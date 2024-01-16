@@ -34,8 +34,15 @@ export default function Console() {
         addCMD({
             name: 'clear',
             usage:'clear console',
+            multiArgs: false,
             callback: () => {outputElement.value = "";}
         } as cmdType);
+        addCMD({
+            name: 'echo',
+            usage: 'print message to console',
+            multiArgs: false,
+            callback: (txt: string) => {outputElement.value += `${txt}\n`;}
+        })
 
         initialized.current = true;
     }, []);
