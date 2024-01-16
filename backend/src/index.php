@@ -7,14 +7,29 @@
 //END: Enabling CORS in my localhost server
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        if (!isset($_POST["test_id"])) {
+        // Get the JSON data from the request body
+        $jsonData = file_get_contents("php://input");
+
+        // Decode the JSON data
+        $decodedData = json_decode($jsonData, true);
+
+        if ($decodedData === null) {
+            echo json_encode(array(
+                "resp" => "error",
+                "msg" => "invalid json data"
+            ));
+            exit(0);
+        }
+
+
+        if (!isset($decodedData["test_id"])) {
             echo json_encode(array(
                 "resp" => "error",
                 "msg" => "test_id is not set"
             ));
             exit(0);
         }
-        $test_id = filter_var($_POST["test_id"], FILTER_VALIDATE_INT);
+        $test_id = filter_var($decodedData["test_id"], FILTER_VALIDATE_INT);
 
         if ($test_id === false) {
             echo json_encode(array(
