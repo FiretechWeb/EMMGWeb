@@ -1,0 +1,43 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    background-color: black;
+    align-items: stretch;
+    font-family: monospace;
+    font-size: 1.25rem;
+    height: 50vh;
+    flex: 1;
+}
+
+.output {
+    background: none;
+    margin: 0;
+    padding: 0;
+    color: green;
+    word-wrap:break-word;
+    border: none;
+    height: auto;
+    text-wrap:unrestricted;
+    resize: none;
+    overflow: auto;
+    font-family: monospace;
+    font-size: 1.25rem;
+    flex: 1;
+}
+
+.input {
+    background: none;
+    margin: 0;
+    font-size: 1.25rem;
+    border: 1px solid whitesmoke;
+    padding: 0;
+    height: 60px;
+    font-family: monospace;
+    resize: none;
+    color: green;
+}
+
+.input:focus,
+.output:focus{
+    outline: none;
+}
