@@ -2,7 +2,7 @@
 
 ## Requirements
 
-* uWamp - *SEE: <https://www.uwamp.com/en/?page=download>*
+* uWamp 3.1.0 - *SEE: <https://www.uwamp.com/en/?page=download>*
 
 ## Instalation
 
