@@ -1,9 +1,9 @@
 'use client';
 
 import { processCMD, addCMD, cmdType } from '@/lib/cmds';
-import styles from './console.module.css'
+import styles from './console.module.css';
 
-import { MutableRefObject, useEffect, useRef } from 'react'
+import { MutableRefObject, useEffect, useRef } from 'react';
 
 function consoleTextInput(inputText: string) {
     processCMD(inputText.trim());
@@ -28,6 +28,9 @@ export default function Console() {
                 outputElement.value += `> ${inputText}\n`;
                 inputElement.value = "";
                 consoleTextInput(inputText);
+                requestAnimationFrame(() => {
+                    outputElement.scrollTop = outputElement.scrollHeight;
+                });
               }
         });
         
@@ -41,7 +44,12 @@ export default function Console() {
             name: 'echo',
             usage: 'print message to console',
             multiArgs: false,
-            callback: (txt: string) => {outputElement.value += `${txt}\n`;}
+            callback: (txt: string) => {
+                outputElement.value += `${txt}\n`; console.log(txt);
+                requestAnimationFrame(() => {
+                    outputElement.scrollTop = outputElement.scrollHeight;
+                });
+            }
         })
 
         initialized.current = true;

@@ -14,8 +14,7 @@ const CMDS: cmdType[] = [
         usage:'server test <<id of test>>',
         multiArgs: false,
         callback: (id: string) => {
-
-            axios.post(GlobalVars.backend_path!, { test_id: id },
+            axios.post(`${GlobalVars.backend_path!}/index.php`, { test_id: id },
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -25,7 +24,24 @@ const CMDS: cmdType[] = [
             })
             .catch(e => processCMD(`echo ${e}`));
         }
-    }
+    },
+    {
+        name: 'init db',
+        usage:'used to initialize db',
+        multiArgs: false,
+        callback: () => {
+            processCMD('echo test');
+            axios.post(`${GlobalVars.backend_path!}/create_db.php`, { },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }).then(r => {
+                processCMD(`echo ${JSON.stringify(r.data, null, 3)}`);
+            })
+            .catch(e => processCMD(`echo ${e}`));
+        }
+    },
 ];
 
 export function addCMD(cmd: cmdType) {
@@ -35,7 +51,6 @@ export function addCMD(cmd: cmdType) {
 export function processCMD(cmdString: string) {
     CMDS.forEach((cmd: cmdType) => {
         if (cmdString.toLocaleLowerCase().startsWith(cmd.name)) {
-            //HACK
             if (cmd.multiArgs) {
                 cmd.callback(...cmdString.slice(cmd.name.length, cmdString.length).split(',').map(arg => arg.trim()));
             } else {
