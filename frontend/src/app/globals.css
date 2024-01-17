@@ -85,6 +85,11 @@ body {
   overflow-x: hidden;
 }
 
+#__next {
+  margin: 0;
+  padding: 0;
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(

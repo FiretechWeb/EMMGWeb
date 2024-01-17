@@ -1,4 +1,4 @@
-import { GlobalVars } from "@/cfg/config";
+import { GlobalVars } from "../cfg/config";
 import axios from "axios";
 
 export interface cmdType {

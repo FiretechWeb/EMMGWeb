@@ -1,6 +1,6 @@
 'use client';
 
-import { processCMD, addCMD, cmdType } from '@/lib/cmds';
+import { processCMD, addCMD, cmdType } from '../lib/cmds';
 import styles from './console.module.css';
 
 import { MutableRefObject, useEffect, useRef } from 'react';
