@@ -1,3 +1,4 @@
+import { threadId } from "worker_threads";
 import { GlobalVars } from "../cfg/config";
 import axios from "axios";
 
@@ -9,6 +10,16 @@ export interface cmdType {
 }
 
 const CMDS: cmdType[] = [
+    {
+        name: 'help',
+        usage:'returns a list with all the commands',
+        multiArgs: false,
+        callback: () => {
+            CMDS.forEach(cmd => {
+                processCMD(`echo ${cmd.name} - usage: ${cmd.usage}`);
+            });
+        }
+    },
     {
         name: 'server test',
         usage:'server test <<id of test>>',
@@ -30,8 +41,27 @@ const CMDS: cmdType[] = [
         usage:'used to initialize db',
         multiArgs: false,
         callback: () => {
-            processCMD('echo test');
             axios.post(`${GlobalVars.backend_path!}/create_db.php`, { },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }).then(r => {
+                processCMD(`echo ${JSON.stringify(r.data, null, 3)}`);
+            })
+            .catch(e => processCMD(`echo ${e}`));
+        }
+    },
+    {
+        name: 'add obra social',
+        usage:'add obra social <<codigo>>, <<nombre>>',
+        multiArgs: true,
+        callback: (code: string, nombre: string) => {
+            axios.post(`${GlobalVars.backend_path!}/api/obra_social.php`, {
+                action: 'add',
+                code: parseInt(code),
+                nombre
+             },
             {
                 headers: {
                     'Content-Type': 'application/json',
