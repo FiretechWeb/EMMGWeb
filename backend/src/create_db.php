@@ -3,45 +3,7 @@
     include 'config/run_settings.php';
     include 'lib/enable_cors.php';
     include 'lib/json_utils.php';
-
-    function dropDB($conn, $dbName) {
-        $sql = "DROP DATABASE IF EXISTS $dbName";
-        if (!mysqli_query($conn, $sql)) {
-            echo JSONResponse::error("Error destroying database: ".mysqli_error($conn));
-            exit(0);
-        }
-    }
-    function createDB($conn, $dbName) {
-        $sql = "CREATE DATABASE IF NOT EXISTS $dbName";
-        if (!mysqli_query($conn, $sql)) {
-            echo JSONResponse::error("Error creating database: ".mysqli_error($conn));
-            exit(0);
-        }
-    }
-    function createEmpresaTable($conn, $tableName) {
-        $sql = "CREATE TABLE IF NOT EXISTS $tableName (
-            id BIGINT NOT NULL AUTO_INCREMENT, 
-            cuit VARCHAR(32) NOT NULL, 
-            razon VARCHAR(128) NOT NULL, 
-            PRIMARY KEY (id) 
-            );";
-        if (!mysqli_query($conn, $sql)) {
-            echo JSONResponse::error("Error creating empresa table: ".mysqli_error($conn));
-            exit(0);
-        }
-    }
-    function createEmpleadosTable($conn, $empleadoTable, $empresaTable) {
-        $sql = "CREATE TABLE IF NOT EXISTS $empleadoTable (
-                em_id BIGINT NOT NULL, 
-                id BIGINT  NOT NULL AUTO_INCREMENT,
-                PRIMARY KEY (id, em_id), 
-                FOREIGN KEY (em_id) REFERENCES $empresaTable (id)
-                ) ENGINE=InnoDB;";
-        if (!mysqli_query($conn, $sql)) {
-            echo JSONResponse::error("Error creating empleados table: ".mysqli_error($conn));
-            exit(0);
-        }
-    }
+    include 'db/db_structure.php';
     
     if ($_SERVER["REQUEST_METHOD"] == "POST") {    
         try {
@@ -52,14 +14,29 @@
                 echo JSONResponse::error("Connection failed: " . mysqli_connect_error());
                 exit(0);
             }
-            dropDB($conn, $HOST_DB);
-            createDB($conn, $HOST_DB);
-            if (!mysqli_select_db($conn, $HOST_DB)) {
+            if (!DBStructure::dropDB($conn, DBStructure::$DB_NAME)) {
+                echo JSONResponse::error("Error dropping database: ".mysqli_error($conn));
+                exit(0);
+            }
+            if (!DBStructure::createDB($conn, DBStructure::$DB_NAME)) {
+                echo JSONResponse::error("Error creating database: ".mysqli_error($conn));
+                exit(0);
+            }
+            
+            if (!mysqli_select_db($conn, DBStructure::$DB_NAME)) {
                 echo JSONResponse::error("Connection to database failed: " .  mysqli_error($conn));
                 exit(0);
             }
-            createEmpresaTable($conn, "empresas");
-            createEmpleadosTable($conn, "empleados", "empresas");
+
+            if (!DBStructure::createEmpresaTable($conn, DBStructure::$EMPRESA_TABLE)) {
+                echo JSONResponse::error("Error creating empresas table: ".mysqli_error($conn));
+                exit(0);
+            }
+            if (!DBStructure::createEmpleadosTable($conn, DBStructure::$EMPLEADOS_TABLE, DBStructure::$EMPRESA_TABLE)) {
+                echo JSONResponse::error("Error creating empresas table: ".mysqli_error($conn));
+                exit(0);
+            }
+            
             mysqli_close($conn);
             echo JSONResponse::ok("Database structure created successfully");
         } catch(Exception $e) {
