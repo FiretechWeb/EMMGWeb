@@ -48,6 +48,10 @@
             $this->db_tables = $tables;
         }
 
+        public function getTableName() {
+            return $this->db_tables['t_obra_social'];
+        }
+        
         public function executeAction() {
 
             switch($this->action) {
@@ -75,12 +79,13 @@
             }
             return DBResponse::error("Invalid action");
         }
+
         public function pull() {
             if ($this->code === null || !is_numeric($this->code)) {
                 return DBResponse::error("code must be a valid number.");
             }
 
-            $sql = "SELECT * FROM {$this->db_tables['t_obra_social']} WHERE code = :code";
+            $sql = "SELECT * FROM {$this->getTableName()} WHERE code = :code";
             $params = [':code' => [$this->code, PDO::PARAM_INT]];
             
             $res = DBAPI::executeQuery($this->pdo, $sql, $params);
@@ -104,7 +109,7 @@
                 return DBResponse::error("code must be a valid number.");
             }
             
-            $sql = "DELETE FROM {$this->db_tables['t_obra_social']} ";
+            $sql = "DELETE FROM {$this->getTableName()} ";
 
             $params = array();
 
@@ -140,7 +145,7 @@
             if ($this->code !== null && !is_numeric($this->code)) {
                 return DBResponse::error("code must be a valid number.");
             }
-            $sql = "SELECT * FROM {$this->db_tables['t_obra_social']} ";
+            $sql = "SELECT * FROM {$this->getTableName()} ";
 
             $params = array();
 
@@ -172,7 +177,7 @@
                 return DBResponse::error("code must be a valid number.");
             }
 
-            $sql = "SELECT * FROM {$this->db_tables['t_obra_social']} WHERE code=:code";
+            $sql = "SELECT * FROM {$this->getTableName()} WHERE code=:code";
             $params = [':code' => [$this->code, PDO::PARAM_INT]];
             $res = DBAPI::executeQuery($this->pdo, $sql, $params);
             if (DBResponse::isERROR($res)) {
@@ -203,7 +208,7 @@
                 return DBResponse::error("Obra social already exist");
             }
 
-            $sql = "INSERT INTO {$this->db_tables['t_obra_social']}
+            $sql = "INSERT INTO {$this->getTableName()}
                 (code, nombre) VALUES (:code, :nombre)";
             $params = [':code' => [$this->code, PDO::PARAM_INT], ':nombre' => [$this->nombre, PDO::PARAM_STR]];
             
@@ -226,7 +231,7 @@
             if ($this->nombre === null) {
                 return DBResponse::error("nombre is null");
             }
-            $sql = "UPDATE {$this->db_tables['t_obra_social']}
+            $sql = "UPDATE {$this->getTableName()}
              SET nombre = :nombre WHERE code = :code";
             $params = [':code' => [$this->code, PDO::PARAM_INT], ':nombre' => [$this->nombre, PDO::PARAM_STR]];
 
