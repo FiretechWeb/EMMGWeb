@@ -173,6 +173,14 @@
             if (!isset($tableStructure[$tableName])) {
                 return DBResponse::error("Invalid table."); 
             }
+            $tableData = $tableStructure[$tableName];
+            $tableActions = $tableData['actions'];
+            foreach($tableActions as $currentAction => $callbackData) {
+                if ($action == $currentAction) {
+                    return call_user_func_array($callbackData, $params);
+                }
+            }
+            return DBResponse::error("Invalid action."); 
         }
     }
 ?>

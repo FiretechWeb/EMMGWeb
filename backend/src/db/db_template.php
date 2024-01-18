@@ -1,4 +1,6 @@
 <?php
+    include_once dirname(__FILE__). '/actions/base_actions.php';
+
     class DBTemplate
     {
         //call_user_func_array
@@ -96,7 +98,7 @@
                         "name" => $fieldTemplates['varchar_64']
                     ], 
                     "actions" => [
-
+                        "insert" => ['DBBaseActions', 'insert']
                     ]
                 ],
                 "id_name_128" => [
@@ -105,7 +107,7 @@
                         "name" => $fieldTemplates['varchar_128']
                     ],
                     "actions" => [
-
+                        "insert" => ['DBBaseActions', 'insert']
                     ]
                 ],
                 "id_name_256" => [
@@ -114,7 +116,7 @@
                         "name" => $fieldTemplates['varchar_256']
                     ],
                     "actions" => [
-
+                        "insert" => ['DBBaseActions', 'insert']
                     ]
                 ],
                 "id_code_name" => [
@@ -124,7 +126,7 @@
                         "name" => $fieldTemplates['varchar_64'],
                     ],
                     "actions" => [
-
+                        "insert" => ['DBBaseActions', 'insert']
                     ]
                 ],
                 "id_code_name_128" => [
@@ -134,7 +136,7 @@
                         "name" => $fieldTemplates['varchar_128']
                     ],
                     "actions" => [
-
+                        "insert" => ['DBBaseActions', 'insert']
                     ]
                 ],
                 "id_code_name_256" => [
@@ -144,7 +146,7 @@
                         "name" => $fieldTemplates['varchar_256']
                     ],
                     "actions" => [
-                        
+                        "insert" => ['DBBaseActions', 'insert']
                     ]
                 ]
             ];
