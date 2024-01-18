@@ -1,6 +1,7 @@
 'use client';
 
 import { processCMD, addCMD, cmdType } from '../lib/cmds';
+import { createDBcmds } from '../lib/db_cmds';
 import styles from './console.module.css';
 
 import { MutableRefObject, useEffect, useRef } from 'react';
@@ -33,6 +34,8 @@ export default function Console() {
                 });
               }
         });
+        
+        createDBcmds();
         
         addCMD({
             name: 'clear',

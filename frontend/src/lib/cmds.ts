@@ -1,4 +1,3 @@
-import { threadId } from "worker_threads";
 import { GlobalVars } from "../cfg/config";
 import axios from "axios";
 
@@ -35,63 +34,7 @@ const CMDS: cmdType[] = [
             })
             .catch(e => processCMD(`echo ${e}`));
         }
-    },
-    {
-        name: 'init db',
-        usage:'used to initialize db',
-        multiArgs: false,
-        callback: () => {
-            axios.post(`${GlobalVars.backend_path!}/create_db.php`, { },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            }).then(r => {
-                processCMD(`echo ${JSON.stringify(r.data, null, 3)}`);
-            })
-            .catch(e => processCMD(`echo ${e}`));
-        }
-    },
-    {
-        name: 'add obra social',
-        usage:'add obra social <<codigo>>, <<nombre>>',
-        multiArgs: true,
-        callback: (code: string, nombre: string) => {
-            axios.post(`${GlobalVars.backend_path!}/api/obra_social.php`, {
-                action: 'add',
-                code: parseInt(code),
-                nombre
-             },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            }).then(r => {
-                processCMD(`echo ${JSON.stringify(r.data, null, 3)}`);
-            })
-            .catch(e => processCMD(`echo ${e}`));
-        }
-    },
-    {
-        name: 'get obra social',
-        usage:'get obra social <<codigo | optional>>, <<nombre | optional>>',
-        multiArgs: true,
-        callback: (code: string, nombre: string) => {
-            axios.post(`${GlobalVars.backend_path!}/api/obra_social.php`, {
-                action: 'get',
-                code: code && code.length > 0 ? parseInt(code) : null,
-                nombre: nombre && nombre.length > 0 ? nombre : null
-             },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            }).then(r => {
-                processCMD(`echo ${JSON.stringify(r.data, null, 3)}`);
-            })
-            .catch(e => processCMD(`echo ${e}`));
-        }
-    },
+    }
 ];
 
 export function addCMD(cmd: cmdType) {
