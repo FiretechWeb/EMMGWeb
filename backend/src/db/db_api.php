@@ -1,7 +1,44 @@
 <?php
     include_once 'db_response.php';
+    include_once '../config/def.php';
 
     class DBAPI {
+
+        public static function checkAndGetPOSTfromJSON() {
+            $decodedData = null;
+            if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                $jsonData = file_get_contents("php://input");
+                $decodedData = json_decode($jsonData, true);
+
+                if ($decodedData === null) {
+                    return DBResponse::error("Invalid json data");
+                }
+                if (!isset($decodedData['action'])) {
+                    return DBResponse::error("Action was not send");
+                }
+            } else {
+                return DBResponse::error("Invalid method");
+            }
+            return DBResponse::ok($decodedData);
+        }
+
+        public static function startPDO() {
+            $pdo = null;
+            try {
+                $DB = DBStructure::$DB_NAME;
+                $URL = Config::$HOST_URL;
+                $USER = Config::$HOST_USER;
+                $PASS = Config::$HOST_PASSWORD;
+                $pdo = new PDO("mysql:host=$URL;dbname=$DB", $USER, $PASS);
+                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            } catch(PDOException $e) {
+                return DBResponse::error($e->getMessage());
+            }
+            if ($pdo === null) {
+                return DBResponse::error("Failed to create PDO");
+            }
+            return DBResponse::ok($pdo);
+        }
 
         public static function executeQuery($pdo, $sql, $params = []) {
             try {
