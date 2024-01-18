@@ -5,7 +5,20 @@
 
     class DBBaseActions {
 
-        public static function get($pdo, $table, $params = [], $tableStructure) {
+        public static function update($pdo, $table, $params = [], $tableStructure = null) {
+            if ($tableStructure === null) {
+                $tableStructure == DBStructure::getStructure();
+            }
+
+            if (!isset($tableStructure[$table])) {
+                return DBResponse::error("The given table does not exists.");
+            }
+            
+            $tableData = $tableStructure[$table];
+            $fields = $tableData['fields'];
+        }
+
+        public static function get($pdo, $table, $params = [], $tableStructure = null) {
             if ($tableStructure === null) {
                 $tableStructure == DBStructure::getStructure();
             }
