@@ -3,11 +3,11 @@
     include_once 'db_structure.php';
     include_once 'db_response.php';
     include_once 'db_api.php';
+    include_once 'db_basic_type.php';
     
-    class DBObraSocial {
+    class DBObraSocial extends DBBasicType {
         private $pdo = null;
         private $db_tables = null;
-        private $action = null;
 
         //fields
         private $id = null;
@@ -50,34 +50,6 @@
 
         public function getTableName() {
             return $this->db_tables['t_obra_social'];
-        }
-        
-        public function executeAction() {
-
-            switch($this->action) {
-                case 'exists':
-                    return $this->exists();
-                break;
-                case 'insert':
-                    return $this->insert();
-                break;
-                case 'update':
-                    return $this->update();
-                break;
-                case 'push':
-                    return $this->push();
-                break;
-                case 'pull':
-                    return $this->pull();
-                break;
-                case 'get':
-                    return $this->get();
-                break;
-                case 'delete':
-                    return $this->delete();
-                break;
-            }
-            return DBResponse::error("Invalid action");
         }
 
         public function pull() {
@@ -256,15 +228,7 @@
                 return DBResponse::error("nombre is null");
             }
 
-            $existsRes = $this->exists($this->code);
-            if (DBResponse::isERROR($existsRes)){
-                return $existsRes;
-            }
-            if (DBResponse::isTRUE($existsRes)) {
-                return $this->update();
-            } else {
-                return $this->insert();
-            }
+            return parent::push();
         }
     }
 ?>
