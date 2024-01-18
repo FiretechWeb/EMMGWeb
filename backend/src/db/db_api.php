@@ -3,7 +3,6 @@
     include_once dirname(__FILE__).'/../config/def.php';
 
     class DBAPI {
-
         public static function checkAndGetPOSTfromJSON() {
             $decodedData = null;
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -63,6 +62,54 @@
                 }
             } catch (Exception $e) {
                 return DBResponse::error($e->getMessage());
+            }
+        }
+        public static function execQueryAndGetRows($pdo, $sql, $params) {
+            $res = self::executeQuery($pdo, $sql, $params);
+            if (DBResponse::isERROR($res)) {
+                return $res;
+            }
+            $rows = DBResponse::getData($res)['rows'];
+            return DBResponse::ok($rows);
+        }
+
+        public static function execQueryAndCheckExists($pdo, $sql, $params) {
+            $res = self::executeQuery($pdo, $sql, $params);
+            if (DBResponse::isERROR($res)) {
+                return $res;
+            }
+
+            $rowCount = DBResponse::getData($res)['row_count'];
+            if ($rowCount  > 0) {
+                return DBResponse::ok(true);
+            } else {
+                return DBResponse::ok(false);
+            }
+        }
+        
+        public static function execQueryAndGetInsertId($pdo, $sql, $params) {
+            $res = self::executeQuery($pdo, $sql, $params);
+            if (DBResponse::isERROR($res)) {
+                return $res;
+            }
+            $lastInsertId = DBResponse::getData($res)['lastInsertId'];
+            if ($lastInsertId !== false) {
+                return DBResponse::ok($lastInsertId);
+            } else {
+                return DBResponse::error("there was not inserted id");
+            }
+        }
+
+        public static function execQueryAndGetRowsAffected($pdo, $sql, $params) {
+            $res = self::executeQuery($pdo, $sql, $params);
+            if (DBResponse::isERROR($res)) {
+                return $res;
+            }
+            $rowsAffected = DBResponse::getData($res)['row_count'];
+            if ($rowsAffected > 0) {
+                return DBResponse::ok($rowsAffected);
+            } else {
+                return DBResponse::error("No rows were updated.");
             }
         }
     }

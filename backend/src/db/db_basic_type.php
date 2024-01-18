@@ -65,54 +65,6 @@
         abstract public function insert();
         abstract public function update();
 
-        protected function execQueryAndGetRows($sql, $params) {
-            $res = DBAPI::executeQuery($this->pdo, $sql, $params);
-            if (DBResponse::isERROR($res)) {
-                return $res;
-            }
-            $rows = DBResponse::getData($res)['rows'];
-            return DBResponse::ok($rows);
-        }
-
-        protected function execQueryAndCheckExists($sql, $params) {
-            $res = DBAPI::executeQuery($this->pdo, $sql, $params);
-            if (DBResponse::isERROR($res)) {
-                return $res;
-            }
-
-            $rowCount = DBResponse::getData($res)['row_count'];
-            if ($rowCount  > 0) {
-                return DBResponse::ok(true);
-            } else {
-                return DBResponse::ok(false);
-            }
-        }
-        
-        protected function execQueryAndGetInsertId($sql, $params) {
-            $res = DBAPI::executeQuery($this->pdo, $sql, $params);
-            if (DBResponse::isERROR($res)) {
-                return $res;
-            }
-            $lastInsertId = DBResponse::getData($res)['lastInsertId'];
-            if ($lastInsertId !== false) {
-                return DBResponse::ok($lastInsertId);
-            } else {
-                return DBResponse::error("there was not inserted id");
-            }
-        }
-
-        protected function execQueryAndGetRowsAffected($sql, $params) {
-            $res = DBAPI::executeQuery($this->pdo, $sql, $params);
-            if (DBResponse::isERROR($res)) {
-                return $res;
-            }
-            $rowsAffected = DBResponse::getData($res)['row_count'];
-            if ($rowsAffected > 0) {
-                return DBResponse::ok($rowsAffected);
-            } else {
-                return DBResponse::error("No rows were updated.");
-            }
-        }
         public function push() {
             $existsRes = $this->exists();
             if (DBResponse::isERROR($existsRes)){

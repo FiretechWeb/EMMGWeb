@@ -80,7 +80,7 @@
                 $params[':nombre'] = [$this->nombre, PDO::PARAM_STR];
             }
 
-            return parent::execQueryAndGetRowsAffected($sql, $params);
+            return DBAPI::execQueryAndGetRowsAffected($this->pdo, $sql, $params);
         }
 
         public function get() {
@@ -106,7 +106,7 @@
                 $params[':nombre'] = [$this->nombre, PDO::PARAM_STR];
             }
             
-            return parent::execQueryAndGetRows($sql, $params);
+            return DBAPI::execQueryAndGetRows($this->pdo, $sql, $params);
         }
 
         public function exists() {
@@ -117,7 +117,7 @@
             $sql = "SELECT * FROM {$this->getTableName()} WHERE code=:code";
             $params = [':code' => [$this->code, PDO::PARAM_INT]];
 
-            return parent::execQueryAndCheckExists($sql, $params);
+            return DBAPI::execQueryAndCheckExists($this->pdo, $sql, $params);
         }
 
         public function insert() {
@@ -140,7 +140,7 @@
                 (code, nombre) VALUES (:code, :nombre)";
             $params = [':code' => [$this->code, PDO::PARAM_INT], ':nombre' => [$this->nombre, PDO::PARAM_STR]];
             
-            return parent::execQueryAndGetInsertId($sql, $params);
+            return DBAPI::execQueryAndGetInsertId($this->pdo, $sql, $params);
         }
 
         public function update() {
@@ -154,7 +154,7 @@
              SET nombre = :nombre WHERE code = :code";
             $params = [':code' => [$this->code, PDO::PARAM_INT], ':nombre' => [$this->nombre, PDO::PARAM_STR]];
 
-            return parent::execQueryAndGetRowsAffected($sql, $params);
+            return DBAPI::execQueryAndGetRowsAffected($this->pdo, $sql, $params);
         }
 
         public function push() {
