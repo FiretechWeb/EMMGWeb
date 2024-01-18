@@ -5,6 +5,18 @@
     include_once dirname(__FILE__).'/../db_api.php';
     include_once dirname(__FILE__).'/../db_basic_type.php';
     
+    class ObraSocialType {
+        public $id;
+        public $nombre;
+        public $code;
+
+        public function __construct($dataArray)
+        {
+            
+        }
+
+    }
+
     class DBObraSocial extends DBBasicType {
         //fields
         private $nombre = null;

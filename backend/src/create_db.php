@@ -27,7 +27,11 @@
                 echo JSONResponse::error("Connection to database failed: " .  mysqli_error($conn));
                 exit(0);
             }
-
+            if (!DBStructure::generateTablesFromStructure($conn)) {
+                echo JSONResponse::error("Error creating actividad economica table: ".mysqli_error($conn));
+                exit(0);
+            }
+            /*
             if (!DBStructure::createActEconomicaTable($conn)) {
                 echo JSONResponse::error("Error creating actividad economica table: ".mysqli_error($conn));
                 exit(0);
@@ -90,7 +94,7 @@
             if (!DBStructure::createEmpleadosTable($conn)) {
                 echo JSONResponse::error("Error creating empresas table: ".mysqli_error($conn));
                 exit(0);
-            }
+            }*/
             
             mysqli_close($conn);
             echo JSONResponse::ok("Database structure created successfully");
