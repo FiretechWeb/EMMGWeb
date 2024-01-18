@@ -1,6 +1,6 @@
 <?php
     include_once 'db_response.php';
-    include_once '../config/def.php';
+    include_once dirname(__FILE__).'/../config/def.php';
 
     class DBAPI {
 

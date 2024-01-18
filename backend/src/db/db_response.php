@@ -1,5 +1,5 @@
 <?php
-    include_once '../lib/json_utils.php';
+    include_once dirname(__FILE__).'/../lib/json_utils.php';
 
     class DBResponse {
         public static function getData($res) {

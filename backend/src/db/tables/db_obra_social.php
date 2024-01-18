@@ -1,9 +1,9 @@
 <?php
     //U: All DB classes will have only add, get, remove and exists methods.
-    include_once 'db_structure.php';
-    include_once 'db_response.php';
-    include_once 'db_api.php';
-    include_once 'db_basic_type.php';
+    include_once dirname(__FILE__).'/../db_structure.php';
+    include_once dirname(__FILE__).'/../db_response.php';
+    include_once dirname(__FILE__).'/../db_api.php';
+    include_once dirname(__FILE__).'/../db_basic_type.php';
     
     class DBObraSocial extends DBBasicType {
         //fields

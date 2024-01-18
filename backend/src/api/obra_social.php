@@ -6,7 +6,7 @@
     include_once '../db/db_structure.php';
     include_once '../db/db_response.php';
     include_once '../db/db_api.php';
-    include_once '../db/db_obra_social.php';
+    include_once '../db/tables/db_obra_social.php';
 
     $res = DBAPI::checkAndGetPOSTfromJSON();
 
