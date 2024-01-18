@@ -13,9 +13,31 @@
             if (!isset($tableStructure[$table])) {
                 return DBResponse::error("The given table does not exists.");
             }
-            
+
             $tableData = $tableStructure[$table];
             $fields = $tableData['fields'];
+            $updateFields = [];
+            $updateColumn = [];
+
+            foreach($fields as $field => $fieldPararms) {
+                if (isset($params[$field])) {
+                    $updateFields[] = ["name" => $field, "value" => $params[$field], "type" =>  $fieldPararms['pdo_type']];
+                    $updateColumn[] = "$field = :$field";
+                }
+            }
+
+            $sql = "SELECT * FROM $table";
+            if (!empty($filtersColumn)) {
+                $sql.= " WHERE ";
+                $sql.= implode(" AND ", $filtersColumn)." ;";
+            }
+
+            $pdoParams = [];
+            foreach($filterFields as $fData) {
+                $pdoParams[$fData['name']] = [$fData['value'], $fData['type']];
+            }
+
+            return DBAPI::execQueryAndGetRowsAffected($pdo, $sql, $params);
         }
 
         public static function get($pdo, $table, $params = [], $tableStructure = null) {
