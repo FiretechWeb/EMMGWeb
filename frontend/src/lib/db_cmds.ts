@@ -1,7 +1,9 @@
 import axios from "axios";
 import { addCMD, processCMD } from "./cmds";
 import { GlobalVars } from "../cfg/config";
+import { splitFirstOccurrence } from "./stringExt";
 import type { cmdType } from "./cmds";
+
 
 export function createDBcmds() {
     addCMD(
@@ -25,14 +27,19 @@ export function createDBcmds() {
 
     addCMD(
         {
-            name: 'obra social',
-            usage:'obra social <<accion>>, <<codigo | optional>>, <<nombre | optional>>',
+            name: 'action',
+            usage:'action <<table>>, <<action>>, ...<<param: value>>',
             multiArgs: true,
-            callback: (accion: string, code: string, nombre: string) => {
-                axios.post(`${GlobalVars.backend_path!}/api/obra_social.php`, {
-                    action: accion,
-                    code: parseInt(code),
-                    nombre
+            callback: (table: string, action: string, ...args: string[]) => {
+                let params: { [key: string]: any } = {};
+                args.forEach(arg => {
+                    let fieldData: string[] = splitFirstOccurrence(arg, ':').map(e => e.trim());
+                    params[fieldData[0]] = fieldData[1];
+                });
+                axios.post(`${GlobalVars.backend_path!}/api/action.php`, {
+                    table,
+                    action,
+                    params
                 },
                 {
                     headers: {
