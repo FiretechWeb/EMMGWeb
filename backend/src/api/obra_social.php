@@ -4,7 +4,8 @@
     include_once '../lib/enable_cors.php';
     include_once '../lib/json_utils.php';
     include_once '../db/db_structure.php';
-    include_once '../db/db_api.php';
+    include_once '../db/db_response.php';
+    include_once '../db/db_obra_social.php';
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $jsonData = file_get_contents("php://input");
@@ -37,34 +38,10 @@
             exit(0);
         }
 
-        $api_instance = new DBAPI($pdo);
-
-        switch($decodedData['action']) {
-            case 'exists':
-                if (!isset($decodedData['code'])) {
-                    echo JSONResponse::error("Code was not sent");
-                    exit(0);
-                }
-                $res = $api_instance->obraSocialExists($decodedData['code']);
-                echo DBAPI::responseToJSON($res);
-            break;
-            case 'add':
-                if (!isset($decodedData['code'])) {
-                    echo JSONResponse::error("Code was not sent");
-                    exit(0);
-                }
-                if (!isset($decodedData['nombre'])) {
-                    echo JSONResponse::error("Nombre was not sent");
-                    exit(0);
-                }
-                $res = $api_instance->addObraSocial($decodedData['code'], $decodedData['nombre']);
-                echo DBAPI::responseToJSON($res);
-            break;
-
-            default:
-                echo JSONResponse::error("Invalid action");
-            break;
-        }
+        $obraSocial = new DBObraSocial($pdo, $decodedData);
+        $res = $obraSocial->executeAction();
+        echo DBResponse::responseToJSON($res);
+        
     } else {
         echo JSONResponse::error("Invalid method");
     }
