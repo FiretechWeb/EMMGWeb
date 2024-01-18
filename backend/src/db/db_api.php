@@ -71,6 +71,9 @@
                 if (!isset($decodedData['action'])) {
                     return DBResponse::error("Action was not send");
                 }
+                if (!isset($decodedData['table'])) {
+                    return DBResponse::error("table was not send");
+                }
             } else {
                 return DBResponse::error("Invalid method");
             }
@@ -169,17 +172,19 @@
             }
         }
 
-        public static function execAction($tableName, $action, $params, $tableStructure) {
+        public static function execAction($pdo, $tableName, $action, $params, $tableStructure) {
             if (!isset($tableStructure[$tableName])) {
                 return DBResponse::error("Invalid table."); 
             }
             $tableData = $tableStructure[$tableName];
             $tableActions = $tableData['actions'];
+
             foreach($tableActions as $currentAction => $callbackData) {
                 if ($action == $currentAction) {
-                    return call_user_func_array($callbackData, $params);
+                    return call_user_func_array($callbackData, [$pdo, $tableName, $params, $tableStructure]);
                 }
             }
+            
             return DBResponse::error("Invalid action."); 
         }
     }

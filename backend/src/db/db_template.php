@@ -12,6 +12,7 @@
                 "pdo_type" => PDO::PARAM_INT,
                 "not_null" => true,
                 "extra_params" => "AUTO_INCREMENT",
+                "allow_insert" => false,
                 "foreign_key" => null
             ],
             "bigint" => [
@@ -20,6 +21,7 @@
                 "pdo_type" => PDO::PARAM_INT,
                 "not_null" => true,
                 "extra_params" => "",
+                "allow_insert" => true,
                 "foreign_key" => null
             ],
             "int" => [
@@ -28,6 +30,7 @@
                 "pdo_type" => PDO::PARAM_INT,
                 "not_null" => true,
                 "extra_params" => "",
+                "allow_insert" => true,
                 "foreign_key" => null
             ],
             "varchar_32" => [
@@ -36,6 +39,7 @@
                 "pdo_type" => PDO::PARAM_STR,
                 "not_null" => true,
                 "extra_params" => "",
+                "allow_insert" => true,
                 "foreign_key" => null
             ],
              "varchar_64" => [
@@ -44,6 +48,7 @@
                 "pdo_type" => PDO::PARAM_STR,
                 "not_null" => true,
                 "extra_params" => "",
+                "allow_insert" => true,
                 "foreign_key" => null
             ],
             "varchar_128" => [
@@ -52,6 +57,7 @@
                 "pdo_type" => PDO::PARAM_STR,
                 "not_null" => true,
                 "extra_params" => "",
+                "allow_insert" => true,
                 "foreign_key" => null
             ],
             "varchar_256" => [
@@ -60,6 +66,7 @@
                 "pdo_type" => PDO::PARAM_STR,
                 "not_null" => true,
                 "extra_params" => "",
+                "allow_insert" => true,
                 "foreign_key" => null
             ],
             "varchar_512" => [
@@ -68,6 +75,7 @@
                 "pdo_type" => PDO::PARAM_STR,
                 "not_null" => true,
                 "extra_params" => "",
+                "allow_insert" => true,
                 "foreign_key" => null
             ],
             "date" => [
@@ -76,6 +84,7 @@
                 "pdo_type" => PDO::PARAM_STR,
                 "not_null" => true,
                 "extra_params" => "",
+                "allow_insert" => true,
                 "foreign_key" => null
             ],
             "boolean" => [
@@ -84,6 +93,7 @@
                 "pdo_type" => PDO::PARAM_BOOL,
                 "not_null" => true,
                 "extra_params" => "",
+                "allow_insert" => true,
                 "foreign_key" => null
             ],
         ];
@@ -98,7 +108,8 @@
                         "name" => $fieldTemplates['varchar_64']
                     ], 
                     "actions" => [
-                        "insert" => ['DBBaseActions', 'insert']
+                        "insert" => ['DBBaseActions', 'insert'],
+                        "get" => ['DBBaseActions', 'get']
                     ]
                 ],
                 "id_name_128" => [
@@ -107,7 +118,8 @@
                         "name" => $fieldTemplates['varchar_128']
                     ],
                     "actions" => [
-                        "insert" => ['DBBaseActions', 'insert']
+                        "insert" => ['DBBaseActions', 'insert'],
+                        "get" => ['DBBaseActions', 'get']
                     ]
                 ],
                 "id_name_256" => [
@@ -116,7 +128,8 @@
                         "name" => $fieldTemplates['varchar_256']
                     ],
                     "actions" => [
-                        "insert" => ['DBBaseActions', 'insert']
+                        "insert" => ['DBBaseActions', 'insert'],
+                        "get" => ['DBBaseActions', 'get']
                     ]
                 ],
                 "id_code_name" => [
@@ -126,7 +139,8 @@
                         "name" => $fieldTemplates['varchar_64'],
                     ],
                     "actions" => [
-                        "insert" => ['DBBaseActions', 'insert']
+                        "insert" => ['DBBaseActions', 'insert'],
+                        "get" => ['DBBaseActions', 'get']
                     ]
                 ],
                 "id_code_name_128" => [
@@ -136,7 +150,8 @@
                         "name" => $fieldTemplates['varchar_128']
                     ],
                     "actions" => [
-                        "insert" => ['DBBaseActions', 'insert']
+                        "insert" => ['DBBaseActions', 'insert'],
+                        "get" => ['DBBaseActions', 'get']
                     ]
                 ],
                 "id_code_name_256" => [
@@ -146,7 +161,8 @@
                         "name" => $fieldTemplates['varchar_256']
                     ],
                     "actions" => [
-                        "insert" => ['DBBaseActions', 'insert']
+                        "insert" => ['DBBaseActions', 'insert'],
+                        "get" => ['DBBaseActions', 'get']
                     ]
                 ]
             ];

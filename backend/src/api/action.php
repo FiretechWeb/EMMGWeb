@@ -6,7 +6,6 @@
     include_once '../db/db_structure.php';
     include_once '../db/db_response.php';
     include_once '../db/db_api.php';
-    include_once '../db/tables/db_obra_social.php';
 
     $res = DBAPI::checkAndGetPOSTfromJSON();
 
@@ -23,7 +22,9 @@
     }
 
     $pdo = DBResponse::getData($res);
-    $obraSocial = new DBObraSocial($pdo, $decodedData);
-    $res = $obraSocial->executeAction();
+    $action = $decodedData['action'];
+    $table = $decodedData['table'];
+    $actionParams = $decodedData['params'];
+    $res = DBAPI::execAction($pdo, $table, $action, $actionParams, DBStructure::getStructure());
     echo DBResponse::responseToJSON($res);
 ?>

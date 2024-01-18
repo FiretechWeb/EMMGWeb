@@ -40,6 +40,7 @@
                             "pdo_type" => PDO::PARAM_INT,
                             "not_null" => true,
                             "extra_params" => "",
+                            "allow_insert" => true,
                             "foreign_key" => ['table' => 'empresa', 'field' => 'id']
                         ],
                         "cuit" => $fieldTemplates['varchar_32'],
@@ -52,6 +53,7 @@
                             "pdo_type" => PDO::PARAM_STR,
                             "not_null" => false,
                             "extra_params" => "",
+                            "allow_insert" => true,
                             "foreign_key" => null
                         ],
                         "agropecuario" => $fieldTemplates['boolean'],

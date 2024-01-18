@@ -5,7 +5,7 @@
 
     class DBBaseActions {
 
-        public static function insert($pdo, $table, $params = [], $tableStructure = null) {
+        public static function get($pdo, $table, $params = [], $tableStructure) {
             if ($tableStructure === null) {
                 $tableStructure == DBStructure::getStructure();
             }
@@ -16,9 +16,47 @@
 
             $tableData = $tableStructure[$table];
             $fields = $tableData['fields'];
+            $filterFields = [];
+            $filtersColumn = [];
+
+            foreach($fields as $field => $fieldPararms) {
+                if (isset($params[$field])) {
+                    $filterFields[] = ["name" => $field, "value" => $params[$field], "type" =>  $fieldPararms['pdo_type']];
+                    $filtersColumn[] = "$field = :$field";
+                }
+            }
+
+            $sql = "SELECT * FROM $table";
+            if (!empty($filtersColumn)) {
+                $sql.= " WHERE ";
+                $sql.= implode(" AND ", $filtersColumn)." ;";
+            }
+
+            $pdoParams = [];
+            foreach($filterFields as $fData) {
+                $pdoParams[$fData['name']] = [$fData['value'], $fData['type']];
+            }
+
+            return DBAPI::execQueryAndGetRows($pdo, $sql, $pdoParams);
+        }
+
+        public static function insert($pdo, $table, $params = [], $tableStructure = null) {
+            if ($tableStructure === null) {
+                $tableStructure == DBStructure::getStructure();
+            }
+
+            if (!isset($tableStructure[$table])) {
+                return DBResponse::error("The given table does not exists.");
+            }
+
+            $tableData = $tableStructure[$table];
+            $fields = array_filter($tableData['fields'], function($field) {
+                return $field['allow_insert'];
+            });
+
             $fieldsData = [];
             $fieldsNames = [];
-            
+
             foreach($fields as $field => $fieldPararms) {
                 if (!isset($params[$field])) {
                     return DBResponse::error("Field $field is not set");

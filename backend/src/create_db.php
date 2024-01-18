@@ -1,10 +1,10 @@
 <?php
-    include 'config/def.php';
-    include 'config/run_settings.php';
-    include 'lib/enable_cors.php';
-    include 'lib/json_utils.php';
-    include 'db/db_structure.php';
-    include 'db/db_api.php';
+    include_once 'config/def.php';
+    include_once 'config/run_settings.php';
+    include_once 'lib/enable_cors.php';
+    include_once 'lib/json_utils.php';
+    include_once 'db/db_structure.php';
+    include_once 'db/db_api.php';
     
     if ($_SERVER["REQUEST_METHOD"] == "POST") {    
         try {
