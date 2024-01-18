@@ -3,6 +3,62 @@
     include_once dirname(__FILE__).'/../config/def.php';
 
     class DBAPI {
+
+        public static function generateTablesFromStructure($conn, $table_structure) {
+            
+            $tables = [];
+            foreach ($table_structure as $tableName => $fields) {
+                $columns = [];
+                $primary_keys = [];
+                $foreign_keys = [];
+                $tableDefinition = "CREATE TABLE IF NOT EXISTS $tableName (";
+                foreach ($fields as $fieldName => $params) {
+                    $columnDefinition = "$fieldName {$params['sql_type']} ";
+                    if ($params['not_null'] === true) {
+                        $columnDefinition .= "NOT NULL ";
+                    }
+                    $columnDefinition .= "{$params['extra_params']}";
+                    $columns[] = $columnDefinition;
+
+                    if ($params['primary']) {
+                        $primary_keys[] = $fieldName;
+                    }
+
+                    if ($params['foreign_key'] !== null) {
+                        $foreingKeyData = $params['foreign_key'];
+                        $foreign_keys[] = $foreingKeyData;
+                        $columns[] = "FOREIGN KEY ($fieldName) REFERENCES {$foreingKeyData['table']}({$foreingKeyData['field']})";
+                    }
+                }
+
+                if (!empty($primary_keys)) {
+                    $columns[] = "PRIMARY KEY (".implode(", ", $primary_keys).")";
+                }
+                $tableDefinition .= implode(", ", $columns);
+                $tableDefinition .= ")";
+                if (!empty($foreign_keys)) {
+                    $tableDefinition .= " ENGINE=InnoDB";
+                }
+                $tables[] = $tableDefinition;
+            }
+            foreach ($tables as $tableSQL) {
+                if (!mysqli_query($conn, $tableSQL)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public static function dropDB($conn, $dbName) {
+            $sql = "DROP DATABASE IF EXISTS $dbName";
+            return mysqli_query($conn, $sql);
+        }
+
+        public static function createDB($conn, $dbName) {
+            $sql = "CREATE DATABASE IF NOT EXISTS $dbName CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci";
+            return mysqli_query($conn, $sql);
+        }
+
         public static function checkAndGetPOSTfromJSON() {
             $decodedData = null;
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
