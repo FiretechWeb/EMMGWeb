@@ -4,10 +4,10 @@
 
     class DBAPI {
 
-        public static function generateTablesFromStructure($conn, $table_structure) {
-            
+        public static function generateTablesFromStructure($conn, $tableStructure) {
             $tables = [];
-            foreach ($table_structure as $tableName => $fields) {
+            foreach ($tableStructure as $tableName => $data) {
+                $fields = $data['fields'];
                 $columns = [];
                 $primary_keys = [];
                 $foreign_keys = [];
@@ -166,6 +166,12 @@
                 return DBResponse::ok($rowsAffected);
             } else {
                 return DBResponse::error("No rows were updated.");
+            }
+        }
+
+        public static function execAction($tableName, $action, $params, $tableStructure) {
+            if (!isset($tableStructure[$tableName])) {
+                return DBResponse::error("Invalid table."); 
             }
         }
     }

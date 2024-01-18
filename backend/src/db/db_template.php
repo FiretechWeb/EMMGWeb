@@ -1,6 +1,7 @@
 <?php
     class DBTemplate
     {
+        //call_user_func_array
         public static function getFieldTemplates() {
             return [
             "id" => [
@@ -90,31 +91,61 @@
            $fieldTemplates = self::getFieldTemplates(); 
             return [
                 "id_name" => [
-                    "id" => $fieldTemplates['id'],
-                    "name" => $fieldTemplates['varchar_64']
+                    "fields" => [
+                        "id" => $fieldTemplates['id'],
+                        "name" => $fieldTemplates['varchar_64']
+                    ], 
+                    "actions" => [
+
+                    ]
                 ],
                 "id_name_128" => [
-                    "id" => $fieldTemplates['id'],
-                    "name" => $fieldTemplates['varchar_128']
+                    "fields" => [
+                        "id" => $fieldTemplates['id'],
+                        "name" => $fieldTemplates['varchar_128']
+                    ],
+                    "actions" => [
+
+                    ]
                 ],
                 "id_name_256" => [
-                    "id" => $fieldTemplates['id'],
-                    "name" => $fieldTemplates['varchar_256']
+                    "fields" => [
+                        "id" => $fieldTemplates['id'],
+                        "name" => $fieldTemplates['varchar_256']
+                    ],
+                    "actions" => [
+
+                    ]
                 ],
                 "id_code_name" => [
-                    "id" => $fieldTemplates['id'],
-                    "code" => $fieldTemplates['bigint'],
-                    "name" => $fieldTemplates['varchar_64']
+                    "fields" => [
+                        "id" => $fieldTemplates['id'],
+                        "code" => $fieldTemplates['bigint'],
+                        "name" => $fieldTemplates['varchar_64'],
+                    ],
+                    "actions" => [
+
+                    ]
                 ],
                 "id_code_name_128" => [
-                    "id" => $fieldTemplates['id'],
-                    "code" => $fieldTemplates['bigint'],
-                    "name" => $fieldTemplates['varchar_128']
+                    "fields" => [
+                        "id" => $fieldTemplates['id'],
+                        "code" => $fieldTemplates['bigint'],
+                        "name" => $fieldTemplates['varchar_128']
+                    ],
+                    "actions" => [
+
+                    ]
                 ],
                 "id_code_name_256" => [
-                    "id" => $fieldTemplates['id'],
-                    "code" => $fieldTemplates['bigint'],
-                    "name" => $fieldTemplates['varchar_256']
+                    "fields" => [
+                        "id" => $fieldTemplates['id'],
+                        "code" => $fieldTemplates['bigint'],
+                        "name" => $fieldTemplates['varchar_256']
+                    ],
+                    "actions" => [
+                        
+                    ]
                 ]
             ];
         }
