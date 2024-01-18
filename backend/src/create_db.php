@@ -8,7 +8,7 @@
     if ($_SERVER["REQUEST_METHOD"] == "POST") {    
         try {
             mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-            $conn = mysqli_connect($HOST_URL, $HOST_USER, $HOST_PASSWORD);
+            $conn = mysqli_connect(Config::$HOST_URL, Config::$HOST_USER, Config::$HOST_PASSWORD);
 
             if (!$conn) {
                 echo JSONResponse::error("Connection failed: " . mysqli_connect_error());
