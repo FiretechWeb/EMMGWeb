@@ -6,25 +6,13 @@
     include_once 'db_basic_type.php';
     
     class DBObraSocial extends DBBasicType {
-        private $pdo = null;
-        private $db_tables = null;
-
         //fields
-        private $id = null;
         private $nombre = null;
         private $code = null;
 
         public function __construct($pdo, $dataArray, $tables = null)
         {
-            if ($tables === null) {
-                $tables = DBStructure::getDefaultTables();
-            }
-
-            if (!isset($dataArray['id'])) {
-                $this->id = null;
-            } else {
-                $this->id = $dataArray['id'];
-            }
+            parent::__construct($pdo, $dataArray, $tables);
 
             if (!isset($dataArray['nombre'])) {
                 $this->nombre = null;
@@ -37,15 +25,6 @@
             } else {
                 $this->code = $dataArray['code'];
             }
-
-            if (!isset($dataArray['action'])) {
-                $this->action = null;
-            } else {
-                $this->action = $dataArray['action'];
-            }
-
-            $this->pdo = $pdo;
-            $this->db_tables = $tables;
         }
 
         public function getTableName() {
@@ -101,16 +80,7 @@
                 $params[':nombre'] = [$this->nombre, PDO::PARAM_STR];
             }
 
-            $res = DBAPI::executeQuery($this->pdo, $sql, $params);
-            if (DBResponse::isERROR($res)) {
-                return $res;
-            }
-            $rowsAffected = DBResponse::getData($res)['row_count'];
-            if ($rowsAffected > 0) {
-                return DBResponse::ok($rowsAffected);
-            } else {
-                return DBResponse::error("Nothing was deleted from the table.");
-            }
+            return parent::execQueryAndGetRowsAffected($sql, $params);
         }
 
         public function get() {
@@ -135,13 +105,8 @@
                 $sql .= " nombre = :nombre";
                 $params[':nombre'] = [$this->nombre, PDO::PARAM_STR];
             }
-
-            $res = DBAPI::executeQuery($this->pdo, $sql, $params);
-            if (DBResponse::isERROR($res)) {
-                return $res;
-            }
-            $rows = DBResponse::getData($res)['rows'];
-            return DBResponse::ok($rows);
+            
+            return parent::execQueryAndGetRows($sql, $params);
         }
 
         public function exists() {
@@ -151,17 +116,8 @@
 
             $sql = "SELECT * FROM {$this->getTableName()} WHERE code=:code";
             $params = [':code' => [$this->code, PDO::PARAM_INT]];
-            $res = DBAPI::executeQuery($this->pdo, $sql, $params);
-            if (DBResponse::isERROR($res)) {
-                return $res;
-            }
 
-            $rowCount = DBResponse::getData($res)['row_count'];
-            if ($rowCount  > 0) {
-                return DBResponse::ok(true);
-            } else {
-                return DBResponse::ok(false);
-            }
+            return parent::execQueryAndCheckExists($sql, $params);
         }
 
         public function insert() {
@@ -172,7 +128,7 @@
                 return DBResponse::error("nombre is null");
             }
 
-            $existsRes = $this->exists($this->code);
+            $existsRes = $this->exists();
             if (DBResponse::isERROR($existsRes)){
                 return $existsRes;
             }
@@ -184,16 +140,7 @@
                 (code, nombre) VALUES (:code, :nombre)";
             $params = [':code' => [$this->code, PDO::PARAM_INT], ':nombre' => [$this->nombre, PDO::PARAM_STR]];
             
-            $res = DBAPI::executeQuery($this->pdo, $sql, $params);
-            if (DBResponse::isERROR($res)) {
-                return $res;
-            }
-            $lastInsertId = DBResponse::getData($res)['lastInsertId'];
-            if ($lastInsertId !== false) {
-                return DBResponse::ok($lastInsertId);
-            } else {
-                return DBResponse::error("there was not inserted id");
-            }
+            return parent::execQueryAndGetInsertId($sql, $params);
         }
 
         public function update() {
@@ -207,16 +154,7 @@
              SET nombre = :nombre WHERE code = :code";
             $params = [':code' => [$this->code, PDO::PARAM_INT], ':nombre' => [$this->nombre, PDO::PARAM_STR]];
 
-            $res = DBAPI::executeQuery($this->pdo, $sql, $params);
-            if (DBResponse::isERROR($res)) {
-                return $res;
-            }
-            $rowsAffected = DBResponse::getData($res)['row_count'];
-            if ($rowsAffected > 0) {
-                return DBResponse::ok($rowsAffected);
-            } else {
-                return DBResponse::error("No rows were updated.");
-            }
+            return parent::execQueryAndGetRowsAffected($sql, $params);
         }
 
         public function push() {
