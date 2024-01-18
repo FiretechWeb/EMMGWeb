@@ -43,6 +43,7 @@ export default function Console() {
             multiArgs: false,
             callback: () => {outputElement.value = "";}
         } as cmdType);
+
         addCMD({
             name: 'echo',
             usage: 'print message to console',
@@ -53,7 +54,7 @@ export default function Console() {
                     outputElement.scrollTop = outputElement.scrollHeight;
                 });
             }
-        })
+        } as cmdType);
 
         initialized.current = true;
     }, []);
