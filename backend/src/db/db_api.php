@@ -10,9 +10,15 @@
                     $stmt->bindParam($param, $value[0], $value[1]);
                 }
                 if ($stmt->execute()) {
+                    $rows = [];
+                    try { //XXX: Try catch inside another try catch can't be good...
+                        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    } catch (Exception $ie) {
+                        $rows = [];
+                    }
                     return DBResponse::ok([
                         'row_count' => $stmt->rowCount(),
-                        'rows' => $stmt->fetchAll(PDO::FETCH_ASSOC),
+                        'rows' => $rows,
                         'lastInsertId' => $pdo->lastInsertId()
                     ]);
                 } else {

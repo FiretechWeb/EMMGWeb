@@ -148,11 +148,14 @@
                 $sql .= "WHERE ";
             }
             if ($this->code !== null) {
-                $sql .= "code = :code";
+                $sql .= " code = :code";
+                if ($this->nombre !== null) {
+                    $sql .= " AND";
+                }
                 $params[':code'] = [$this->code, PDO::PARAM_INT];
             }
             if ($this->nombre !== null) {
-                $sql .= "nombre = :nombre";
+                $sql .= " nombre = :nombre";
                 $params[':nombre'] = [$this->nombre, PDO::PARAM_STR];
             }
 
