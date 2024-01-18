@@ -69,8 +69,8 @@
                 case 'get':
                     return $this->get();
                 break;
-                case 'remove':
-                    return $this->remove();
+                case 'delete':
+                    return $this->delete();
                 break;
             }
             return DBResponse::error("Invalid action");
@@ -93,13 +93,13 @@
                 $this->id = $firstElement['id'];
                 $this->code = $firstElement['code'];
                 $this->nombre = $firstElement['nombre'];
-                
+
                 return DBResponse::ok($firstElement);
             } else {
                 return DBResponse::error("Cannot pull");
             }
         }
-        public function remove() {
+        public function delete() {
             if ($this->code !== null && !is_numeric($this->code)) {
                 return DBResponse::error("code must be a valid number.");
             }

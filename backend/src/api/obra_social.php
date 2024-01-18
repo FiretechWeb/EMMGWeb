@@ -21,7 +21,6 @@
         }
 
         $pdo = null;
-
         try {
             $DB = DBStructure::$DB_NAME;
             $pdo = new PDO("mysql:host=$HOST_URL;dbname=$DB", $HOST_USER, $HOST_PASSWORD);
@@ -32,7 +31,6 @@
             echo JSONResponse::error($e->getMessage());
             exit(0);
         }
-        
         if ($pdo === null) {
             echo JSONResponse::error("PDO is null");
             exit(0);
@@ -41,7 +39,7 @@
         $obraSocial = new DBObraSocial($pdo, $decodedData);
         $res = $obraSocial->executeAction();
         echo DBResponse::responseToJSON($res);
-        
+
     } else {
         echo JSONResponse::error("Invalid method");
     }
