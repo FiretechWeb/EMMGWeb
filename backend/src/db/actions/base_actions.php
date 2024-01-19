@@ -3,6 +3,18 @@
     include_once dirname(__FILE__). '/../db_structure.php';
     include_once dirname(__FILE__). '/../db_response.php';
 
+    function isValidCondition($condString) {
+        return in_array($condString, ["LIKE", "=", ">", "<", "<>"]);
+    }
+
+    /*
+    * Format of action params received from FrontEnd
+    * {
+    *  'fields': { 'fieldName': value, ...},
+    *  'conditions': [{'field': field, 'condition': conditionString, 'result': result}, ...]
+    * } 
+    */
+
     class DBBaseActions {
 
         public static function update($pdo, $table, $params = [], $tableStructure = null) {
@@ -16,28 +28,56 @@
 
             $tableData = $tableStructure[$table];
             $fields = $tableData['fields'];
-            $updateFields = [];
-            $updateColumn = [];
+            $fieldsAllowedToSet = array_filter($tableData['fields'], function($field) {
+                return $field['allow_insert'];
+            });
+            $fieldParams = $params['fields'];
+            $conditions = $params['conditions'];
+            $preparedStatements = [];
+            $setColumns = [];
+            $conditionColumns = [];
+            $i = 0;
 
-            foreach($fields as $field => $fieldPararms) {
-                if (isset($params[$field])) {
-                    $updateFields[] = ["name" => $field, "value" => $params[$field], "type" =>  $fieldPararms['pdo_type']];
-                    $updateColumn[] = "$field = :$field";
+            foreach($fieldsAllowedToSet as $field => $fieldPararms) {
+                if (isset($fieldParams[$field])) {
+                    $preparedStatements[] = ["name" => $field, "value" => $fieldParams[$field], "type" =>  $fieldPararms['pdo_type']];
+                    $setColumns[] = "$field = :$field";
                 }
             }
 
-            $sql = "SELECT * FROM $table";
-            if (!empty($filtersColumn)) {
-                $sql.= " WHERE ";
-                $sql.= implode(" AND ", $filtersColumn)." ;";
+            if (empty($setColumns)) {
+                return DBResponse::error("There are no columns to update.");
             }
+
+            foreach($conditions as $conditionData) {
+                if (isset($fields[$conditionData['field']])) {
+                    $fieldName = $conditionData['field'];
+                    $conditionName = $conditionData['condition'];
+                    $result = $conditionData['result'];
+                    $fieldPararms =  $fields[$fieldName];
+
+                    if (!isValidCondition($conditionName)) {
+                        return DBResponse::error("Invalid conditional statement");
+                    }
+
+                    $conditionColumns[] = "$fieldName $conditionName :result_$i";
+                    $preparedStatements[] = ["name" => "result_$i", "value" => $result, "type" =>  $fieldPararms['pdo_type']];
+                    $i++;
+                }
+            }
+            
+            if (empty($conditionColumns)) {
+                return DBResponse::error("For security reasons, you can only update with a condition.");
+            }
+
+            $sql = "UPDATE $table SET ".implode(" , ", $setColumns)." WHERE ".implode(" AND ", $conditionColumns);
 
             $pdoParams = [];
-            foreach($filterFields as $fData) {
-                $pdoParams[$fData['name']] = [$fData['value'], $fData['type']];
+            foreach($preparedStatements as $ps) {
+                $pdoParams[$ps['name']] = [$ps['value'], $ps['type']];
             }
 
-            return DBAPI::execQueryAndGetRowsAffected($pdo, $sql, $params);
+            return DBAPI::execQueryAndGetRowsAffected($pdo, $sql, $pdoParams);
         }
 
         public static function get($pdo, $table, $params = [], $tableStructure = null) {
@@ -51,25 +91,37 @@
 
             $tableData = $tableStructure[$table];
             $fields = $tableData['fields'];
-            $filterFields = [];
-            $filtersColumn = [];
+            $conditions = $params['conditions'];
+            $conditionColumns = [];
+            $preparedStatements = [];
+            $i = 0;
+            
+            foreach($conditions as $conditionData) {
+                if (isset($fields[$conditionData['field']])) {
+                    $fieldName = $conditionData['field'];
+                    $conditionName = $conditionData['condition'];
+                    $result = $conditionData['result'];
+                    $fieldPararms =  $fields[$fieldName];
 
-            foreach($fields as $field => $fieldPararms) {
-                if (isset($params[$field])) {
-                    $filterFields[] = ["name" => $field, "value" => $params[$field], "type" =>  $fieldPararms['pdo_type']];
-                    $filtersColumn[] = "$field = :$field";
+                    if (!isValidCondition($conditionName)) {
+                        return DBResponse::error("Invalid conditional statement");
+                    }
+
+                    $conditionColumns[] = "$fieldName $conditionName :result_$i";
+                    $preparedStatements[] = ["name" => "result_$i", "value" => $result, "type" =>  $fieldPararms['pdo_type']];
+                    $i++;
                 }
             }
 
             $sql = "SELECT * FROM $table";
-            if (!empty($filtersColumn)) {
+            if (!empty($conditionColumns)) {
                 $sql.= " WHERE ";
-                $sql.= implode(" AND ", $filtersColumn)." ;";
+                $sql.= implode(" AND ", $conditionColumns)." ;";
             }
 
             $pdoParams = [];
-            foreach($filterFields as $fData) {
-                $pdoParams[$fData['name']] = [$fData['value'], $fData['type']];
+            foreach($preparedStatements as $ps) {
+                $pdoParams[$ps['name']] = [$ps['value'], $ps['type']];
             }
 
             return DBAPI::execQueryAndGetRows($pdo, $sql, $pdoParams);
@@ -83,20 +135,24 @@
             if (!isset($tableStructure[$table])) {
                 return DBResponse::error("The given table does not exists.");
             }
+            if (!isset($params['fields'])) {
+                return DBResponse::error("No fields to insert given.");
+            }
 
             $tableData = $tableStructure[$table];
             $fields = array_filter($tableData['fields'], function($field) {
                 return $field['allow_insert'];
             });
 
+            $fieldParams = $params['fields'];
             $fieldsData = [];
             $fieldsNames = [];
 
             foreach($fields as $field => $fieldPararms) {
-                if (!isset($params[$field])) {
+                if (!isset($fieldParams[$field])) {
                     return DBResponse::error("Field $field is not set");
                 }
-                $fieldsData[] = ["name" => $field, "value" => $params[$field], "type" =>  $fieldPararms['pdo_type']];
+                $fieldsData[] = ["name" => $field, "value" => $fieldParams[$field], "type" =>  $fieldPararms['pdo_type']];
                 $fieldsNames[] = $field;
             }
 
