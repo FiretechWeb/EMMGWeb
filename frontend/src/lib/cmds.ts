@@ -37,8 +37,20 @@ const CMDS: cmdType[] = [
     }
 ];
 
+function cmdExists(cmd: cmdType) {
+    return CMDS.some(x => x.name == cmd.name);
+}
+
 export function addCMD(cmd: cmdType) {
+    if (cmdExists(cmd)) return;
+
     CMDS.push(cmd);
+}
+
+export function removeCMD(cmdName: string) {
+    let filteredCMDS: Array<cmdType> = CMDS.filter(cmd => cmd.name != cmdName);
+    CMDS.length = 0;
+    filteredCMDS.forEach(cmd => CMDS.push(cmd));
 }
 
 export function processCMD(cmdString: string) {

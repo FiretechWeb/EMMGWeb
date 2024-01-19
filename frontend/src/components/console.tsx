@@ -1,6 +1,6 @@
 'use client';
 
-import { processCMD, addCMD, cmdType } from '../lib/cmds';
+import { processCMD, addCMD, cmdType, removeCMD } from '../lib/cmds';
 import { createDBcmds } from '../lib/db_cmds';
 import styles from './console.module.css';
 
@@ -13,27 +13,32 @@ function consoleTextInput(inputText: string) {
 export default function Console() {
     const consoleRef: MutableRefObject<null|HTMLFormElement> = useRef(null);
     const initialized: MutableRefObject<boolean> = useRef(false);
+    const inputRef: MutableRefObject<null|HTMLInputElement> = useRef(null);
+    const outputRef: MutableRefObject<null|HTMLTextAreaElement> = useRef(null);
+
+    const handleConsoleInput = (e: KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            const inputText: string = inputRef.current!.value;
+            outputRef.current!.value += `> ${inputText}\n`;
+            inputRef.current!.value = "";
+            consoleTextInput(inputText);
+            requestAnimationFrame(() => {
+                outputRef.current!.scrollTop = outputRef.current!.scrollHeight;
+            });
+        }
+    }
+
     useEffect(() => {
         if (initialized.current || !consoleRef.current) return;
+
+        const inputElement = inputRef.current as HTMLInputElement;
 
         const formElement: HTMLFormElement = (consoleRef.current as HTMLFormElement);
         formElement.addEventListener('submit', (e) => {
             e.preventDefault();
         });
 
-        const outputElement: HTMLTextAreaElement = formElement.querySelector("textarea") as HTMLTextAreaElement;
-        const inputElement: HTMLInputElement = formElement.querySelector("input") as HTMLInputElement;
-        inputElement.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                const inputText: string = inputElement.value;
-                outputElement.value += `> ${inputText}\n`;
-                inputElement.value = "";
-                consoleTextInput(inputText);
-                requestAnimationFrame(() => {
-                    outputElement.scrollTop = outputElement.scrollHeight;
-                });
-              }
-        });
+        inputElement.addEventListener('keydown', handleConsoleInput);
         
         createDBcmds();
         
@@ -41,7 +46,7 @@ export default function Console() {
             name: 'clear',
             usage:'clear console',
             multiArgs: false,
-            callback: () => {outputElement.value = "";}
+            callback: () => {outputRef.current!.value = "";}
         } as cmdType);
 
         addCMD({
@@ -49,20 +54,26 @@ export default function Console() {
             usage: 'print message to console',
             multiArgs: false,
             callback: (txt: string) => {
-                outputElement.value += `${txt}\n`; console.log(txt);
+                outputRef.current!.value += `${txt}\n`; console.log(txt);
                 requestAnimationFrame(() => {
-                    outputElement.scrollTop = outputElement.scrollHeight;
+                    outputRef.current!.scrollTop = outputRef.current!.scrollHeight;
                 });
             }
         } as cmdType);
 
         initialized.current = true;
-    }, []);
+
+        return () => {
+            removeCMD('echo');
+            removeCMD('clear');
+            inputElement.removeEventListener('keydown', handleConsoleInput);
+          };
+    }, [inputRef]);
 
     return (
         <form className={styles.wrapper} ref={consoleRef}>
-            <textarea readOnly className={styles.output}></textarea>
-            <input className={styles.input} type="text"></input>
+            <textarea ref={outputRef} readOnly className={styles.output}></textarea>
+            <input ref={inputRef} className={styles.input} type="text"></input>
         </form>
     )
 }

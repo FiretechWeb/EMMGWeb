@@ -1,6 +1,4 @@
 import styles from './ui.module.css'
-import { processCMD, addCMD, cmdType } from '../lib/cmds';
-import { createDBcmds } from '../lib/db_cmds';
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import Console from '../components/console';
 
@@ -22,7 +20,7 @@ export default function Home() {
           window.removeEventListener('keydown', handleKeyPress);
         };
     }, []);
-    
+
     return (
         <main>
             {fakeConsole && <Console></Console>}
