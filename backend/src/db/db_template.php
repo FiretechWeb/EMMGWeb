@@ -110,7 +110,8 @@
                     "actions" => [
                         "insert" => ['DBBaseActions', 'insert'],
                         "get" => ['DBBaseActions', 'get'],
-                        "update" => ['DBBaseActions', 'update']
+                        "update" => ['DBBaseActions', 'update'],
+                        "delete" => ['DBBaseActions', 'delete']
                     ]
                 ],
                 "id_name_128" => [
@@ -121,7 +122,8 @@
                     "actions" => [
                         "insert" => ['DBBaseActions', 'insert'],
                         "get" => ['DBBaseActions', 'get'],
-                        "update" => ['DBBaseActions', 'update']
+                        "update" => ['DBBaseActions', 'update'],
+                        "delete" => ['DBBaseActions', 'delete']
                     ]
                 ],
                 "id_name_256" => [
@@ -132,7 +134,8 @@
                     "actions" => [
                         "insert" => ['DBBaseActions', 'insert'],
                         "get" => ['DBBaseActions', 'get'],
-                        "update" => ['DBBaseActions', 'update']
+                        "update" => ['DBBaseActions', 'update'],
+                        "delete" => ['DBBaseActions', 'delete']
                     ]
                 ],
                 "id_code_name" => [
@@ -144,7 +147,8 @@
                     "actions" => [
                         "insert" => ['DBBaseActions', 'insert'],
                         "get" => ['DBBaseActions', 'get'],
-                        "update" => ['DBBaseActions', 'update']
+                        "update" => ['DBBaseActions', 'update'],
+                        "delete" => ['DBBaseActions', 'delete']
                     ]
                 ],
                 "id_code_name_128" => [
@@ -156,7 +160,8 @@
                     "actions" => [
                         "insert" => ['DBBaseActions', 'insert'],
                         "get" => ['DBBaseActions', 'get'],
-                        "update" => ['DBBaseActions', 'update']
+                        "update" => ['DBBaseActions', 'update'],
+                        "delete" => ['DBBaseActions', 'delete']
                     ]
                 ],
                 "id_code_name_256" => [
@@ -168,7 +173,8 @@
                     "actions" => [
                         "insert" => ['DBBaseActions', 'insert'],
                         "get" => ['DBBaseActions', 'get'],
-                        "update" => ['DBBaseActions', 'update']
+                        "update" => ['DBBaseActions', 'update'],
+                        "delete" => ['DBBaseActions', 'delete']
                     ]
                 ]
             ];

@@ -168,7 +168,7 @@
             if ($rowsAffected > 0) {
                 return DBResponse::ok($rowsAffected);
             } else {
-                return DBResponse::error("No rows were updated.");
+                return DBResponse::error("No rows were affected.");
             }
         }
 

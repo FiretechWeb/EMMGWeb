@@ -17,6 +17,50 @@
 
     class DBBaseActions {
 
+        public static function delete($pdo, $table, $params = [], $tableStructure = null) {
+            if ($tableStructure === null) {
+                $tableStructure == DBStructure::getStructure();
+            }
+
+            if (!isset($tableStructure[$table])) {
+                return DBResponse::error("The given table does not exists.");
+            }
+
+            $tableData = $tableStructure[$table];
+            $fields = $tableData['fields'];
+            $conditions = $params['conditions'];
+            $conditionColumns = [];
+            $preparedStatements = [];
+            $i = 0;
+            
+            foreach($conditions as $conditionData) {
+                if (isset($fields[$conditionData['field']])) {
+                    $fieldName = $conditionData['field'];
+                    $conditionName = $conditionData['condition'];
+                    $result = $conditionData['result'];
+                    $fieldPararms =  $fields[$fieldName];
+
+                    if (!isValidCondition($conditionName)) {
+                        return DBResponse::error("Invalid conditional statement");
+                    }
+
+                    $conditionColumns[] = "$fieldName $conditionName :result_$i";
+                    $preparedStatements[] = ["name" => "result_$i", "value" => $result, "type" =>  $fieldPararms['pdo_type']];
+                    $i++;
+                }
+            }
+            if (empty($conditionColumns)) {
+                return DBResponse::error("For security reasons, you can only delete with a condition.");
+            }
+            $sql = "DELETE FROM $table WHERE ".implode(" AND ", $conditionColumns)." ;";
+
+            $pdoParams = [];
+            foreach($preparedStatements as $ps) {
+                $pdoParams[$ps['name']] = [$ps['value'], $ps['type']];
+            }
+
+            return DBAPI::execQueryAndGetRowsAffected($pdo, $sql, $pdoParams);
+        }
         public static function update($pdo, $table, $params = [], $tableStructure = null) {
             if ($tableStructure === null) {
                 $tableStructure == DBStructure::getStructure();

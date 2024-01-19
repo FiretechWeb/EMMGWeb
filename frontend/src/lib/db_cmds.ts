@@ -5,6 +5,7 @@ import { splitFirstOccurrence } from "./stringExt";
 import type { cmdType } from "./cmds";
 
 
+//XXX: If the condition does not have spaces between <field condition result>, then it will not work.
 function processActionCondition(inputString: string): Object {
     const regex = /^(\S+)\s+(\S+)\s+(.+)/;
 
@@ -45,6 +46,24 @@ export function createDBcmds() {
         } as cmdType
     );
 
+    addCMD(
+        {
+            name: 'get structure',
+            usage:'get API DB structure',
+            multiArgs: false,
+            callback: () => {
+                axios.post(`${GlobalVars.backend_path!}/api/get_structure.php`, { },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                }).then(r => {
+                    processCMD(`echo ${JSON.stringify(r.data, null, 3)}`);
+                })
+                .catch(e => processCMD(`echo ${e}`));
+            }
+        } as cmdType
+    );
 
     /**
      * Send an action to the backend API
