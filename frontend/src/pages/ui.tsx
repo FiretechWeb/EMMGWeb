@@ -22,6 +22,7 @@ export default function Home() {
           window.removeEventListener('keydown', handleKeyPress);
         };
     }, []);
+    
     return (
         <main>
             {fakeConsole && <Console></Console>}
