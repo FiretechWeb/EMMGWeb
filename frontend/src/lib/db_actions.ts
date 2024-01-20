@@ -2,7 +2,17 @@ import { GlobalVars } from "../cfg/config";
 import axios from "axios";
 import { splitFirstOccurrence } from "./stringExt";
 
+let _dbStructure: any = null;
+
 export class DBActions {
+
+    static getPrimaryKeyName(table: string, dbStructure: any = null) {
+        if (!dbStructure) {
+            dbStructure = _dbStructure;
+        }
+        
+    }  
+
     static async createMainDB() {
         try {
             let res = await axios.post(`${GlobalVars.backend_path!}/create_db.php`, { },
@@ -35,6 +45,7 @@ export class DBActions {
                 console.error("404 response");
                 return null;
             } else {
+                _dbStructure = res.data;
                 return res.data;
             }
         } catch (e) {

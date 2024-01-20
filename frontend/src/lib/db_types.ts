@@ -10,7 +10,7 @@ export interface DBFieldType {
     not_null: boolean;
     extra_params: string;
     allow_insert: boolean;
-    foreign_key: DBForeignKey;
+    foreign_key: DBForeignKey | null;
 }
 
 export interface DBTableType {

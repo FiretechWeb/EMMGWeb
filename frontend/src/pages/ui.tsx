@@ -50,7 +50,7 @@ export default function Home() {
             <TabView scrollable panelContainerClassName='p-5'>
             {Object.keys(dataStructure).map( (key) => (
                 <TabPanel headerStyle={{background: 'none'}} headerClassName="border-dashed border-2 border-sky-500 *:p-2" key={key} header={key}>
-                    <DBTableComponent jsonData={JSON.stringify(dataStructure[key])} name={key}></DBTableComponent>
+                    <DBTableComponent jsonTableData={JSON.stringify(dataStructure[key])} name={key}></DBTableComponent>
                 </TabPanel>
             ))}
             </TabView>
