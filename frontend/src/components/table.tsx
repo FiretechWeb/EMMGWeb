@@ -1,45 +1,49 @@
 import type { DBFieldType, DBTableType } from "../lib/db_types"
 import { useState, useEffect } from "react"
+import { InputText } from 'primereact/inputtext';
+import { InputNumber } from 'primereact/inputnumber';
+import { Checkbox } from 'primereact/checkbox';
+import { Calendar } from 'primereact/calendar';
 
-function getComponentFromSQLType(componentKey: string, type: string, name: string, children = null) {
+function getComponentFromSQLType(componentKey: string, type: string, name: string) {
     if (type.toLowerCase().includes("varchar")) {
         return (
             <div key={componentKey}>
                 <label>{name}</label>
-                <input type="text" name={componentKey}>{children}</input>
+                <InputText name={componentKey} ></InputText>
             </div>
         )
     } else if (type.toLowerCase().includes("bigint")) {
         return (
             <div key={componentKey}>
                 <label>{name}</label>
-                <input type="text" name={componentKey}>{children}</input>
+                <InputNumber name={componentKey} ></InputNumber>
             </div>
         )
     } else if (type.toLowerCase().includes("int")) {
         return (
             <div key={componentKey}>
                 <label>{name}</label>
-                <input type="text" name={componentKey}>{children}</input>
+                <InputNumber name={componentKey} ></InputNumber>
             </div>
         )
     } else if (type.toLowerCase().includes("tinyint")) {
         return (
             <div key={componentKey}>
                 <label>{name}</label>
-                <input key={componentKey} type="checkbox" value={name} name={componentKey}>{children}</input>
+                <Checkbox checked={false}></Checkbox>
             </div>
         )
     } else if (type.toLowerCase().includes("date")) {
         return (
             <div key={componentKey}>
                 <label>{name}</label>
-                <input key={componentKey} type="date" name={componentKey}>{children}</input>
+                <Calendar></Calendar>
             </div>
         )
     }
 
-    return <div key={componentKey}>{children}</div>;
+    return <div key={componentKey}></div>;
 }
 
 interface TableComponentProps {

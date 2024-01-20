@@ -4,6 +4,8 @@ import Console from '../components/console';
 import { DBActions } from '../lib/db_actions';
 import type { DBFieldType, DBTableType } from "../lib/db_types"
 import DBTableComponent from '../components/table';
+import { TabView, TabPanel } from 'primereact/tabview';
+
 
 export default function Home() {
     const initialized: MutableRefObject<boolean> = useRef(false);
@@ -42,10 +44,16 @@ export default function Home() {
     return (
         <main>
             {fakeConsole && <Console></Console>}
+            <h1 className='p-2 text-3xl text-center'>Liquidación de sueldos</h1>
 
+            <h2 className='p-2 text-2xl text-center'>Carga de datos</h2>
+            <TabView scrollable panelContainerClassName='p-5'>
             {Object.keys(dataStructure).map( (key) => (
-                <DBTableComponent jsonData={JSON.stringify(dataStructure[key])} name={key}></DBTableComponent>
+                <TabPanel headerStyle={{background: 'none'}} headerClassName="border-dashed border-2 border-sky-500 *:p-2" key={key} header={key}>
+                    <DBTableComponent jsonData={JSON.stringify(dataStructure[key])} name={key}></DBTableComponent>
+                </TabPanel>
             ))}
+            </TabView>
         </main>
     )
 }
