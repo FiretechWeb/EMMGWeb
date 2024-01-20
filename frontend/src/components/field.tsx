@@ -61,6 +61,7 @@ export default function FieldComponent(props: FieldComponentProps) {
              fieldData && fieldData && !fieldData.foreign_key && 
             (fieldData.sql_type.toLowerCase().includes("bigint") ||
             fieldData.sql_type.toLowerCase().includes("int")) &&
+            !fieldData.sql_type.toLowerCase().includes("tinyint") &&
             <div className="m-2">
                 <label className="mx-2">{props.name}: </label>
                 <InputNumber name={props.name} ></InputNumber>
