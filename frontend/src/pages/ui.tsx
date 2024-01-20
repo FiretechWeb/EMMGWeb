@@ -2,11 +2,13 @@ import styles from './ui.module.css'
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import Console from '../components/console';
 import { DBActions } from '../lib/db_actions';
+import type { DBFieldType, DBTableType } from "../lib/db_types"
+import DBTableComponent from '../components/table';
 
 export default function Home() {
     const initialized: MutableRefObject<boolean> = useRef(false);
     const [fakeConsole, setFakeConsole] = useState(false);
-    const [dataStructure, setDataStructure] = useState({});
+    const [dataStructure, setDataStructure] = useState<{ [key: string]: any }>({});
     
     const handleKeyPress = (event: KeyboardEvent) => {
         if (event.key.toLowerCase() === 'f12') {
@@ -40,8 +42,9 @@ export default function Home() {
     return (
         <main>
             {fakeConsole && <Console></Console>}
+
             {Object.keys(dataStructure).map( (key) => (
-                <div key={key}>Table: {key}</div>
+                <DBTableComponent jsonData={JSON.stringify(dataStructure[key])} name={key}></DBTableComponent>
             ))}
         </main>
     )
