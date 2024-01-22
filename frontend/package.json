@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "export": "npx run export",
     "start": "next start",
     "lint": "next lint"
   },

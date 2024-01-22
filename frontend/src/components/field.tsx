@@ -37,7 +37,7 @@ export default function FieldComponent(props: FieldComponentProps) {
                     }
                 }).catch(e => setFieldForeignOptions([]));
         }
-    }, [props]);
+    }, [props, fieldData]);
 
     return (
         <>

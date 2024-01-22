@@ -25,7 +25,7 @@ export default function TableAddComponent(props: TableAddComponentProps) {
         Object.keys(fields)
             .filter(fieldName => fields[fieldName].allow_insert)
             .map( (fieldName) => (
-                <FieldComponent name={fieldName} jsonFieldData={JSON.stringify(fields[fieldName])}></FieldComponent>
+                <FieldComponent key={fieldName} name={fieldName} jsonFieldData={JSON.stringify(fields[fieldName])}></FieldComponent>
             ))
         }
         <Button onClick={agregarElemento} className="bg-slate-500 p-1 m-1 self-center place-self-center" label="Agregar"></Button>
