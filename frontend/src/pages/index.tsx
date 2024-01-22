@@ -24,6 +24,7 @@ export default function Home() {
 
         if (initialized.current) return;
 
+        window.removeEventListener('keydown', handleKeyPress);
         window.addEventListener('keydown', handleKeyPress);
 
         DBActions.getStructure().then( r => {
@@ -34,10 +35,6 @@ export default function Home() {
         }).catch( e => console.error(e) );
 
         initialized.current = true;
-
-        return () => {
-          window.removeEventListener('keydown', handleKeyPress);
-        };
 
     }, []);
 

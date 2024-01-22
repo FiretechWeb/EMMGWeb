@@ -30,6 +30,7 @@ export default function Console() {
 
     useEffect(() => {
         if (initialized.current || !consoleRef.current) return;
+    
         const inputElement = inputRef.current as HTMLInputElement;
 
         const formElement: HTMLFormElement = (consoleRef.current as HTMLFormElement);
@@ -37,10 +38,12 @@ export default function Console() {
             e.preventDefault();
         });
 
+        inputElement.removeEventListener('keydown', handleConsoleInput);
         inputElement.addEventListener('keydown', handleConsoleInput);
         
         createDBcmds();
-        
+
+        removeCMD('clear');
         addCMD({
             name: 'clear',
             usage:'clear console',
@@ -48,6 +51,7 @@ export default function Console() {
             callback: () => {outputRef.current!.value = "";}
         } as cmdType);
 
+        removeCMD('echo');
         addCMD({
             name: 'echo',
             usage: 'print message to console',
@@ -61,13 +65,7 @@ export default function Console() {
         } as cmdType);
 
         initialized.current = true;
-
-        return () => {
-            removeCMD('echo');
-            removeCMD('clear');
-            inputElement.removeEventListener('keydown', handleConsoleInput);
-          };
-    }, [inputRef]);
+    }, [inputRef, outputRef]);
 
     return (
         <form className={styles.wrapper} ref={consoleRef}>
