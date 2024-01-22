@@ -30,7 +30,6 @@ export default function Console() {
 
     useEffect(() => {
         if (initialized.current || !consoleRef.current) return;
-
         const inputElement = inputRef.current as HTMLInputElement;
 
         const formElement: HTMLFormElement = (consoleRef.current as HTMLFormElement);
