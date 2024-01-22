@@ -1,15 +1,13 @@
 #!/bin/bash
-# Remove files in .out/ directory
-find out/ -type f -delete
 
-# Remove directories in .out/ directory (excluding those starting with a dot and .git)
-find out/ -mindepth 1 -type d ! -name '.*' ! -name '.git' -exec rm -rf {} \;
+# Remove files and directories inside ../emmg-deploy/ directory (excluding .git)
+find ../emmg-deploy/ -mindepth 1 ! -path '../emmg-deploy/.git*' -delete
 
 echo "cleaned out folder."
 cd frontend
 npm run build
 npm run export
 cd ..
-mv ./frontend/out/* ./out
-cp -r ./backend/src ./out/backend
+mv ./frontend/out/* ../emmg-deploy/
+cp -r ./backend/src ../emmg-deploy/backend
 echo "site built and exported."

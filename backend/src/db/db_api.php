@@ -6,11 +6,15 @@
 
         public static function generateTablesFromStructure($conn, $tableStructure) {
             $tables = [];
+            $dropTables = [];
+            $resetIncrement = [];
             foreach ($tableStructure as $tableName => $data) {
                 $fields = $data['fields'];
                 $columns = [];
                 $primary_keys = [];
                 $foreign_keys = [];
+                $dropTables[] = "DROP TABLE IF EXISTS $tableName";
+                $resetIncrement[] = "ALTER TABLE $tableName AUTO_INCREMENT = 1";
                 $tableDefinition = "CREATE TABLE IF NOT EXISTS $tableName (";
                 foreach ($fields as $fieldName => $params) {
                     $columnDefinition = "$fieldName {$params['sql_type']} ";
@@ -41,11 +45,22 @@
                 }
                 $tables[] = $tableDefinition;
             }
+            foreach ($dropTables as $dropSQL) {
+                if (!mysqli_query($conn, $dropSQL)) {
+                    return false;
+                }
+            }
             foreach ($tables as $tableSQL) {
                 if (!mysqli_query($conn, $tableSQL)) {
                     return false;
                 }
             }
+            foreach ($resetIncrement as $resetSQL) {
+                if (!mysqli_query($conn, $resetSQL)) {
+                    return false;
+                }
+            }
+            
             return true;
         }
 
