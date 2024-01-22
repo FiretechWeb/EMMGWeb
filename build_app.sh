@@ -3,7 +3,7 @@
 # Remove files and directories inside ../emmg-deploy/ directory (excluding .git)
 find ../emmg-deploy/ -mindepth 1 ! -path '../emmg-deploy/.git*' -delete
 
-echo "cleaned out folder."
+echo "cleaned emmg-deploy folder."
 cd frontend
 npm run build
 npm run export
