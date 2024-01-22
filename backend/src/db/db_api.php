@@ -83,7 +83,7 @@
         public static function startPDO() {
             $pdo = null;
             try {
-                $DB = DBStructure::$DB_NAME;
+                $DB = Config::$HOST_DB;
                 $URL = Config::$HOST_URL;
                 $USER = Config::$HOST_USER;
                 $PASS = Config::$HOST_PASSWORD;

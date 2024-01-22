@@ -3,8 +3,6 @@
     include_once dirname(__FILE__).'/db_template.php';
 
     class DBStructure {
-        public static $DB_NAME = "emmgweb";
-
         public static function getStructure() {
             $fieldTemplates = DBTemplate::getFieldTemplates();
             $tableTemplates = DBTemplate::getTableTemplates();

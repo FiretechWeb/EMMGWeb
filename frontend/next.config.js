@@ -5,7 +5,7 @@ const nextConfig = {
     reactStrictMode: true,
     output: 'standalone',
      trailingSlash: true,
-
+     assetPrefix: './',
      experimental: {
         images: {
           unoptimized: true,

@@ -1,4 +1,5 @@
 <?php
+
     include_once 'config/def.php';
     include_once 'config/run_settings.php';
     include_once 'lib/enable_cors.php';
@@ -15,16 +16,18 @@
                 echo JSONResponse::error("Connection failed: " . mysqli_connect_error());
                 exit(0);
             }
-            if (!DBAPI::dropDB($conn, DBStructure::$DB_NAME)) {
-                echo JSONResponse::error("Error dropping database: ".mysqli_error($conn));
-                exit(0);
-            }
-            if (!DBAPI::createDB($conn, DBStructure::$DB_NAME)) {
-                echo JSONResponse::error("Error creating database: ".mysqli_error($conn));
-                exit(0);
+            if (!Config::$PRODUCTION) {
+                if (!DBAPI::dropDB($conn, Config::$HOST_DB)) {
+                    echo JSONResponse::error("Error dropping database: ".mysqli_error($conn));
+                    exit(0);
+                }
+                if (!DBAPI::createDB($conn, Config::$HOST_DB)) {
+                    echo JSONResponse::error("Error creating database: ".mysqli_error($conn));
+                    exit(0);
+                }
             }
             
-            if (!mysqli_select_db($conn, DBStructure::$DB_NAME)) {
+            if (!mysqli_select_db($conn, Config::$HOST_DB)) {
                 echo JSONResponse::error("Connection to database failed: " .  mysqli_error($conn));
                 exit(0);
             }
