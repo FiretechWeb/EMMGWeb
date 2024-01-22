@@ -13,7 +13,7 @@ export default function TableAddComponent(props: TableAddComponentProps) {
     const agregarElemento = (event: any) => {
         //add element here!
         event.preventDefault();
-      };
+    };
 
     useEffect(() => {
         setFields(JSON.parse(props.jsonTableData)['fields']);

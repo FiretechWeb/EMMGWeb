@@ -1,11 +1,12 @@
 import type { DBFieldType, DBTableType } from "../lib/db_types"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { InputText } from 'primereact/inputtext';
 import { InputNumber } from 'primereact/inputnumber';
 import { Checkbox } from 'primereact/checkbox';
 import { Calendar } from 'primereact/calendar';
 import { DBActions } from "../lib/db_actions";
 import { Dropdown } from "primereact/dropdown";
+import { MutableRefObject } from "react";
 
 interface FieldComponentProps {
     name: string,
@@ -14,11 +15,16 @@ interface FieldComponentProps {
 }
 
 export default function FieldComponent(props: FieldComponentProps) {
+    const initialized: MutableRefObject<boolean> = useRef(false);
+
     const [fieldData, setFieldData] = useState<DBFieldType | null>(null);
     const [fieldChecked, setFieldChecked] = useState<boolean>(false);
     const [fieldSelected, setFieldSelected] = useState<any>(null);
     const [fieldForeignOptions, setFieldForeignOptions] = useState<Array<any>>([]);
     useEffect(() => {
+        
+        if (initialized.current) return;
+
         setFieldData(JSON.parse(props.jsonFieldData) as DBFieldType);
 
         if (!fieldData) return;
@@ -37,6 +43,8 @@ export default function FieldComponent(props: FieldComponentProps) {
                     }
                 }).catch(e => setFieldForeignOptions([]));
         }
+
+        initialized.current = true;
     }, [props, fieldData]);
 
     return (

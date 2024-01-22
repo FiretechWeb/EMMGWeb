@@ -67,6 +67,7 @@ export class DBActions {
      * } 
     */
     static async process(table: string, action: string, params: Object) {
+        console.log(`DBAction.process: ${table} - ${action}`, params);
         try {
             let res = await axios.post(`${GlobalVars.backend_path!}/api/action.php`, {
                 table,
