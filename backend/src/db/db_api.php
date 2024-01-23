@@ -43,12 +43,11 @@
                     $tableDefinition .= " ENGINE=InnoDB";
                 }
                 $tables[] = $tableDefinition;
-                
+
                 if (empty($foreign_keys)) {
                     array_push($dropTables, "DROP TABLE IF EXISTS $tableName");
                 } else {
-                    array_unshift($dropTables, "DROP TABLE IF EXISTS $tableName")
-;
+                    array_unshift($dropTables, "DROP TABLE IF EXISTS $tableName");
                 }
             }
             foreach ($dropTables as $dropSQL) {
