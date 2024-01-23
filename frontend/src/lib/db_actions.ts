@@ -1,16 +1,28 @@
 import { GlobalVars } from "../cfg/config";
 import axios from "axios";
 import { splitFirstOccurrence } from "./stringExt";
+import type { DBFieldType } from "./db_types";
 
 let _dbStructure: any = null;
 
 export class DBActions {
 
-    static getPrimaryKeyName(table: string, dbStructure: any = null) {
+    static generateKeyFromField(fieldData: any, primaryKeys: Array<string>): string {
+        return primaryKeys.map( key => fieldData[key]).join('-');
+    }
+    
+    static getPrimaryKeys(table: string, dbStructure: any = null): Array<string> {
         if (!dbStructure) {
             dbStructure = _dbStructure;
         }
-        
+
+        if (!dbStructure || !dbStructure[table] || !dbStructure[table]['fields']) return [];
+
+        const tableFields = dbStructure[table]['fields'];
+
+        return Object.keys(tableFields).filter( fieldName => {
+            return (tableFields[fieldName] as DBFieldType).primary;
+        });
     }  
 
     static async createMainDB() {
@@ -45,7 +57,11 @@ export class DBActions {
                 console.error("404 response");
                 return null;
             } else {
-                _dbStructure = res.data;
+                if (res.data && res.data.data) {
+                    _dbStructure = res.data.data;
+                } else {
+                    _dbStructure = null;
+                }
                 return res.data;
             }
         } catch (e) {

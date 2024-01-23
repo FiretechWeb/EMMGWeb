@@ -9,9 +9,9 @@ import { Dropdown } from "primereact/dropdown";
 import { MutableRefObject } from "react";
 
 interface FieldComponentProps {
-    name: string,
+    name: string;
     jsonFieldData: string;
-
+    value?: any;
 }
 
 export default function FieldComponent(props: FieldComponentProps) {
@@ -21,13 +21,19 @@ export default function FieldComponent(props: FieldComponentProps) {
     const [fieldChecked, setFieldChecked] = useState<boolean>(false);
     const [fieldSelected, setFieldSelected] = useState<any>(null);
     const [fieldForeignOptions, setFieldForeignOptions] = useState<Array<any>>([]);
+    const [fieldValue, setFieldValue] = useState<any>(null);
+
     useEffect(() => {
         
         if (initialized.current) return;
-
+        setFieldValue(props.value);
+        if (props.value) {
+            setFieldChecked(true);
+        }
         setFieldData(JSON.parse(props.jsonFieldData) as DBFieldType);
 
         if (!fieldData) return;
+        
         if (fieldData.foreign_key) {
             DBActions.process(fieldData.foreign_key.table, "get", DBActions.toParams([]))
                 .then(r => {
@@ -38,6 +44,9 @@ export default function FieldComponent(props: FieldComponentProps) {
                                 code: e[fieldData.foreign_key!.field]
                             }
                         }));
+                        if (fieldValue) {
+                            setFieldSelected(fieldForeignOptions.find(fo => fo.code == fieldValue));
+                        }
                     } else {
                         setFieldForeignOptions([]);
                     }
@@ -45,7 +54,7 @@ export default function FieldComponent(props: FieldComponentProps) {
         }
 
         initialized.current = true;
-    }, [props, fieldData]);
+    }, [props, fieldData, fieldValue, fieldForeignOptions]);
 
     return (
         <>
@@ -62,7 +71,7 @@ export default function FieldComponent(props: FieldComponentProps) {
             fieldData.sql_type.toLowerCase().includes("varchar") &&
             <div className="m-2">
                 <label className="mx-2">{props.name}: </label>
-                <InputText name={props.name} ></InputText>
+                <InputText name={props.name} onChange={(e) => setFieldValue(e.target.value)} value={fieldValue as string} ></InputText>
             </div>
         }
         {
@@ -72,7 +81,7 @@ export default function FieldComponent(props: FieldComponentProps) {
             !fieldData.sql_type.toLowerCase().includes("tinyint") &&
             <div className="m-2">
                 <label className="mx-2">{props.name}: </label>
-                <InputNumber name={props.name} ></InputNumber>
+                <InputNumber name={props.name} onValueChange={(e) => setFieldValue(e.value)} value={fieldValue as number} ></InputNumber>
             </div>
         }
         {
@@ -88,7 +97,7 @@ export default function FieldComponent(props: FieldComponentProps) {
             fieldData.sql_type.toLowerCase().includes("date") &&
             <div className="m-2">
                 <label className="mx-2">{props.name}: </label>
-                <Calendar name={props.name}></Calendar>
+                <Calendar name={props.name} onChange={(e) => setFieldValue(e.value)} value={fieldValue as Date}></Calendar>
             </div>
         }
         </>
