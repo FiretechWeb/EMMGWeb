@@ -13,7 +13,6 @@
                 $columns = [];
                 $primary_keys = [];
                 $foreign_keys = [];
-                $dropTables[] = "DROP TABLE IF EXISTS $tableName";
                 $resetIncrement[] = "ALTER TABLE $tableName AUTO_INCREMENT = 1";
                 $tableDefinition = "CREATE TABLE IF NOT EXISTS $tableName (";
                 foreach ($fields as $fieldName => $params) {
@@ -31,7 +30,7 @@
                     if ($params['foreign_key'] !== null) {
                         $foreingKeyData = $params['foreign_key'];
                         $foreign_keys[] = $foreingKeyData;
-                        $columns[] = "FOREIGN KEY ($fieldName) REFERENCES {$foreingKeyData['table']}({$foreingKeyData['field']})";
+                        $columns[] = "FOREIGN KEY ($fieldName) REFERENCES {$foreingKeyData['table']}({$foreingKeyData['field']}) ON DELETE CASCADE";
                     }
                 }
 
@@ -44,6 +43,13 @@
                     $tableDefinition .= " ENGINE=InnoDB";
                 }
                 $tables[] = $tableDefinition;
+                
+                if (empty($foreign_keys)) {
+                    array_push($dropTables, "DROP TABLE IF EXISTS $tableName");
+                } else {
+                    array_unshift($dropTables, "DROP TABLE IF EXISTS $tableName")
+;
+                }
             }
             foreach ($dropTables as $dropSQL) {
                 if (!mysqli_query($conn, $dropSQL)) {
