@@ -12,24 +12,37 @@ interface FieldComponentProps {
     name: string;
     jsonFieldData: string;
     value?: any;
+    onValueChanged?: Function;
 }
 
 export default function FieldComponent(props: FieldComponentProps) {
     const initialized: MutableRefObject<boolean> = useRef(false);
 
     const [fieldData, setFieldData] = useState<DBFieldType | null>(null);
-    const [fieldChecked, setFieldChecked] = useState<boolean>(false);
     const [fieldSelected, setFieldSelected] = useState<any>(null);
     const [fieldForeignOptions, setFieldForeignOptions] = useState<Array<any>>([]);
     const [fieldValue, setFieldValue] = useState<any>(null);
 
+    const updateFieldValue = (value: any) => {
+        setFieldValue(value);
+        if (props.onValueChanged) {
+            props.onValueChanged(props.name, value);
+        }
+    }
+
+    const updateFieldSelected = (selectedField: any) => {
+        setFieldSelected(selectedField);
+        if (props.onValueChanged) {
+            props.onValueChanged(props.name, selectedField.code);
+        }
+    }
+
     useEffect(() => {
         
         if (initialized.current) return;
-        setFieldValue(props.value);
-        if (props.value) {
-            setFieldChecked(true);
-        }
+
+        updateFieldValue(props.value);
+
         setFieldData(JSON.parse(props.jsonFieldData) as DBFieldType);
 
         if (!fieldData) return;
@@ -62,7 +75,7 @@ export default function FieldComponent(props: FieldComponentProps) {
             fieldData && fieldData && fieldData.foreign_key && 
             <div className="m-2">
                 <label className="mx-2">{props.name}: </label>
-                <Dropdown filter value={fieldSelected} onChange={(e) => setFieldSelected(e.value)} options={fieldForeignOptions} placeholder="Seleccionar" optionLabel="name" ></Dropdown>
+                <Dropdown filter value={fieldSelected} onChange={(e) => updateFieldSelected(e.value)} options={fieldForeignOptions} placeholder="Seleccionar" optionLabel="name" ></Dropdown>
             </div>
 
         }
@@ -71,7 +84,7 @@ export default function FieldComponent(props: FieldComponentProps) {
             fieldData.sql_type.toLowerCase().includes("varchar") &&
             <div className="m-2">
                 <label className="mx-2">{props.name}: </label>
-                <InputText name={props.name} onChange={(e) => setFieldValue(e.target.value)} value={fieldValue as string} ></InputText>
+                <InputText name={props.name} onChange={(e) => updateFieldValue(e.target.value)} value={fieldValue as string} ></InputText>
             </div>
         }
         {
@@ -81,7 +94,7 @@ export default function FieldComponent(props: FieldComponentProps) {
             !fieldData.sql_type.toLowerCase().includes("tinyint") &&
             <div className="m-2">
                 <label className="mx-2">{props.name}: </label>
-                <InputNumber name={props.name} onValueChange={(e) => setFieldValue(e.value)} value={fieldValue as number} ></InputNumber>
+                <InputNumber name={props.name} onValueChange={(e) => updateFieldValue(e.value)} value={fieldValue as number} ></InputNumber>
             </div>
         }
         {
@@ -89,7 +102,7 @@ export default function FieldComponent(props: FieldComponentProps) {
             fieldData.sql_type.toLowerCase().includes("tinyint") &&
             <div className="m-2">
                 <label className="mx-2">{props.name}: </label>
-                <Checkbox onChange={e => setFieldChecked(!fieldChecked)} name={props.name} checked={fieldChecked}></Checkbox>
+                <Checkbox onChange={e => updateFieldValue(!fieldValue)} name={props.name} checked={fieldValue as boolean}></Checkbox>
             </div>
         }
         {
@@ -97,7 +110,7 @@ export default function FieldComponent(props: FieldComponentProps) {
             fieldData.sql_type.toLowerCase().includes("date") &&
             <div className="m-2">
                 <label className="mx-2">{props.name}: </label>
-                <Calendar name={props.name} onChange={(e) => setFieldValue(e.value)} value={fieldValue as Date}></Calendar>
+                <Calendar name={props.name} onChange={(e) => updateFieldValue(e.value)} value={fieldValue as Date}></Calendar>
             </div>
         }
         </>

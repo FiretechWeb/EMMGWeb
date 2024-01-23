@@ -14,14 +14,39 @@ export default function TableModifyComponent(props: TableModifyComponentProps) {
     const initialized: MutableRefObject<boolean> = useRef(false);
     const [rowSelected, setRowSelected] = useState<any>(null);
     //const [primaryKeys, setPrimaryKeys] = useState<Array<string>>([]);
+    let fieldValues: any = {};
 
     const modifyElement = (event: any) => {
-        //add element here!
+        if (!rowSelected) return;
+
+        console.log("MODIFY", rowSelected);
+
+        const emptyFields: boolean = Object.keys(fields)
+            .filter(fieldName => fields[fieldName].allow_insert)
+            .some(fieldName => {
+                if (fieldValues[fieldName] === null || fieldValues[fieldName] === undefined)
+                    return true;
+                if (typeof fieldValues[fieldName] === "string" && (fieldValues[fieldName] as string).trim().length <= 0) {
+                    return true;
+                }
+                return false;
+            });
+
+        if (emptyFields) {
+            console.log("THERE ARE STILL SOME EMPTY FIELDS");
+        }
+
         event.preventDefault();
     };
+
+    const onFieldValueChanged = (fieldName: string, value: any) => {
+        fieldValues[fieldName] = value;
+    }
+
     const elementSelected = (e: any) => {
         setRowSelected(e);
     }
+
     useEffect(() => {
         if (initialized.current) return;
 
@@ -40,7 +65,7 @@ export default function TableModifyComponent(props: TableModifyComponentProps) {
         Object.keys(fields)
             .filter(fieldName => fields[fieldName].allow_insert)
             .map( (fieldName) => (
-                <FieldComponent key={fieldName} name={fieldName} jsonFieldData={JSON.stringify(fields[fieldName])} value={rowSelected[fieldName]}></FieldComponent>
+                <FieldComponent key={fieldName} name={fieldName} onValueChanged={onFieldValueChanged} jsonFieldData={JSON.stringify(fields[fieldName])} value={rowSelected[fieldName]}></FieldComponent>
             ))
         
         }

@@ -15,9 +15,13 @@ export default function TableDeleteComponent(props: TableDeleteComponentProps) {
 
 
     const deleteElement = (event: any) => {
-        //add element here!
+        if (!rowSelected) return;
+
+        console.log("DELETE", rowSelected);
+
         event.preventDefault();
     };
+    
     const elementSelected = (e: any) => {
         setRowSelected(e);
     }
@@ -32,9 +36,9 @@ export default function TableDeleteComponent(props: TableDeleteComponentProps) {
         <form className="flex flex-col">
 
         <DBElementsList tableName={props.name} jsonTableData={props.jsonTableData} selectionChanged={elementSelected}></DBElementsList>
-        
+
         {
-        rowSelected && <Button onClick={deleteElement} className="bg-slate-500 p-1 m-1 self-center place-self-center" label="Eliminar"></Button>
+            rowSelected && <Button onClick={deleteElement} className="bg-slate-500 p-1 m-1 self-center place-self-center" label="Eliminar"></Button>
         }
         </form>
         </div>
