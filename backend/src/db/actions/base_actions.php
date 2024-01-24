@@ -1,4 +1,6 @@
 <?php
+    date_default_timezone_set('America/Argentina/Buenos_Aires');
+
     include_once dirname(__FILE__). '/../db_api.php';
     include_once dirname(__FILE__). '/../db_structure.php';
     include_once dirname(__FILE__). '/../db_response.php';
@@ -61,6 +63,7 @@
 
             return DBAPI::execQueryAndGetRowsAffected($pdo, $sql, $pdoParams);
         }
+
         public static function update($pdo, $table, $params = [], $tableStructure = null) {
             if ($tableStructure === null) {
                 $tableStructure == DBStructure::getStructure();
@@ -75,16 +78,20 @@
             $fieldsAllowedToSet = array_filter($tableData['fields'], function($field) {
                 return $field['allow_insert'];
             });
-            $fieldParams = $params['fields'];
+
+            $fieldData = $params['fields'];
             $conditions = $params['conditions'];
             $preparedStatements = [];
             $setColumns = [];
             $conditionColumns = [];
             $i = 0;
 
-            foreach($fieldsAllowedToSet as $field => $fieldPararms) {
-                if (isset($fieldParams[$field])) {
-                    $preparedStatements[] = ["name" => $field, "value" => $fieldParams[$field], "type" =>  $fieldPararms['pdo_type']];
+            foreach($fieldsAllowedToSet as $field => $fieldParams) {
+                if (isset($fieldData[$field])) {
+                    if ($fieldParams['sql_type'] == "DATE") {
+                        $fieldData[$field] = (new DateTime($fieldData[$field]))->format('Y-m-d');
+                    }
+                    $preparedStatements[] = ["name" => $field, "value" => $fieldData[$field], "type" =>  $fieldParams['pdo_type']];
                     $setColumns[] = "$field = :$field";
                 }
             }
@@ -188,15 +195,18 @@
                 return $field['allow_insert'];
             });
 
-            $fieldParams = $params['fields'];
+            $fieldData = $params['fields'];
             $fieldsData = [];
             $fieldsNames = [];
 
-            foreach($fields as $field => $fieldPararms) {
-                if (!isset($fieldParams[$field])) {
+            foreach($fields as $field => $fieldParams) {
+                if (!isset($fieldData[$field])) {
                     return DBResponse::error("Field $field is not set");
                 }
-                $fieldsData[] = ["name" => $field, "value" => $fieldParams[$field], "type" =>  $fieldPararms['pdo_type']];
+                if ($fieldParams['sql_type'] == "DATE") {
+                    $fieldData[$field] = (new DateTime($fieldData[$field]))->format('Y-m-d');
+                }
+                $fieldsData[] = ["name" => $field, "value" => $fieldData[$field], "type" =>  $fieldParams['pdo_type']];
                 $fieldsNames[] = $field;
             }
 

@@ -8,16 +8,6 @@
             $tableTemplates = DBTemplate::getTableTemplates();
             
             return [
-                "empresa" => [
-                    "fields" => [
-                        "id" => $fieldTemplates['id'],
-                        "cuit" => $fieldTemplates['varchar_32'],
-                        "razon" => $fieldTemplates['varchar_128']
-                    ],
-                    "actions" => [
-
-                    ]
-                ], 
                 "puesto_empleado" => $tableTemplates['id_name'],
                 "actividad_economica" => $tableTemplates['id_name'],
                 "regimen" => $tableTemplates['id_name'],
@@ -28,19 +18,9 @@
                 "tipo_servicio" => $tableTemplates['id_code_name'],
                 "convenio_colectivo" => $tableTemplates['id_code_name'],
                 "categoria" => $tableTemplates['id_code_name'],
-                "puesto_trabajo" => $tableTemplates['id_code_name'],
                 "empleado" => [
                     "fields" => [
                         "id" => $fieldTemplates['id'],
-                        "em_id" => [
-                            "primary" => true,
-                            "sql_type" => "BIGINT",
-                            "pdo_type" => PDO::PARAM_INT,
-                            "not_null" => true,
-                            "extra_params" => "",
-                            "allow_insert" => true,
-                            "foreign_key" => ['table' => 'empresa', 'field' => 'id']
-                        ],
                         "cuit" => $fieldTemplates['varchar_32'],
                         "nombre" => $fieldTemplates['varchar_64'],
                         "apellido" => $fieldTemplates['varchar_64'],
@@ -78,9 +58,11 @@
                         "id_actividad" => DBTemplate::getTemplateField("bigint", null, null, null, ['table' => 'actividad_economica', 'field' => 'id'])
                     ],  
                     "actions" => [
-
+                        "insert" => ['DBBaseActions', 'insert'],
+                        "get" => ['DBBaseActions', 'get'],
+                        "update" => ['DBBaseActions', 'update'],
+                        "delete" => ['DBBaseActions', 'delete']
                     ]
-
                 ]
             ];
         }
