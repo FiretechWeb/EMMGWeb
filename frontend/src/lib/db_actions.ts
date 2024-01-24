@@ -58,6 +58,9 @@ export class DBActions {
         }
     }
 
+    static setStructure(structure: any) {
+        _dbStructure = structure;
+    }
     static async getStructure() {
         try {
             let res = await axios.post(`${GlobalVars.backend_path!}/api/get_structure.php`, { },

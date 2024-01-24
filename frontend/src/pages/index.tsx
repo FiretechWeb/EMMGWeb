@@ -5,12 +5,40 @@ import { DBActions } from '../lib/db_actions';
 import type { DBFieldType, DBTableType } from "../lib/db_types"
 import DBTableComponent from '../components/table';
 import { TabView, TabPanel } from 'primereact/tabview';
+import type { InferGetStaticPropsType, GetStaticProps } from 'next'
 
+interface HomeProps {
+    dataStructure: any
+}
 
-export default function Home() {
+const getStructureAsProps = async () => {
+    try {
+        const r = await DBActions.getStructure();
+        if (!r || !r.data) {
+            return null;
+        } else { //try again
+            return { props: { dataStructure: r.data }};
+        }
+    } catch(e) {
+        return null;
+    }
+}
+
+export const getStaticProps = async (context: any) => {
+    let staticProps: any = await getStructureAsProps();
+    if (!staticProps) {
+        staticProps = await getStructureAsProps(); //try again
+        if (!staticProps) {
+            staticProps = { props: { dataStructure: {} }};
+        }
+    }
+
+    return staticProps;
+};
+
+export default function Home({dataStructure} : HomeProps) {
     const initialized: MutableRefObject<boolean> = useRef(false);
     const [fakeConsole, setFakeConsole] = useState(false);
-    const [dataStructure, setDataStructure] = useState<{ [key: string]: any }>({});
     
     const handleKeyPress = (event: KeyboardEvent) => {
         if (event.key.toLowerCase() === 'f12') {
@@ -23,20 +51,14 @@ export default function Home() {
     useEffect(() => {
 
         if (initialized.current) return;
-
+        
+        DBActions.setStructure(dataStructure);
         window.removeEventListener('keydown', handleKeyPress);
         window.addEventListener('keydown', handleKeyPress);
-
-        DBActions.getStructure().then( r => {
-            if (!r || !r.data) return;
-
-            setDataStructure(r.data);
-
-        }).catch( e => console.error(e) );
-
+        
         initialized.current = true;
 
-    }, []);
+    }, [dataStructure]);
 
     return (
         <main className={styles.main}>
