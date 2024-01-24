@@ -137,7 +137,7 @@
                         'lastInsertId' => $pdo->lastInsertId()
                     ]);
                 } else {
-                    return DBResponse::error("SQL ERROR in executeCountQuery");
+                    return DBResponse::error("SQL ERROR in executeQuery");
                 }
             } catch (Exception $e) {
                 return DBResponse::error($e->getMessage());

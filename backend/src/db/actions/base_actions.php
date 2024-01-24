@@ -19,6 +19,69 @@
 
     class DBBaseActions {
 
+        public static function duplicated($pdo, $table, $params = [], $tableStructure = null) {
+            if ($tableStructure === null) {
+                $tableStructure == DBStructure::getStructure();
+            }
+
+            if (!isset($tableStructure[$table])) {
+                return DBResponse::error("The given table does not exists.");
+            }
+
+            if (!isset($params['fields'])) {
+                return DBResponse::error("No fields to check duplicated given.");
+            }
+
+            $tableData = $tableStructure[$table];
+            $fields = $tableData['fields'];
+            $fieldData = $params['fields'];
+            $primaryKeys = [];
+            if (isset($params['keys'])) {
+                $primaryKeys = $params['keys'];
+            }
+            $conditionColumns = [];
+            $primaryConditions = [];
+            $preparedStatements = [];
+            $i = 0;
+
+            foreach ($primaryKeys as $key => $keyValue) {
+                if (isset($fields[$key]) && $fields[$key]['primary']) {
+                    $primaryConditions[] = "$key <> :result_$i";
+                    $preparedStatements[] = ["name" => "result_$i", "value" => $keyValue, "type" =>  $fields[$key]['pdo_type']];
+                    $i++;
+                }
+            }
+            foreach($fields as $field => $fieldParams) {
+                if (isset($fieldData[$field])) {
+                    if ($fieldParams['unique']) {
+                        if ($fieldParams['sql_type'] == "DATE") {
+                            $fieldData[$field] = (new DateTime($fieldData[$field]))->format('Y-m-d');
+                        }
+                        $conditionColumns[] = "$field = :result_$i";
+                        $preparedStatements[] = ["name" => "result_$i", "value" => $fieldData[$field], "type" =>  $fieldParams['pdo_type']];
+                        $i++;
+                    }
+                }
+            }
+
+            if (empty($conditionColumns)) {
+                return DBResponse::ok(false);
+            }
+
+            $sql = "SELECT * FROM $table WHERE ";
+            if (!empty($primaryConditions)) {
+                $sql.= "( ".implode(" AND ", $primaryConditions)." ) AND ( " .implode(" OR ", $conditionColumns). " );";
+            } else {
+                $sql .= implode(" OR ", $conditionColumns)." ;";
+            }
+            $pdoParams = [];
+            foreach($preparedStatements as $ps) {
+                $pdoParams[$ps['name']] = [$ps['value'], $ps['type']];
+            }
+
+            return DBAPI::execQueryAndCheckExists($pdo, $sql, $pdoParams);
+        }
+
         public static function delete($pdo, $table, $params = [], $tableStructure = null) {
             if ($tableStructure === null) {
                 $tableStructure == DBStructure::getStructure();
@@ -31,10 +94,21 @@
             $tableData = $tableStructure[$table];
             $fields = $tableData['fields'];
             $conditions = $params['conditions'];
+            $primaryKeys = [];
+            if (isset($params['keys'])) {
+                $primaryKeys = $params['keys'];
+            }
             $conditionColumns = [];
             $preparedStatements = [];
             $i = 0;
             
+            foreach ($primaryKeys as $key => $keyValue) {
+                if (isset($fields[$key]) && $fields[$key]['primary']) {
+                    $conditionColumns[] = "$key = :result_$i";
+                    $preparedStatements[] = ["name" => "result_$i", "value" => $keyValue, "type" =>  $fields[$key]['pdo_type']];
+                    $i++;
+                }
+            }
             foreach($conditions as $conditionData) {
                 if (isset($fields[$conditionData['field']])) {
                     $fieldName = $conditionData['field'];
@@ -51,9 +125,11 @@
                     $i++;
                 }
             }
+
             if (empty($conditionColumns)) {
                 return DBResponse::error("For security reasons, you can only delete with a condition.");
             }
+
             $sql = "DELETE FROM $table WHERE ".implode(" AND ", $conditionColumns)." ;";
 
             $pdoParams = [];
@@ -73,6 +149,19 @@
                 return DBResponse::error("The given table does not exists.");
             }
 
+            if (!isset($params['fields'])) {
+                return DBResponse::error("No fields to update given.");
+            }
+
+            $duplicatedRes = DBAPI::execAction($pdo, $table, 'duplicated', $params, $tableStructure);
+            
+            if (DBResponse::isERROR($duplicatedRes)) {
+                return $duplicatedRes;
+            }
+            if (DBResponse::getData($duplicatedRes)) {
+                return DBResponse::error("Duplicated already exists");
+            }
+            
             $tableData = $tableStructure[$table];
             $fields = $tableData['fields'];
             $fieldsAllowedToSet = array_filter($tableData['fields'], function($field) {
@@ -81,9 +170,14 @@
 
             $fieldData = $params['fields'];
             $conditions = $params['conditions'];
+            $primaryKeys = [];
+            if (isset($params['keys'])) {
+                $primaryKeys = $params['keys'];
+            }
             $preparedStatements = [];
             $setColumns = [];
             $conditionColumns = [];
+            $uniqueFields = [];
             $i = 0;
 
             foreach($fieldsAllowedToSet as $field => $fieldParams) {
@@ -91,6 +185,11 @@
                     if ($fieldParams['sql_type'] == "DATE") {
                         $fieldData[$field] = (new DateTime($fieldData[$field]))->format('Y-m-d');
                     }
+
+                    if ($fieldParams['unique']) {
+                        $uniqueFields[] = $field;
+                    }
+
                     $preparedStatements[] = ["name" => $field, "value" => $fieldData[$field], "type" =>  $fieldParams['pdo_type']];
                     $setColumns[] = "$field = :$field";
                 }
@@ -100,19 +199,27 @@
                 return DBResponse::error("There are no columns to update.");
             }
 
+            foreach ($primaryKeys as $key => $keyValue) {
+                if (isset($fields[$key]) && $fields[$key]['primary']) {
+                    $conditionColumns[] = "$key = :result_$i";
+                    $preparedStatements[] = ["name" => "result_$i", "value" => $keyValue, "type" =>  $fields[$key]['pdo_type']];
+                    $i++;
+                }
+            }
+
             foreach($conditions as $conditionData) {
                 if (isset($fields[$conditionData['field']])) {
                     $fieldName = $conditionData['field'];
                     $conditionName = $conditionData['condition'];
                     $result = $conditionData['result'];
-                    $fieldPararms =  $fields[$fieldName];
+                    $fieldParams =  $fields[$fieldName];
 
                     if (!isValidCondition($conditionName)) {
                         return DBResponse::error("Invalid conditional statement");
                     }
 
                     $conditionColumns[] = "$fieldName $conditionName :result_$i";
-                    $preparedStatements[] = ["name" => "result_$i", "value" => $result, "type" =>  $fieldPararms['pdo_type']];
+                    $preparedStatements[] = ["name" => "result_$i", "value" => $result, "type" =>  $fieldParams['pdo_type']];
                     $i++;
                 }
             }
@@ -152,14 +259,14 @@
                     $fieldName = $conditionData['field'];
                     $conditionName = $conditionData['condition'];
                     $result = $conditionData['result'];
-                    $fieldPararms =  $fields[$fieldName];
+                    $fieldParams =  $fields[$fieldName];
 
                     if (!isValidCondition($conditionName)) {
                         return DBResponse::error("Invalid conditional statement");
                     }
 
                     $conditionColumns[] = "$fieldName $conditionName :result_$i";
-                    $preparedStatements[] = ["name" => "result_$i", "value" => $result, "type" =>  $fieldPararms['pdo_type']];
+                    $preparedStatements[] = ["name" => "result_$i", "value" => $result, "type" =>  $fieldParams['pdo_type']];
                     $i++;
                 }
             }
@@ -188,6 +295,15 @@
             }
             if (!isset($params['fields'])) {
                 return DBResponse::error("No fields to insert given.");
+            }
+
+            $duplicatedRes = DBAPI::execAction($pdo, $table, 'duplicated', $params, $tableStructure);
+            
+            if (DBResponse::isERROR($duplicatedRes)) {
+                return $duplicatedRes;
+            }
+            if (DBResponse::getData($duplicatedRes)) {
+                return DBResponse::error("Duplicated already exists");
             }
 
             $tableData = $tableStructure[$table];

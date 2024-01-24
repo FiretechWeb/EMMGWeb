@@ -41,6 +41,8 @@ export default function Home({dataStructure} : HomeProps) {
     const [fakeConsole, setFakeConsole] = useState(false);
     
     const handleKeyPress = (event: KeyboardEvent) => {
+        if (!event || !event.key) return false;
+        
         if (event.key.toLowerCase() === 'f12') {
             setFakeConsole((prevValue) => !prevValue);
             event.preventDefault();

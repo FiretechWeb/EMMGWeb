@@ -6,6 +6,7 @@
         public static function getStructure() {
             $fieldTemplates = DBTemplate::getFieldTemplates();
             $tableTemplates = DBTemplate::getTableTemplates();
+            $actionsTemplates = DBTemplate::getTemplateActions();
             
             return [
                 "puesto_empleado" => $tableTemplates['id_name'],
@@ -32,7 +33,8 @@
                             "not_null" => false,
                             "extra_params" => "",
                             "allow_insert" => true,
-                            "foreign_key" => null
+                            "foreign_key" => null,
+                            "unique" => false
                         ],
                         "agropecuario" => $fieldTemplates['boolean'],
                         "domicilio_exp" => $fieldTemplates['varchar_128'],
@@ -57,12 +59,7 @@
 
                         "id_actividad" => DBTemplate::getTemplateField("bigint", null, null, null, ['table' => 'actividad_economica', 'field' => 'id'])
                     ],  
-                    "actions" => [
-                        "insert" => ['DBBaseActions', 'insert'],
-                        "get" => ['DBBaseActions', 'get'],
-                        "update" => ['DBBaseActions', 'update'],
-                        "delete" => ['DBBaseActions', 'delete']
-                    ]
+                    "actions" => $actionsTemplates['default']
                 ]
             ];
         }

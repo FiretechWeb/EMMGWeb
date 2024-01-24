@@ -20,7 +20,8 @@ export default function TableAddComponent(props: TableAddComponentProps) {
         if (DBActions.isDataToSendValid(fieldValues, fields)) {
             DBActions.process(props.name, "insert", {
                 'fields': fieldValues,
-                'conditions': []
+                'conditions': [],
+                'keys': {}
             }).then(r => {
                 console.log(r);
             }).catch(e => console.error(e));

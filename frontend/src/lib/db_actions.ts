@@ -13,7 +13,7 @@ export class DBActions {
 
     static isDataToSendValid(fieldValues: any, tableFields: any) : boolean {
         return !Object.keys(tableFields)
-            .filter(fieldName => tableFields[fieldName].allow_insert)
+            .filter(fieldName => tableFields[fieldName].allow_insert && tableFields[fieldName].not_null)
             .some(fieldName => {
             if (fieldValues[fieldName] === null || fieldValues[fieldName] === undefined)
                 return true;
@@ -126,20 +126,27 @@ export class DBActions {
     static toParams(paramsArgs: string[]): Object {
         let params: { [key: string]: any } = {
             'fields': {},
+            'keys' : {},
             'conditions': []
         };
         paramsArgs.forEach(arg => {
             let fieldData: string[] = splitFirstOccurrence(arg, ':').map(e => e.trim());
             switch(fieldData[0]) {
                 case 'field':
+                case 'key':
                     let data = splitFirstOccurrence(fieldData[1], '=').map(e => e.trim());
                     let fieldName: string = data[0];
                     let fieldValue: string = data[1];
-                    params['fields'][fieldName] = fieldValue;
+                    if (fieldData[0] == 'field') {
+                        params['fields'][fieldName] = fieldValue;
+                    } else {
+                        params['keys'][fieldName] = fieldValue;
+                    }
                 break;
                 case 'if':
                     params['conditions'].push(DBActions.toConditionObject(fieldData[1]));
                 break;
+                
             }
         });
         return params;

@@ -38,19 +38,14 @@ export default function TableModifyComponent(props: TableModifyComponentProps) {
         }
 
         if (DBActions.isDataToSendValid(fieldValues, fields)) {
-            let updateConditions: Array<any> = [];
+            let keysValues: any = {};
 
-            primaryKeys.forEach(pkey => {
-                updateConditions.push({
-                    'field': pkey,
-                    'condition': "=",
-                    'result': rowSelected[pkey]
-                });
-            });
+            primaryKeys.forEach(pkey => keysValues[pkey] = rowSelected[pkey]);
 
             DBActions.process(props.name, "update", {
                 'fields': fieldValues,
-                'conditions': updateConditions
+                'conditions': [],
+                'keys': keysValues
             }).then(r => {
                 console.log(r);
                 requestForceListUpdate();

@@ -3,6 +3,17 @@
 
     class DBTemplate
     {
+        public static  function getTemplateActions() {
+            return [
+                "default" => [
+                    "insert" => ['DBBaseActions', 'insert'],
+                    "get" => ['DBBaseActions', 'get'],
+                    "update" => ['DBBaseActions', 'update'],
+                    "delete" => ['DBBaseActions', 'delete'],
+                    "duplicated" => ['DBBaseActions', 'duplicated']
+                ]
+                ];
+        }
         //call_user_func_array
         public static function getFieldTemplates() {
             return [
@@ -13,7 +24,8 @@
                 "not_null" => true,
                 "extra_params" => "AUTO_INCREMENT",
                 "allow_insert" => false,
-                "foreign_key" => null
+                "foreign_key" => null,
+                "unique" => true
             ],
             "bigint" => [
                 "primary" => false,
@@ -22,7 +34,8 @@
                 "not_null" => true,
                 "extra_params" => "",
                 "allow_insert" => true,
-                "foreign_key" => null
+                "foreign_key" => null,
+                "unique" => false
             ],
             "int" => [
                 "primary" => false,
@@ -31,7 +44,8 @@
                 "not_null" => true,
                 "extra_params" => "",
                 "allow_insert" => true,
-                "foreign_key" => null
+                "foreign_key" => null,
+                "unique" => false
             ],
             "varchar_32" => [
                 "primary" => false,
@@ -40,7 +54,8 @@
                 "not_null" => true,
                 "extra_params" => "",
                 "allow_insert" => true,
-                "foreign_key" => null
+                "foreign_key" => null,
+                "unique" => false
             ],
              "varchar_64" => [
                 "primary" => false,
@@ -49,7 +64,8 @@
                 "not_null" => true,
                 "extra_params" => "",
                 "allow_insert" => true,
-                "foreign_key" => null
+                "foreign_key" => null,
+                "unique" => false
             ],
             "varchar_128" => [
                 "primary" => false,
@@ -58,7 +74,8 @@
                 "not_null" => true,
                 "extra_params" => "",
                 "allow_insert" => true,
-                "foreign_key" => null
+                "foreign_key" => null,
+                "unique" => false
             ],
             "varchar_256" => [
                 "primary" => false,
@@ -67,7 +84,8 @@
                 "not_null" => true,
                 "extra_params" => "",
                 "allow_insert" => true,
-                "foreign_key" => null
+                "foreign_key" => null,
+                "unique" => false
             ],
             "varchar_512" => [
                 "primary" => false,
@@ -76,7 +94,8 @@
                 "not_null" => true,
                 "extra_params" => "",
                 "allow_insert" => true,
-                "foreign_key" => null
+                "foreign_key" => null,
+                "unique" => false
             ],
             "date" => [
                 "primary" => false,
@@ -85,7 +104,8 @@
                 "not_null" => true,
                 "extra_params" => "",
                 "allow_insert" => true,
-                "foreign_key" => null
+                "foreign_key" => null,
+                "unique" => false
             ],
             "boolean" => [
                 "primary" => false,
@@ -94,93 +114,65 @@
                 "not_null" => true,
                 "extra_params" => "",
                 "allow_insert" => true,
-                "foreign_key" => null
+                "foreign_key" => null,
+                "unique" => false
             ],
         ];
         }
 
         public static function getTableTemplates() {
            $fieldTemplates = self::getFieldTemplates(); 
+           $actionsTemplates = self::getTemplateActions();
             return [
                 "id_name" => [
                     "fields" => [
                         "id" => $fieldTemplates['id'],
-                        "name" => $fieldTemplates['varchar_64']
+                        "name" => self::getTemplateField('varchar_64', null, null, null, null, true)
                     ], 
-                    "actions" => [
-                        "insert" => ['DBBaseActions', 'insert'],
-                        "get" => ['DBBaseActions', 'get'],
-                        "update" => ['DBBaseActions', 'update'],
-                        "delete" => ['DBBaseActions', 'delete']
-                    ]
+                    "actions" => $actionsTemplates['default']
                 ],
                 "id_name_128" => [
                     "fields" => [
                         "id" => $fieldTemplates['id'],
-                        "name" => $fieldTemplates['varchar_128']
+                        "name" => self::getTemplateField('varchar_128', null, null, null, null, true)
                     ],
-                    "actions" => [
-                        "insert" => ['DBBaseActions', 'insert'],
-                        "get" => ['DBBaseActions', 'get'],
-                        "update" => ['DBBaseActions', 'update'],
-                        "delete" => ['DBBaseActions', 'delete']
-                    ]
+                    "actions" => $actionsTemplates['default']
                 ],
                 "id_name_256" => [
                     "fields" => [
                         "id" => $fieldTemplates['id'],
-                        "name" => $fieldTemplates['varchar_256']
+                        "name" => self::getTemplateField('varchar_256', null, null, null, null, true)
                     ],
-                    "actions" => [
-                        "insert" => ['DBBaseActions', 'insert'],
-                        "get" => ['DBBaseActions', 'get'],
-                        "update" => ['DBBaseActions', 'update'],
-                        "delete" => ['DBBaseActions', 'delete']
-                    ]
+                    "actions" => $actionsTemplates['default']
                 ],
                 "id_code_name" => [
                     "fields" => [
                         "id" => $fieldTemplates['id'],
-                        "code" => $fieldTemplates['bigint'],
-                        "name" => $fieldTemplates['varchar_64'],
+                        "code" => self::getTemplateField('bigint', null, null, null, null, true),
+                        "name" => self::getTemplateField('varchar_64', null, null, null, null, true)
                     ],
-                    "actions" => [
-                        "insert" => ['DBBaseActions', 'insert'],
-                        "get" => ['DBBaseActions', 'get'],
-                        "update" => ['DBBaseActions', 'update'],
-                        "delete" => ['DBBaseActions', 'delete']
-                    ]
+                    "actions" => $actionsTemplates['default']
                 ],
                 "id_code_name_128" => [
                     "fields" => [
                         "id" => $fieldTemplates['id'],
-                        "code" => $fieldTemplates['bigint'],
-                        "name" => $fieldTemplates['varchar_128']
+                        "code" => self::getTemplateField('bigint', null, null, null, null, true),
+                        "name" => self::getTemplateField('varchar_128', null, null, null, null, true)
                     ],
-                    "actions" => [
-                        "insert" => ['DBBaseActions', 'insert'],
-                        "get" => ['DBBaseActions', 'get'],
-                        "update" => ['DBBaseActions', 'update'],
-                        "delete" => ['DBBaseActions', 'delete']
-                    ]
+                    "actions" => $actionsTemplates['default']
                 ],
                 "id_code_name_256" => [
                     "fields" => [
                         "id" => $fieldTemplates['id'],
-                        "code" => $fieldTemplates['bigint'],
-                        "name" => $fieldTemplates['varchar_256']
+                        "code" => self::getTemplateField('bigint', null, null, null, null, true),
+                        "name" => self::getTemplateField('varchar_256', null, null, null, null, true)
                     ],
-                    "actions" => [
-                        "insert" => ['DBBaseActions', 'insert'],
-                        "get" => ['DBBaseActions', 'get'],
-                        "update" => ['DBBaseActions', 'update'],
-                        "delete" => ['DBBaseActions', 'delete']
-                    ]
+                    "actions" => $actionsTemplates['default']
                 ]
             ];
         }
 
-        public static function getTemplateField($templateField, $primary = null, $notNull = null, $params = null, $foreign_key = null) {
+        public static function getTemplateField($templateField, $primary = null, $notNull = null, $params = null, $foreign_key = null, $unique = null) {
             $field = self::getFieldTemplates()[$templateField];
             if ($primary !== null) {
                 $field['primary'] = $primary;
@@ -193,6 +185,9 @@
             }
             if ($foreign_key !== null) {
                 $field['foreign_key'] = $foreign_key;
+            }
+            if ($unique !== null) {
+                $field['unique'] = $unique;
             }
 
             return $field;
