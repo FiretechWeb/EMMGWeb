@@ -10,6 +10,19 @@ export class DBActions {
     static generateKeyFromField(fieldData: any, primaryKeys: Array<string>): string {
         return primaryKeys.map( key => fieldData[key]).join('-');
     }
+
+    static isDataToSendValid(fieldValues: any, tableFields: any) : boolean {
+        return !Object.keys(tableFields)
+            .filter(fieldName => tableFields[fieldName].allow_insert)
+            .some(fieldName => {
+            if (fieldValues[fieldName] === null || fieldValues[fieldName] === undefined)
+                return true;
+            if (typeof fieldValues[fieldName] === "string" && (fieldValues[fieldName] as string).trim().length <= 0) {
+                return true;
+            }
+            return false;
+        });
+    }
     
     static getPrimaryKeys(table: string, dbStructure: any = null): Array<string> {
         if (!dbStructure) {

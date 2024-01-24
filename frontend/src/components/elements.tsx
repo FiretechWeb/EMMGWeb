@@ -5,9 +5,9 @@ import type { DBFieldType } from "../lib/db_types";
 import { DBActions } from "../lib/db_actions";
 
 interface DBElementsListProps {
-    tableName: string,
-    jsonTableData: string,
-    selectionChanged: Function
+    tableName: string;
+    jsonTableData: string;
+    selectionChanged: Function;
 }
 
 export function DBElementsList(props: DBElementsListProps) {
@@ -34,10 +34,9 @@ export function DBElementsList(props: DBElementsListProps) {
                 setElements([]);
             }
         }).catch(e => console.error(e));
-
-
+        
         initialized.current = true;
-    }, [props]);
+    }, []);
 
     return (
         <DataTable className="m-3" value={elements} selectionMode="single" selection={selectedElement} onSelectionChange={(e) => { setSelectedElement(e.value); props.selectionChanged(e.value)}} dataKey="_uid" metaKeySelection={false} tableStyle={{ minWidth: '50rem' }}>

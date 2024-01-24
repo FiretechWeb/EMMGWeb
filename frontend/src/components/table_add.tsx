@@ -2,6 +2,7 @@ import type { DBFieldType, DBTableType } from "../lib/db_types"
 import { useState, useEffect, MutableRefObject, useRef } from "react"
 import { Button } from "primereact/button";
 import FieldComponent from "./field";
+import { DBActions } from "../lib/db_actions";
 
 interface TableAddComponentProps {
     jsonTableData: string;
@@ -16,21 +17,19 @@ export default function TableAddComponent(props: TableAddComponentProps) {
         //let rowToAdd = {};
         console.log(JSON.stringify(fieldValues));
 
-        const emptyFields: boolean = Object.keys(fields)
-            .filter(fieldName => fields[fieldName].allow_insert)
-            .some(fieldName => {
-                if (fieldValues[fieldName] === null || fieldValues[fieldName] === undefined)
-                    return true;
-                if (typeof fieldValues[fieldName] === "string" && (fieldValues[fieldName] as string).trim().length <= 0) {
-                    return true;
-                }
-                return false;
-            });
-
-        if (emptyFields) {
-            console.log("THERE ARE STILL SOME EMPTY FIELDS");
+        if (DBActions.isDataToSendValid(fieldValues, fields)) {
+            DBActions.process(props.name, "insert", {
+                'fields': fieldValues,
+                'conditions': []
+            }).then(r => {
+                console.log(r);
+            }).catch(e => console.error(e));
+        } else {
+            console.error("Missing fields or values to send data");
         }
 
+
+        
         event.preventDefault();
     };
 
