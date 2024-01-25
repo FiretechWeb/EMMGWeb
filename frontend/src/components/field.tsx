@@ -53,7 +53,8 @@ export default function FieldComponent(props: FieldComponentProps) {
                     if (r && r.data) {
                         setFieldForeignOptions(r.data.map( (e: any) => { 
                             return {
-                                name: JSON.stringify(e),
+                                name: fieldData.foreign_key!.format ? 
+                                    DBActions.parseFieldFormat(fieldData.foreign_key!.format, e) : JSON.stringify(e),
                                 code: e[fieldData.foreign_key!.field]
                             }
                         }));

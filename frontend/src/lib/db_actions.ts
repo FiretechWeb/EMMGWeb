@@ -1,12 +1,21 @@
 import { GlobalVars } from "../cfg/config";
 import axios from "axios";
 import { splitFirstOccurrence } from "./stringExt";
-import type { DBFieldType } from "./db_types";
+import type { DBFieldType, DBForeignKey } from "./db_types";
 
 let _dbStructure: any = null;
 
 export class DBActions {
 
+    /*
+    *   Receives field data and a input string with the format: "text {fieldName} text 2"... 
+    */
+    static parseFieldFormat(input: string, data: { [key: string]: any }): string {
+        return input.replace(/\{([^}]+)\}/g, (match, fieldName) => {
+            const fieldValue = data[fieldName.trim()];
+            return typeof fieldValue !== 'undefined' ? String(fieldValue) : match;
+        });
+    }
     static generateKeyFromField(fieldData: any, primaryKeys: Array<string>): string {
         return primaryKeys.map( key => fieldData[key]).join('-');
     }
@@ -68,10 +77,12 @@ export class DBActions {
         let tableGroups: any = {};
         Object.keys(dbStructure).forEach( tableName => {
             const groupName: string = dbStructure[tableName]['group'] ?? "_nogroup_";
-            tableGroups[groupName] = {};
+            if (!tableGroups[groupName]) {
+                tableGroups[groupName] = {};
+            }
             tableGroups[groupName][tableName] = dbStructure[tableName];
         });
-
+        console.log(tableGroups);
         return tableGroups;
     }
     static async getStructure() {

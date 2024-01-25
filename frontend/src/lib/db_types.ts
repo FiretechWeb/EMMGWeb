@@ -1,6 +1,7 @@
 export interface DBForeignKey {
     table: string,
-    field: string
+    field: string,
+    format?: string
 }
 
 export interface DBFieldType {

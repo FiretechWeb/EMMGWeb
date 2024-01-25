@@ -195,41 +195,45 @@
     }
 
     class DBFieldShortHand {
-        public function toUnique($field) {
+        public function unique($field) {
             $field['unique'] = true;
             return $field;
         }
-        public function toNotUnique($field) {
+        public function notUnique($field) {
             $field['unique'] = false;
             return $field;
         }
-        public function toPrimary($field) {
+        public function primary($field) {
             $field['primary'] = true;
             return $field;
         }
-        public function toNotPrimary($field) {
+        public function notPrimary($field) {
             $field['primary'] = false;
             return $field;
         }
-        public function toAllowInsert($field) {
+        public function allowInsert($field) {
             $field['allow_insert'] = true;
             return $field;
         }
-        public function toNotAllowedInsert($field) {
+        public function notAllowInsert($field) {
             $field['allow_insert'] = false;
             return $field;
         }
-        public function toNotNull($field) {
+        public function notNull($field) {
             $field['not_null'] = true;
             return $field; 
         }
-        public function toCanBeNull($field) {
+        public function canBeNull($field) {
             $field['not_null'] = false;
             return $field; 
         }
-        public function withDisplayName($field, $displayName) {
+        public function displayName($field, $displayName) {
             $field['display_name'] = $displayName;
             return $field; 
+        }
+        public function foreignKey($field, $foreingKey) {
+            $field['foreign_key'] = $foreingKey;
+            return $field;     
         }
     }
 ?>

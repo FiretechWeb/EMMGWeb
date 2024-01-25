@@ -10,12 +10,28 @@
             $s = new DBFieldShortHand();
 
             return [
+                "tipos_empresa" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "tipo" => $s->displayName($f['varchar_128'], "Tipo de Empresa"),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Tipo de Empresa",
+                    "group" => "Empresas"   
+                ],
                 "empresas" => [
                     "fields" => [
                         "id" => $f['id'],
-                        "razon" => $s->withDisplayName($f['varchar_128'], "Razón Social"),
-                        "domicilio" => $s->withDisplayName($f['varchar_256'], "Domicilio"),
-                        "cuit" => $s->withDisplayName($f['bigint'], "CUIT")
+                        "razon" => $s->displayName($f['varchar_128'], "Razón Social"),
+                        "domicilio" => $s->displayName($f['varchar_256'], "Domicilio"),
+                        "cuit" => $s->displayName($f['bigint'], "CUIT"),
+                        "id_tipo" => $s->displayName(
+                            $s->foreignKey($f['bigint'], 
+                            [
+                                'table' => 'tipos_empresa',
+                                'field' => 'id',
+                                'format' => '{id}: {tipo}'
+                            ]), "Tipo de Empresa")
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Empresa",
