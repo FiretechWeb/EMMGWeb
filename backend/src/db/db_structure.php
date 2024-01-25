@@ -7,8 +7,7 @@
             $fieldTemplates = DBTemplate::getFieldTemplates();
             $tableTemplates = DBTemplate::getTableTemplates();
             $actionsTemplates = DBTemplate::getTemplateActions();
-            
-            return [
+            $returnStructure = [
                 "puesto_empleado" => $tableTemplates['id_name'],
                 "actividad_economica" => $tableTemplates['id_name'],
                 "regimen" => $tableTemplates['id_name'],
@@ -62,6 +61,19 @@
                     "actions" => $actionsTemplates['default']
                 ]
             ];
+            
+            $returnStructure['puesto_empleado']['display_name'] = "Puesto de empleado";
+            $returnStructure['actividad_economica']['display_name'] = "Actividad económica";
+            $returnStructure['regimen']['display_name'] = "Régimen";
+            $returnStructure['obra_social']['display_name'] = "Obra social";
+            $returnStructure['modalidad_contrato']['display_name'] = "Modalidad de contrato";
+            $returnStructure['situacion']['display_name'] = "Situación";
+            $returnStructure['tipo_servicio']['display_name'] = "Tipo de servicio";
+            $returnStructure['convenio_colectivo']['display_name'] = "Convenio colectivo";
+            $returnStructure['categoria']['display_name'] = "Categoria";
+            $returnStructure['empleado']['display_name'] = "Empleado";
+
+            return $returnStructure;
         }
     }
 ?>

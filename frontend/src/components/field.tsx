@@ -1,4 +1,4 @@
-import type { DBFieldType, DBTableType } from "../lib/db_types"
+import type { DBFieldType } from "../lib/db_types"
 import { useState, useEffect, useRef } from "react"
 import { InputText } from 'primereact/inputtext';
 import { InputNumber } from 'primereact/inputnumber';

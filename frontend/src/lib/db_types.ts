@@ -19,4 +19,5 @@ export interface DBTableType {
         [fieldName: string]: DBFieldType;
     };
     actions: any;
+    display_name?: string;
 }

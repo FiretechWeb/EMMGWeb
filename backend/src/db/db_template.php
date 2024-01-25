@@ -12,7 +12,7 @@
                     "delete" => ['DBBaseActions', 'delete'],
                     "duplicated" => ['DBBaseActions', 'duplicated']
                 ]
-                ];
+            ];
         }
         //call_user_func_array
         public static function getFieldTemplates() {

@@ -1,4 +1,4 @@
-import type { DBFieldType, DBTableType } from "../lib/db_types"
+import type { DBFieldType } from "../lib/db_types"
 import { useState, useEffect, MutableRefObject, useRef } from "react"
 import TableAddComponent from "./table_add";
 import TableModifyComponent from "./table_modify";
@@ -7,7 +7,7 @@ import { Button } from "primereact/button";
 
 interface TableComponentProps {
     jsonTableData: string;
-    name: string;
+    tableName: string;
 }
 
 enum UIActionStates {
@@ -20,29 +20,30 @@ enum UIActionStates {
 export default function DBTableComponent(props: TableComponentProps) {
     const [fields, setFields] = useState<{ [fieldName: string]: DBFieldType; }>({});
     const [actionState, setActionState] = useState<UIActionStates>(UIActionStates.NONE);
+    const [displayName, setDisplayName] = useState<string>("");
     const initialized: MutableRefObject<boolean> = useRef(false);
     useEffect(() => {
         if (initialized.current) return;
-
-        setFields(JSON.parse(props.jsonTableData)['fields']);
-
+        const tableData: any = JSON.parse(props.jsonTableData);
+        setFields(tableData['fields']);
+        setDisplayName(tableData['display_name'] ?? props.tableName);
         initialized.current = true;
     }, [props]);
 
     return(
         <div>
-            <h2 className="text-3xl font-bold m-1 text-center">{props.name}</h2>
+            <h2 className="text-3xl font-bold m-1 text-center">{displayName}</h2>
             {
                 actionState === UIActionStates.ADD &&
-                <TableAddComponent name={props.name} jsonTableData={props.jsonTableData}></TableAddComponent>
+                <TableAddComponent tableName={props.tableName} jsonTableData={props.jsonTableData}></TableAddComponent>
             }
             {
                 actionState === UIActionStates.MODIFY &&
-                <TableModifyComponent name={props.name} jsonTableData={props.jsonTableData}></TableModifyComponent>
+                <TableModifyComponent tableName={props.tableName} jsonTableData={props.jsonTableData}></TableModifyComponent>
             }
             {
                 actionState === UIActionStates.DELETE &&
-                <TableDeleteComponent name={props.name} jsonTableData={props.jsonTableData}></TableDeleteComponent>
+                <TableDeleteComponent tableName={props.tableName} jsonTableData={props.jsonTableData}></TableDeleteComponent>
             }
             <hr />
             <div className="flex flex-row items-center text-center place-items-center place-content-center content-center justify-center">
