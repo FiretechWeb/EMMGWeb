@@ -193,4 +193,43 @@
             return $field;
         }
     }
+
+    class DBFieldShortHand {
+        public function toUnique($field) {
+            $field['unique'] = true;
+            return $field;
+        }
+        public function toNotUnique($field) {
+            $field['unique'] = false;
+            return $field;
+        }
+        public function toPrimary($field) {
+            $field['primary'] = true;
+            return $field;
+        }
+        public function toNotPrimary($field) {
+            $field['primary'] = false;
+            return $field;
+        }
+        public function toAllowInsert($field) {
+            $field['allow_insert'] = true;
+            return $field;
+        }
+        public function toNotAllowedInsert($field) {
+            $field['allow_insert'] = false;
+            return $field;
+        }
+        public function toNotNull($field) {
+            $field['not_null'] = true;
+            return $field; 
+        }
+        public function toCanBeNull($field) {
+            $field['not_null'] = false;
+            return $field; 
+        }
+        public function withDisplayName($field, $displayName) {
+            $field['display_name'] = $displayName;
+            return $field; 
+        }
+    }
 ?>

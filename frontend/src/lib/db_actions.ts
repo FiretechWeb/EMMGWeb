@@ -61,6 +61,19 @@ export class DBActions {
     static setStructure(structure: any) {
         _dbStructure = structure;
     }
+    static getTableGroups(dbStructure: any = null) {
+        if (!dbStructure) {
+            dbStructure = _dbStructure;
+        }
+        let tableGroups: any = {};
+        Object.keys(dbStructure).forEach( tableName => {
+            const groupName: string = dbStructure[tableName]['group'] ?? "_nogroup_";
+            tableGroups[groupName] = {};
+            tableGroups[groupName][tableName] = dbStructure[tableName];
+        });
+
+        return tableGroups;
+    }
     static async getStructure() {
         try {
             let res = await axios.post(`${GlobalVars.backend_path!}/api/get_structure.php`, { },

@@ -4,6 +4,27 @@
 
     class DBStructure {
         public static function getStructure() {
+            $f = DBTemplate::getFieldTemplates();
+            $t = DBTemplate::getTableTemplates();
+            $a = DBTemplate::getTemplateActions();
+            $s = new DBFieldShortHand();
+
+            return [
+                "empresas" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "razon" => $s->withDisplayName($f['varchar_128'], "Razón Social"),
+                        "domicilio" => $s->withDisplayName($f['varchar_256'], "Domicilio"),
+                        "cuit" => $s->withDisplayName($f['bigint'], "CUIT")
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Empresa",
+                    "group" => "Empresas"
+                ]
+            ];
+        }
+        /*
+        public static function getStructure() {
             $fieldTemplates = DBTemplate::getFieldTemplates();
             $tableTemplates = DBTemplate::getTableTemplates();
             $actionsTemplates = DBTemplate::getTemplateActions();
@@ -100,5 +121,6 @@
 
             return $returnStructure;
         }
+        */
     }
 ?>

@@ -2,9 +2,8 @@ import styles from './index.module.css'
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import Console from '../components/console';
 import { DBActions } from '../lib/db_actions';
-import DBTableComponent from '../components/table';
 import { TabView, TabPanel } from 'primereact/tabview';
-import type { InferGetStaticPropsType, GetStaticProps } from 'next'
+import TableGroup from '../components/group';
 
 interface HomeProps {
     dataStructure: any
@@ -38,7 +37,7 @@ export const getStaticProps = async (context: any) => {
 export default function Home({dataStructure} : HomeProps) {
     const initialized: MutableRefObject<boolean> = useRef(false);
     const [fakeConsole, setFakeConsole] = useState(false);
-    
+    const [tableGroups, setTableGroups] = useState<any>({});
     const handleKeyPress = (event: KeyboardEvent) => {
         if (!event || !event.key) return false;
         
@@ -54,6 +53,8 @@ export default function Home({dataStructure} : HomeProps) {
         if (initialized.current) return;
         
         DBActions.setStructure(dataStructure);
+        setTableGroups(DBActions.getTableGroups());
+        
         window.removeEventListener('keydown', handleKeyPress);
         window.addEventListener('keydown', handleKeyPress);
         
@@ -69,9 +70,9 @@ export default function Home({dataStructure} : HomeProps) {
             <h2 className='p-2 text-2xl text-center'>Carga de datos</h2>
             <TabView scrollable panelContainerClassName='p-5'>
             {
-            Object.keys(dataStructure).map( (key) => (
-                <TabPanel headerStyle={{background: 'none'}} headerClassName="border-dashed border-2 border-sky-500 *:p-2" key={key} header={dataStructure[key]['display_name'] ?? key}>
-                    <DBTableComponent jsonTableData={JSON.stringify(dataStructure[key])} tableName={key}></DBTableComponent>
+            Object.keys(tableGroups).map( (groupName) => (
+                <TabPanel headerStyle={{background: 'none'}} headerClassName="border-dashed border-2 border-sky-500 *:p-2" key={groupName} header={groupName}>
+                    <TableGroup tableGroup={tableGroups[groupName]}></TableGroup>
                 </TabPanel>
             ))}
             </TabView>
