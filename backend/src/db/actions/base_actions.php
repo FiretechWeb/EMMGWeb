@@ -57,8 +57,14 @@
                         if ($fieldParams['sql_type'] == "DATE") {
                             $fieldData[$field] = (new DateTime($fieldData[$field]))->format('Y-m-d');
                         }
+
+                        $preparedValue = $fieldData[$field];
+                        if (strpos($fieldParams['sql_type'], "DECIMAL") !== false) {
+                            $preparedValue = strval($preparedValue);
+                        }
+
                         $conditionColumns[] = "$field = :result_$i";
-                        $preparedStatements[] = ["name" => "result_$i", "value" => $fieldData[$field], "type" =>  $fieldParams['pdo_type']];
+                        $preparedStatements[] = ["name" => "result_$i", "value" => $preparedValue, "type" =>  $fieldParams['pdo_type']];
                         $i++;
                     }
                 }
@@ -114,14 +120,18 @@
                     $fieldName = $conditionData['field'];
                     $conditionName = $conditionData['condition'];
                     $result = $conditionData['result'];
-                    $fieldPararms =  $fields[$fieldName];
+                    $fieldParams =  $fields[$fieldName];
 
                     if (!isValidCondition($conditionName)) {
                         return DBResponse::error("Invalid conditional statement");
                     }
 
+                    if (strpos($fieldParams['sql_type'], "DECIMAL") !== false) {
+                        $result = strval($result);
+                    }
+
                     $conditionColumns[] = "$fieldName $conditionName :result_$i";
-                    $preparedStatements[] = ["name" => "result_$i", "value" => $result, "type" =>  $fieldPararms['pdo_type']];
+                    $preparedStatements[] = ["name" => "result_$i", "value" => $result, "type" =>  $fieldParams['pdo_type']];
                     $i++;
                 }
             }
@@ -190,7 +200,12 @@
                         $uniqueFields[] = $field;
                     }
 
-                    $preparedStatements[] = ["name" => $field, "value" => $fieldData[$field], "type" =>  $fieldParams['pdo_type']];
+                    $preparedValue = $fieldData[$field];
+                    if (strpos($fieldParams['sql_type'], "DECIMAL") !== false) {
+                        $preparedValue = strval($preparedValue);
+                    }
+
+                    $preparedStatements[] = ["name" => $field, "value" => $preparedValue, "type" =>  $fieldParams['pdo_type']];
                     $setColumns[] = "$field = :$field";
                 }
             }
@@ -216,6 +231,10 @@
 
                     if (!isValidCondition($conditionName)) {
                         return DBResponse::error("Invalid conditional statement");
+                    }
+
+                    if (strpos($fieldParams['sql_type'], "DECIMAL") !== false) {
+                        $result = strval($result);
                     }
 
                     $conditionColumns[] = "$fieldName $conditionName :result_$i";
@@ -263,6 +282,10 @@
 
                     if (!isValidCondition($conditionName)) {
                         return DBResponse::error("Invalid conditional statement");
+                    }
+
+                    if (strpos($fieldParams['sql_type'], "DECIMAL") !== false) {
+                        $result = strval($result);
                     }
 
                     $conditionColumns[] = "$fieldName $conditionName :result_$i";
@@ -322,7 +345,12 @@
                 if ($fieldParams['sql_type'] == "DATE") {
                     $fieldData[$field] = (new DateTime($fieldData[$field]))->format('Y-m-d');
                 }
-                $fieldsData[] = ["name" => $field, "value" => $fieldData[$field], "type" =>  $fieldParams['pdo_type']];
+                $preparedValue = $fieldData[$field];
+                if (strpos($fieldParams['sql_type'], "DECIMAL") !== false) {
+                    $preparedValue = strval($preparedValue);
+                }
+
+                $fieldsData[] = ["name" => $field, "value" => $preparedValue, "type" =>  $fieldParams['pdo_type']];
                 $fieldsNames[] = $field;
             }
 

@@ -117,6 +117,36 @@
                 "foreign_key" => null,
                 "unique" => false
             ],
+            "decimal" => [
+                "primary" => false,
+                "sql_type" => "DECIMAL(12,2)",
+                "pdo_type" => PDO::PARAM_STR,
+                "not_null" => true,
+                "extra_params" => "",
+                "allow_insert" => true,
+                "foreign_key" => null,
+                "unique" => false
+            ],
+            "low_decimal" => [
+                "primary" => false,
+                "sql_type" => "DECIMAL(9,2)",
+                "pdo_type" => PDO::PARAM_STR,
+                "not_null" => true,
+                "extra_params" => "",
+                "allow_insert" => true,
+                "foreign_key" => null,
+                "unique" => false
+            ],
+            "high_decimal" => [
+                "primary" => false,
+                "sql_type" => "DECIMAL(15,2)",
+                "pdo_type" => PDO::PARAM_STR,
+                "not_null" => true,
+                "extra_params" => "",
+                "allow_insert" => true,
+                "foreign_key" => null,
+                "unique" => false
+            ],
         ];
         }
 

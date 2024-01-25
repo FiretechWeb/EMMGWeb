@@ -10,6 +10,15 @@
             $s = new DBFieldShortHand();
 
             return [
+                "tipo_cuenta_banco" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "nombre" => $s->unique($s->displayName($f['varchar_128'], "Tipo de cuenta")),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Tipo de cuenta bancaria",
+                    "group" => "Configuración"
+                ],
                 "provincia" => [
                     "fields" => [
                         "id" => $f['id'],
@@ -42,6 +51,7 @@
                         "id" => $f['id'],
                         "cuit" => $s->unique($s->displayName($f['bigint'], "CUIT")),
                         "razon" => $s->displayName($f['varchar_128'], "Razón Social"),
+                        "tel" => $s->displayName($f['varchar_64'], "Teléfono"),
                         "domicilio" => $s->displayName($f['varchar_128'], "Domicilio"),
                         "ciudad" => $s->displayName($f['varchar_128'], "Ciudad"),
                         "id_provincia" => $s->displayName(
@@ -64,7 +74,20 @@
                                 'table' => 'actividad',
                                 'field' => 'id',
                                 'format' => '{nombre}'
-                            ]), "Actividad")
+                            ]), "Actividad"),
+                        "cuenta_bancaria" => $s->displayName($f['varchar_64'], "Cuenta Bancaria"),
+                        "id_tcuenta_banco" => $s->displayName(
+                            $s->foreignKey($f['bigint'], 
+                            [
+                                'table' => 'tipo_cuenta_banco',
+                                'field' => 'id',
+                                'format' => '{nombre}'
+                            ]), "Tipo de cuenta bancaria"),
+                        "hs_completa" => $s->displayName($f['int'], "Horas de jornada completa"),
+                        "dias_completa" => $s->displayName($f['int'], "Días de jornada completa"),
+                        "imp_detraccion" => $s->canBeNull(
+                            $s->displayName($f['decimal'], "Importe detracción")
+                        ),
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Empresa",

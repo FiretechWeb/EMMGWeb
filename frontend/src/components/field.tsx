@@ -95,7 +95,15 @@ export default function FieldComponent(props: FieldComponentProps) {
             !fieldData.sql_type.toLowerCase().includes("tinyint") &&
             <div className="m-2">
                 <label className="mx-2">{fieldData.display_name ?? props.name}: </label>
-                <InputNumber name={props.name} onValueChange={(e) => updateFieldValue(e.value)} value={fieldValue as number} ></InputNumber>
+                <InputNumber name={props.name} onValueChange={(e) => updateFieldValue(e.value)} value={fieldValue as number}></InputNumber>
+            </div>
+        }
+        {
+             fieldData && fieldData && !fieldData.foreign_key && 
+            fieldData.sql_type.toLowerCase().includes("decimal") &&
+            <div className="m-2">
+                <label className="mx-2">{fieldData.display_name ?? props.name}: </label>
+                <InputNumber name={props.name} onValueChange={(e) => updateFieldValue(e.value)} value={fieldValue as number} minFractionDigits={2} maxFractionDigits={2}></InputNumber>
             </div>
         }
         {
