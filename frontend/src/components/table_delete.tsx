@@ -74,7 +74,7 @@ export default function TableDeleteComponent(props: TableDeleteComponentProps) {
     return (
         <div>
             <h3 className="text-xl font-bold">Eliminar {displayName}</h3>
-        <form className="flex flex-col">
+        <form className="flex flex-col" autoComplete="off">
 
         {
            !forceListUpdate && <DBElementsList tableName={props.tableName} jsonTableData={props.jsonTableData} selectionChanged={elementSelected}></DBElementsList>

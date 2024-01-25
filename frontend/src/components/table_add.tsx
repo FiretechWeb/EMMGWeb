@@ -54,7 +54,7 @@ export default function TableAddComponent(props: TableAddComponentProps) {
     return (
         <div>
             <h3 className="text-xl font-bold">Agregar {displayName}</h3>
-        <form className="flex flex-col">
+        <form className="flex flex-col" autoComplete="off">
         {
         Object.keys(fields)
             .filter(fieldName => fields[fieldName].allow_insert)
