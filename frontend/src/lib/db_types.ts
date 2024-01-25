@@ -11,6 +11,7 @@ export interface DBFieldType {
     extra_params: string;
     allow_insert: boolean;
     foreign_key: DBForeignKey | null;
+    display_name?: string;
 }
 
 export interface DBTableType {

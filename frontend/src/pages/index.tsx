@@ -68,7 +68,8 @@ export default function Home({dataStructure} : HomeProps) {
 
             <h2 className='p-2 text-2xl text-center'>Carga de datos</h2>
             <TabView scrollable panelContainerClassName='p-5'>
-            {Object.keys(dataStructure).map( (key) => (
+            {
+            Object.keys(dataStructure).map( (key) => (
                 <TabPanel headerStyle={{background: 'none'}} headerClassName="border-dashed border-2 border-sky-500 *:p-2" key={key} header={dataStructure[key]['display_name'] ?? key}>
                     <DBTableComponent jsonTableData={JSON.stringify(dataStructure[key])} tableName={key}></DBTableComponent>
                 </TabPanel>

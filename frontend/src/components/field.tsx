@@ -74,7 +74,7 @@ export default function FieldComponent(props: FieldComponentProps) {
         {
             fieldData && fieldData && fieldData.foreign_key && 
             <div className="m-2">
-                <label className="mx-2">{props.name}: </label>
+                <label className="mx-2">{fieldData.display_name ?? props.name}: </label>
                 <Dropdown filter value={fieldSelected} onChange={(e) => updateFieldSelected(e.value)} options={fieldForeignOptions} placeholder="Seleccionar" optionLabel="name" ></Dropdown>
             </div>
 
@@ -83,7 +83,7 @@ export default function FieldComponent(props: FieldComponentProps) {
             fieldData && fieldData && !fieldData.foreign_key && 
             fieldData.sql_type.toLowerCase().includes("varchar") &&
             <div className="m-2">
-                <label className="mx-2">{props.name}: </label>
+                <label className="mx-2">{fieldData.display_name ?? props.name}: </label>
                 <InputText name={props.name} onChange={(e) => updateFieldValue(e.target.value)} value={fieldValue as string} ></InputText>
             </div>
         }
@@ -93,7 +93,7 @@ export default function FieldComponent(props: FieldComponentProps) {
             fieldData.sql_type.toLowerCase().includes("int")) &&
             !fieldData.sql_type.toLowerCase().includes("tinyint") &&
             <div className="m-2">
-                <label className="mx-2">{props.name}: </label>
+                <label className="mx-2">{fieldData.display_name ?? props.name}: </label>
                 <InputNumber name={props.name} onValueChange={(e) => updateFieldValue(e.value)} value={fieldValue as number} ></InputNumber>
             </div>
         }
@@ -101,7 +101,7 @@ export default function FieldComponent(props: FieldComponentProps) {
             fieldData && fieldData && !fieldData.foreign_key && 
             fieldData.sql_type.toLowerCase().includes("tinyint") &&
             <div className="m-2">
-                <label className="mx-2">{props.name}: </label>
+                <label className="mx-2">{fieldData.display_name ?? props.name}: </label>
                 <Checkbox onChange={e => updateFieldValue(!fieldValue)} name={props.name} checked={fieldValue as boolean}></Checkbox>
             </div>
         }
@@ -109,7 +109,7 @@ export default function FieldComponent(props: FieldComponentProps) {
             fieldData && fieldData && !fieldData.foreign_key && 
             fieldData.sql_type.toLowerCase().includes("date") &&
             <div className="m-2">
-                <label className="mx-2">{props.name}: </label>
+                <label className="mx-2">{fieldData.display_name ?? props.name}: </label>
                 <Calendar name={props.name} onChange={(e) => updateFieldValue(e.value)} value={fieldValue as Date}></Calendar>
             </div>
         }

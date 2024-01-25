@@ -61,16 +61,41 @@
                     "actions" => $actionsTemplates['default']
                 ]
             ];
-            
+
             $returnStructure['puesto_empleado']['display_name'] = "Puesto de empleado";
+            $returnStructure['puesto_empleado']['fields']['name']['display_name'] = 'Puesto';
+
             $returnStructure['actividad_economica']['display_name'] = "Actividad económica";
+            $returnStructure['actividad_economica']['fields']['name']['display_name'] = 'Nombre';
+
             $returnStructure['regimen']['display_name'] = "Régimen";
+            $returnStructure['regimen']['fields']['name']['display_name'] = 'Nombre';
+
             $returnStructure['obra_social']['display_name'] = "Obra social";
+            $returnStructure['obra_social']['fields']['name']['display_name'] = 'Nombre';
+            $returnStructure['obra_social']['fields']['code']['display_name'] = 'Código';
+
             $returnStructure['modalidad_contrato']['display_name'] = "Modalidad de contrato";
+            $returnStructure['modalidad_contrato']['fields']['name']['display_name'] = 'Nombre';
+            $returnStructure['modalidad_contrato']['fields']['code']['display_name'] = 'Código';
+
             $returnStructure['situacion']['display_name'] = "Situación";
+            $returnStructure['situacion']['fields']['name']['display_name'] = 'Nombre';
+            $returnStructure['situacion']['fields']['code']['display_name'] = 'Código';
+
             $returnStructure['tipo_servicio']['display_name'] = "Tipo de servicio";
+            $returnStructure['tipo_servicio']['fields']['name']['display_name'] = 'Servicio';
+            $returnStructure['tipo_servicio']['fields']['code']['display_name'] = 'Código';
+
             $returnStructure['convenio_colectivo']['display_name'] = "Convenio colectivo";
+            $returnStructure['convenio_colectivo']['fields']['name']['display_name'] = 'Nombre';
+            $returnStructure['convenio_colectivo']['fields']['code']['display_name'] = 'Código';
+
             $returnStructure['categoria']['display_name'] = "Categoria";
+            $returnStructure['categoria']['fields']['name']['display_name'] = 'Nombre';
+            $returnStructure['categoria']['fields']['code']['display_name'] = 'Código';
+
+
             $returnStructure['empleado']['display_name'] = "Empleado";
 
             return $returnStructure;
