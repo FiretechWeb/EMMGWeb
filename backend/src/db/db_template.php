@@ -235,5 +235,26 @@
             $field['foreign_key'] = $foreingKey;
             return $field;     
         }
+        /*
+                "primary" => true,
+                "not_null" => true,
+                "allow_insert" => false,
+                "unique" => true
+        */
+        public function params($field, $params) {
+            if (strpos($params, "primary") !== false) {
+                $field["primary"] = strpos($params, "!primary") === false;
+            }
+            if (strpos($params, "not_null") !== false) {
+                $field["primary"] = strpos($params, "!not_null") === false;
+            }
+            if (strpos($params, "allow_insert") !== false) {
+                $field["primary"] = strpos($params, "!allow_insert") === false;
+            }
+            if (strpos($params, "unique") !== false) {
+                $field["primary"] = strpos($params, "!unique") === false;
+            }
+            return $field;
+        }
     }
 ?>

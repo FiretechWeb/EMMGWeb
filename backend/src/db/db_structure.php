@@ -10,10 +10,28 @@
             $s = new DBFieldShortHand();
 
             return [
+                "provincia" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "nombre" => $s->unique($s->displayName($f['varchar_128'], "Nombre")),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Provincia",
+                    "group" => "Configuración"
+                ],
+                "actividad" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "nombre" => $s->unique($s->displayName($f['varchar_128'], "Actividad")),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Actividad",
+                    "group" => "Empresas"   
+                ],
                 "tipos_empresa" => [
                     "fields" => [
                         "id" => $f['id'],
-                        "tipo" => $s->displayName($f['varchar_128'], "Tipo de Empresa"),
+                        "tipo" => $s->unique($s->displayName($f['varchar_128'], "Tipo de Empresa")),
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Tipo de Empresa",
@@ -22,16 +40,31 @@
                 "empresas" => [
                     "fields" => [
                         "id" => $f['id'],
+                        "cuit" => $s->unique($s->displayName($f['bigint'], "CUIT")),
                         "razon" => $s->displayName($f['varchar_128'], "Razón Social"),
-                        "domicilio" => $s->displayName($f['varchar_256'], "Domicilio"),
-                        "cuit" => $s->displayName($f['bigint'], "CUIT"),
+                        "domicilio" => $s->displayName($f['varchar_128'], "Domicilio"),
+                        "ciudad" => $s->displayName($f['varchar_128'], "Ciudad"),
+                        "id_provincia" => $s->displayName(
+                            $s->foreignKey($f['bigint'], 
+                            [
+                                'table' => 'provincia',
+                                'field' => 'id',
+                                'format' => '{nombre}'
+                            ]), "Provincia"),
                         "id_tipo" => $s->displayName(
                             $s->foreignKey($f['bigint'], 
                             [
                                 'table' => 'tipos_empresa',
                                 'field' => 'id',
-                                'format' => '{id}: {tipo}'
-                            ]), "Tipo de Empresa")
+                                'format' => '{tipo}'
+                            ]), "Tipo de Empresa"),
+                        "id_actividad" => $s->displayName(
+                            $s->foreignKey($f['bigint'], 
+                            [
+                                'table' => 'actividad',
+                                'field' => 'id',
+                                'format' => '{nombre}'
+                            ]), "Actividad")
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Empresa",
