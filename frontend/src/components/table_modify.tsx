@@ -4,6 +4,7 @@ import { Button } from "primereact/button";
 import { DBElementsList } from "./elements";
 import { DBActions } from "../lib/db_actions";
 import FieldComponent from "./field";
+import { useErrorState, useSuccessState } from "../lib/global_store";
 
 interface TableModifyComponentProps {
     jsonTableData: string;
@@ -17,7 +18,9 @@ export default function TableModifyComponent(props: TableModifyComponentProps) {
     const [forceFieldsUpdate, setForceFieldsUpdate] = useState(false);
     const [forceListUpdate, setForceListUpdate] = useState(false);
     const [displayName, setDisplayName] = useState<string>("");
-
+    const setErrorState = useErrorState((state) => state.setError);
+    const setSuccessState = useSuccessState((state) => state.setSuccess);
+    
     let fieldValues: any = {};
 
     const modifyElement = (event: any) => {
@@ -28,13 +31,13 @@ export default function TableModifyComponent(props: TableModifyComponentProps) {
         const primaryKeys: Array<string> = DBActions.getPrimaryKeys(props.tableName);
 
         if (primaryKeys.length == 0) {
-            console.error("primary keys not found in ", props.tableName);
+            setErrorState(`primary keys not found in ${props.tableName}`);
             event.preventDefault();
             return;
         }
 
         if (primaryKeys.some( pkey => rowSelected[pkey] === null || rowSelected[pkey] === undefined)) {
-            console.error("primary keys invalid", props.tableName);
+            setErrorState(`primary keys invalid ${props.tableName}`);
             event.preventDefault();
             return;
         }
@@ -49,12 +52,19 @@ export default function TableModifyComponent(props: TableModifyComponentProps) {
                 'conditions': [],
                 'keys': keysValues
             }).then(r => {
-                console.log(r);
-                requestForceListUpdate();
-            }).catch(e => console.error(e));
-
+                if (!r.res) {
+                    setErrorState("Invalid response type.");
+                } else if (r.msg && r.res == 'error') {
+                    setErrorState(r.msg)
+                } else if (r.res == 'ok') {
+                    requestForceListUpdate();
+                    setSuccessState("Data modified correctly.");
+                } else {
+                    setErrorState("Invalid response type.");
+                }
+            }).catch(e => setErrorState(e));
         } else {
-            console.error("Missing fields or values to send data");
+            setErrorState("Missing fields or values to modify data");
         }
 
         event.preventDefault();

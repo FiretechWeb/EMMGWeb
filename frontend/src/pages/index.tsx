@@ -4,6 +4,8 @@ import Console from '../components/console';
 import { DBActions } from '../lib/db_actions';
 import { TabView, TabPanel } from 'primereact/tabview';
 import TableGroup from '../components/group';
+import { useErrorState, useSuccessState } from '../lib/global_store';
+import { Dialog } from 'primereact/dialog';
 
 interface HomeProps {
     dataStructure: any
@@ -38,6 +40,11 @@ export default function Home({dataStructure} : HomeProps) {
     const initialized: MutableRefObject<boolean> = useRef(false);
     const [fakeConsole, setFakeConsole] = useState(false);
     const [tableGroups, setTableGroups] = useState<any>({});
+    const currentError = useErrorState((state) => state.error);
+    const currentSuccess = useSuccessState((state) => state.success);
+    const cleanError = useErrorState((state) => state.cleanError);
+    const cleanSuccess = useSuccessState((state) => state.cleanSuccess);
+
     const handleKeyPress = (event: KeyboardEvent) => {
         if (!event || !event.key) return false;
         
@@ -65,6 +72,19 @@ export default function Home({dataStructure} : HomeProps) {
     return (
         <main className={styles.main}>
             {fakeConsole && <Console></Console>}
+
+            <Dialog header="Error" visible={typeof currentError === 'string' && currentError.length > 0} contentClassName='p-2' headerClassName='p-2 text-red-600 text-3xl' style={{ width: '50vw'}} onHide={() => cleanError()}>
+                <p className="m-0 text-red-600 text-2xl text-center">
+                    {currentError}
+                </p>
+            </Dialog>
+
+            <Dialog header="Success" visible={typeof currentSuccess === 'string' && currentSuccess.length > 0} contentClassName='p-2' headerClassName='p-2 text-green-600 text-3xl' style={{ width: '50vw'}} onHide={() => cleanSuccess()}>
+                <p className="m-0 text-green-600 text-2xl text-center">
+                    {currentSuccess}
+                </p>
+            </Dialog>
+
             <h1 className='p-2 text-3xl text-center'>Liquidación de sueldos</h1>
 
             <h2 className='p-2 text-2xl text-center'>Carga de datos</h2>

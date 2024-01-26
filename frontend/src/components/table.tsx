@@ -4,24 +4,23 @@ import TableAddComponent from "./table_add";
 import TableModifyComponent from "./table_modify";
 import TableDeleteComponent from "./table_delete";
 import { Button } from "primereact/button";
+import { useUIActionState, UIActionStates } from "../lib/global_store";
+
 
 interface TableComponentProps {
     jsonTableData: string;
     tableName: string;
 }
 
-enum UIActionStates {
-    NONE,
-    ADD,
-    MODIFY,
-    DELETE
-}
-
 export default function DBTableComponent(props: TableComponentProps) {
     const [fields, setFields] = useState<{ [fieldName: string]: DBFieldType; }>({});
-    const [actionState, setActionState] = useState<UIActionStates>(UIActionStates.NONE);
+    const actionState: UIActionStates = useUIActionState((state) => state.state);
+    const setActionState = useUIActionState((state) => state.setUIActionState);
+
+    //const [actionState, setActionState] = useState<UIActionStates>(UIActionStates.NONE);
     const [displayName, setDisplayName] = useState<string>("");
     const initialized: MutableRefObject<boolean> = useRef(false);
+
     useEffect(() => {
         if (initialized.current) return;
         const tableData: any = JSON.parse(props.jsonTableData);

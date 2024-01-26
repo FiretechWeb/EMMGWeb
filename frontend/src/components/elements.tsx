@@ -3,6 +3,7 @@ import { Column } from "primereact/column";
 import { useState, useRef, MutableRefObject, useEffect } from "react";
 import type { DBFieldType } from "../lib/db_types";
 import { DBActions } from "../lib/db_actions";
+import { useErrorState } from "../lib/global_store";
 
 interface DBElementsListProps {
     tableName: string;
@@ -16,6 +17,7 @@ export function DBElementsList(props: DBElementsListProps) {
     const [displayElements, setDisplayElements] = useState<Array<any>>([]);
     const [selectedElement, setSelectedElement] = useState<any>(null);
     const initialized: MutableRefObject<boolean> = useRef(false);
+    const setErrorState = useErrorState((state) => state.setError);
 
     const elementSelected = (event: DataTableSelectionSingleChangeEvent<any>) => {
         setSelectedElement(event.value);
@@ -52,9 +54,10 @@ export function DBElementsList(props: DBElementsListProps) {
                     }
                 ));
             } else {
+                setErrorState(`Invalid response type or data at DBElementsList`);
                 setElements([]);
             }
-        }).catch(e => console.error(e));
+        }).catch(e => setErrorState(e));
         
         initialized.current = true;
     }, []);

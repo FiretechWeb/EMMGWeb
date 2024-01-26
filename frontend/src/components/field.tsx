@@ -7,6 +7,7 @@ import { Calendar } from 'primereact/calendar';
 import { DBActions } from "../lib/db_actions";
 import { Dropdown } from "primereact/dropdown";
 import { MutableRefObject } from "react";
+import { useErrorState } from "../lib/global_store";
 
 interface FieldComponentProps {
     name: string;
@@ -22,6 +23,7 @@ export default function FieldComponent(props: FieldComponentProps) {
     const [fieldSelected, setFieldSelected] = useState<any>(null);
     const [fieldForeignOptions, setFieldForeignOptions] = useState<Array<any>>([]);
     const [fieldValue, setFieldValue] = useState<any>(null);
+    const setErrorState = useErrorState((state) => state.setError);
 
     const updateFieldValue = (value: any) => {
         setFieldValue(value);
@@ -65,9 +67,13 @@ export default function FieldComponent(props: FieldComponentProps) {
                             }
                         }));
                     } else {
+                        setErrorState(`Invalid response type or data: ${props.name} - Foreign: ${fieldData.foreign_key!.table}`)
                         setFieldForeignOptions([]);
                     }
-                }).catch(e => setFieldForeignOptions([]));
+                }).catch(e => {
+                    setErrorState(e);
+                    setFieldForeignOptions([])
+                });
         }
 
         initialized.current = true;

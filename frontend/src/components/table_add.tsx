@@ -3,6 +3,7 @@ import { useState, useEffect, MutableRefObject, useRef } from "react"
 import { Button } from "primereact/button";
 import FieldComponent from "./field";
 import { DBActions } from "../lib/db_actions";
+import { useErrorState, useSuccessState, useUIActionState, UIActionStates } from "../lib/global_store";
 
 interface TableAddComponentProps {
     jsonTableData: string;
@@ -14,6 +15,9 @@ export default function TableAddComponent(props: TableAddComponentProps) {
     const [fields, setFields] = useState<{ [fieldName: string]: DBFieldType; }>({});
     const initialized: MutableRefObject<boolean> = useRef(false);
     const [displayName, setDisplayName] = useState<string>("");
+    const setErrorState = useErrorState((state) => state.setError);
+    const setSuccessState = useSuccessState((state) => state.setSuccess);
+    const setActionState = useUIActionState((state) => state.setUIActionState);
 
     let fieldValues: any = {};
     const addElement = (event: any) => {
@@ -26,10 +30,20 @@ export default function TableAddComponent(props: TableAddComponentProps) {
                 'conditions': [],
                 'keys': {}
             }).then(r => {
-                console.log(r);
-            }).catch(e => console.error(e));
+                if (!r.res) {
+                    setErrorState("Invalid response type.");
+                } else if (r.msg && r.res == 'error') {
+                    setErrorState(r.msg)
+                } else if (r.res == 'ok') {
+                    setSuccessState("Data added correctly.");
+                    setActionState(UIActionStates.NONE);
+                } else {
+                    setErrorState("Invalid response type.");
+                }
+                
+            }).catch(e => setErrorState(e));
         } else {
-            console.error("Missing fields or values to send data");
+            setErrorState("Missing fields or values to send data");
         }
 
         event.preventDefault();
