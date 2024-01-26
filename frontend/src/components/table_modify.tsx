@@ -109,7 +109,7 @@ export default function TableModifyComponent(props: TableModifyComponentProps) {
         }
 
         {
-            rowSelected && <Button onClick={modifyElement} className="bg-slate-500 p-1 m-1 self-center place-self-center" label="Modificar"></Button>
+        rowSelected && <Button onClick={modifyElement} className="bg-slate-500 p-1 m-1 self-center place-self-center" label="Modificar"></Button>
         }
         </form>
         </div>

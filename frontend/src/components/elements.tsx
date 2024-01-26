@@ -1,4 +1,4 @@
-import { DataTable } from "primereact/datatable";
+import { DataTable, DataTableSelectionSingleChangeEvent } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { useState, useRef, MutableRefObject, useEffect } from "react";
 import type { DBFieldType } from "../lib/db_types";
@@ -13,8 +13,19 @@ interface DBElementsListProps {
 export function DBElementsList(props: DBElementsListProps) {
     const [fields, setFields] = useState<{ [fieldName: string]: DBFieldType; }>({});
     const [elements, setElements] = useState<Array<any>>([]);
+    const [displayElements, setDisplayElements] = useState<Array<any>>([]);
     const [selectedElement, setSelectedElement] = useState<any>(null);
     const initialized: MutableRefObject<boolean> = useRef(false);
+
+    const elementSelected = (event: DataTableSelectionSingleChangeEvent<any>) => {
+        setSelectedElement(event.value);
+        if (event.value && (event.value)['_uid']) {
+            props.selectionChanged(elements.find(e => e['_uid'] && e['_uid'] == (event.value)['_uid']));
+        } else {
+            props.selectionChanged(event.value);
+        }
+
+    }
 
     useEffect(() => {
         if (initialized.current) return;
@@ -22,9 +33,19 @@ export function DBElementsList(props: DBElementsListProps) {
         setFields(JSON.parse(props.jsonTableData)['fields']);
         
         const primaryKeys: Array<string> = DBActions.getPrimaryKeys(props.tableName);
-        DBActions.process(props.tableName, "get", DBActions.toParams([]))
+        DBActions.process(props.tableName, "get", DBActions.toParams(['related_data']))
         .then( r => {
             if (r && r.data) {
+                setDisplayElements(r.data.map(
+                    (fieldData: any) => {
+                        let displayData: any = {};
+                        Object.keys(fieldData).forEach( fieldName => {
+                            displayData[fieldName] = DBActions.displayField(props.tableName, fieldName, fieldData);
+                        });
+                        return {_uid: DBActions.generateKeyFromField(fieldData, primaryKeys), ...displayData}
+                    }
+                ));
+
                 setElements(r.data.map(
                     (fieldData: any) => {
                         return {_uid: DBActions.generateKeyFromField(fieldData, primaryKeys), ...fieldData}
@@ -39,7 +60,7 @@ export function DBElementsList(props: DBElementsListProps) {
     }, []);
 
     return (
-        <DataTable className="m-3" value={elements} selectionMode="single" selection={selectedElement} onSelectionChange={(e) => { setSelectedElement(e.value); props.selectionChanged(e.value)}} dataKey="_uid" metaKeySelection={false} tableStyle={{ minWidth: '50rem' }}>
+        <DataTable className="m-3" value={displayElements} selectionMode="single" selection={selectedElement} onSelectionChange={elementSelected} dataKey="_uid" metaKeySelection={false} tableStyle={{ minWidth: '50rem' }}>
         {
             Object.keys(fields)
                 .filter(fieldName => fields[fieldName].allow_insert)

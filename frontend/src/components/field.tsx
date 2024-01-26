@@ -38,6 +38,12 @@ export default function FieldComponent(props: FieldComponentProps) {
     }
 
     useEffect(() => {
+        if (fieldValue) {
+            setFieldSelected(fieldForeignOptions.find(fo => fo.code == fieldValue));
+        }
+    }, [fieldForeignOptions]);
+
+    useEffect(() => {
         
         if (initialized.current) return;
 
@@ -58,9 +64,6 @@ export default function FieldComponent(props: FieldComponentProps) {
                                 code: e[fieldData.foreign_key!.field]
                             }
                         }));
-                        if (fieldValue) {
-                            setFieldSelected(fieldForeignOptions.find(fo => fo.code == fieldValue));
-                        }
                     } else {
                         setFieldForeignOptions([]);
                     }

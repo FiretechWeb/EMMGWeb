@@ -17,15 +17,35 @@ export class DBActions {
         });
     }
 
-    /*
-    static showWithFormat(tableName: string, fieldName: string, fieldData: { [key: string]: any }, dbStructure: any = null) {
+    static displayField(table: string, field: string, fieldsData: { [key: string]: any }, dbStructure: any = null) {
         if (!dbStructure) {
             dbStructure = _dbStructure;
         }
-        if (!dbStructure || !dbStructure[tableName] || !dbStructure[tableName]['fields']) return null;
+        if (!fieldsData[field]) return null;
 
-        if 
-    }*/
+        if (!dbStructure || !dbStructure[table] || !dbStructure[table]['fields']) return fieldsData[field];
+
+        const tableFields = dbStructure[table]['fields'];
+
+        if (!tableFields[field]) {
+            return fieldsData[field];
+        }
+        const fieldParams: DBFieldType = tableFields[field] as DBFieldType;
+
+        if (!fieldParams.foreign_key || !fieldParams.foreign_key.format) {
+            return fieldsData[field];
+        }
+
+        let foreignData: any = {};
+
+        Object.keys(fieldsData)
+            .filter(fName => fName.trim().startsWith(`_${fieldParams.foreign_key?.table}_`))
+            .forEach(fName => {
+                foreignData[fName.trim().replace(`_${fieldParams.foreign_key?.table}_`, "")] = fieldsData[fName];
+            });
+
+        return DBActions.parseFieldFormat(fieldParams.foreign_key.format, foreignData);
+    }
 
     static generateKeyFromField(fieldData: any, primaryKeys: Array<string>): string {
         return primaryKeys.map( key => fieldData[key]).join('-');
