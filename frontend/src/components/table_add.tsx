@@ -3,7 +3,7 @@ import { useState, useEffect, MutableRefObject, useRef } from "react"
 import { Button } from "primereact/button";
 import FieldComponent from "./field";
 import { DBActions } from "../lib/db_actions";
-import { useErrorState, useSuccessState, useUIActionState, UIActionStates } from "../lib/global_store";
+import { useErrorState, useSuccessState, useUIActionState, UIActionStates, useCurrentTableState, usePreviousTableState } from "../lib/global_store";
 
 interface TableAddComponentProps {
     jsonTableData: string;
@@ -18,7 +18,9 @@ export default function TableAddComponent(props: TableAddComponentProps) {
     const setErrorState = useErrorState((state) => state.setError);
     const setSuccessState = useSuccessState((state) => state.setSuccess);
     const setActionState = useUIActionState((state) => state.setUIActionState);
-
+    const setTableFieldsData = useCurrentTableState((state) => state.setData);
+    const setPrevTableFieldsData = usePreviousTableState((state) => state.setData);
+    const tableFieldsData = useCurrentTableState((state) => state.data);
     let fieldValues: any = {};
     const addElement = (event: any) => {
 
@@ -51,6 +53,8 @@ export default function TableAddComponent(props: TableAddComponentProps) {
 
     const onFieldValueChanged = (fieldName: string, value: any) => {
         fieldValues[fieldName] = value;
+        setPrevTableFieldsData({...tableFieldsData})
+        setTableFieldsData({...fieldValues});
     }
 
     useEffect(() => {

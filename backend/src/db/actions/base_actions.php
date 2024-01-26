@@ -51,6 +51,7 @@
                     $i++;
                 }
             }
+            
             foreach($fields as $field => $fieldParams) {
                 if (isset($fieldData[$field])) {
                     if ($fieldParams['unique']) {

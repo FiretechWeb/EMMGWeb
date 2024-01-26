@@ -209,6 +209,7 @@
                             [
                                 'table' => 'cuenta_contable',
                                 'field' => 'id',
+                                'extra_relation' => 'em_id:em_id',
                                 'format' => '{nombre}'
                             ]), "Cuenta contable"),
                     ],

@@ -7,7 +7,7 @@ import { Calendar } from 'primereact/calendar';
 import { DBActions } from "../lib/db_actions";
 import { Dropdown } from "primereact/dropdown";
 import { MutableRefObject } from "react";
-import { useErrorState } from "../lib/global_store";
+import { useErrorState, useCurrentTableState, usePreviousTableState } from "../lib/global_store";
 
 interface FieldComponentProps {
     name: string;
@@ -18,11 +18,16 @@ interface FieldComponentProps {
 
 export default function FieldComponent(props: FieldComponentProps) {
     const initialized: MutableRefObject<boolean> = useRef(false);
+    const foreignListInit: MutableRefObject<boolean> = useRef(false);
+
 
     const [fieldData, setFieldData] = useState<DBFieldType | null>(null);
     const [fieldSelected, setFieldSelected] = useState<any>(null);
     const [fieldForeignOptions, setFieldForeignOptions] = useState<Array<any>>([]);
     const [fieldValue, setFieldValue] = useState<any>(null);
+    const tableFieldsData = useCurrentTableState((state) => state.data);
+    const prevTableFieldsData = usePreviousTableState((state) => state.data);
+
     const setErrorState = useErrorState((state) => state.setError);
 
     const updateFieldValue = (value: any) => {
@@ -38,6 +43,40 @@ export default function FieldComponent(props: FieldComponentProps) {
             props.onValueChanged(props.name, selectedField.code);
         }
     }
+    const updateDropdownList = () => {
+        if (!fieldData || !fieldData.foreign_key) return;
+        console.log("UPDATE");
+
+        DBActions.process(fieldData.foreign_key.table, "get", DBActions.foreignKeyGetParams(fieldData, tableFieldsData))
+            .then(r => {
+                if (r && r.data) {
+                    setFieldForeignOptions(r.data.map( (e: any) => { 
+                        return {
+                            name: fieldData.foreign_key!.format ? 
+                                DBActions.parseFieldFormat(fieldData.foreign_key!.format, e) : JSON.stringify(e),
+                            code: e[fieldData.foreign_key!.field]
+                        }
+                    }));
+                } else {
+                    setErrorState(`Invalid response type or data: ${props.name} - Foreign: ${fieldData.foreign_key!.table}`)
+                    setFieldForeignOptions([]);
+                }
+            }).catch(e => {
+                setErrorState(e);
+                setFieldForeignOptions([])
+            });
+    }
+
+    useEffect(() => {
+        if (!fieldData || !fieldData.foreign_key) return;
+
+        if (!fieldData.foreign_key.extra_relation && foreignListInit.current) return;
+
+        if (!fieldData.foreign_key.extra_relation || DBActions.shouldUpdateForeignList(fieldData, prevTableFieldsData, tableFieldsData)) {
+            foreignListInit.current = true;
+            updateDropdownList();
+        }
+    }, [tableFieldsData, fieldData, prevTableFieldsData]);
 
     useEffect(() => {
         if (fieldValue) {
@@ -50,34 +89,10 @@ export default function FieldComponent(props: FieldComponentProps) {
         if (initialized.current) return;
 
         updateFieldValue(props.value);
-
         setFieldData(JSON.parse(props.jsonFieldData) as DBFieldType);
 
-        if (!fieldData) return;
-        
-        if (fieldData.foreign_key) {
-            DBActions.process(fieldData.foreign_key.table, "get", DBActions.toParams([]))
-                .then(r => {
-                    if (r && r.data) {
-                        setFieldForeignOptions(r.data.map( (e: any) => { 
-                            return {
-                                name: fieldData.foreign_key!.format ? 
-                                    DBActions.parseFieldFormat(fieldData.foreign_key!.format, e) : JSON.stringify(e),
-                                code: e[fieldData.foreign_key!.field]
-                            }
-                        }));
-                    } else {
-                        setErrorState(`Invalid response type or data: ${props.name} - Foreign: ${fieldData.foreign_key!.table}`)
-                        setFieldForeignOptions([]);
-                    }
-                }).catch(e => {
-                    setErrorState(e);
-                    setFieldForeignOptions([])
-                });
-        }
-
         initialized.current = true;
-    }, [props, fieldData, fieldValue, fieldForeignOptions]);
+    }, [props, fieldData]);
 
     return (
         <>

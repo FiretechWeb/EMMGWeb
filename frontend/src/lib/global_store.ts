@@ -6,6 +6,7 @@ interface ErrorState {
     getError: () => string;
     cleanError: () => void;
 }
+
 interface SuccessState {
     success: string;
     setSuccess: (value: string) => void;
@@ -24,6 +25,13 @@ interface UIActionState {
     state: UIActionStates;
     setUIActionState: (value: UIActionStates) => void;
     getUIActionState: () => UIActionStates;
+}
+
+interface CurrentFieldData {
+    data: any;
+    setData: (value: any) => void;
+    getData: () => any;
+    cleanData: () => void;
 }
 
 
@@ -74,6 +82,24 @@ const actionStateDefinition = (
     getUIActionState: () => get().state,
 } as UIActionState);
 
+const currentFieldSelectedDefinition = (
+    set: (
+        partial:
+        | CurrentFieldData
+        | Partial<CurrentFieldData>
+        | ((state: CurrentFieldData) => CurrentFieldData | Partial<CurrentFieldData>),
+        replace?: boolean | undefined
+    ) => void,
+    get: () => CurrentFieldData
+    ) => ({
+    data: {},
+    setData: (value: any) => set({ data: value }),
+    getData: () => get().data,
+    cleanData: () => set({data: {}})
+} as CurrentFieldData);
+
 export const useErrorState = create<ErrorState>(errorDefinition);
 export const useSuccessState = create<SuccessState>(sucessDefinition);
 export const useUIActionState = create<UIActionState>(actionStateDefinition);
+export const useCurrentTableState = create<CurrentFieldData>(currentFieldSelectedDefinition);
+export const usePreviousTableState = create<CurrentFieldData>(currentFieldSelectedDefinition);
