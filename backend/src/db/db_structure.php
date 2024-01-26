@@ -75,14 +75,14 @@
                                 'field' => 'id',
                                 'format' => '{nombre}'
                             ]), "Actividad"),
-                        "cuenta_bancaria" => $s->displayName($f['varchar_64'], "Cuenta Bancaria"),
-                        "id_tcuenta_banco" => $s->displayName(
+                        "cuenta_bancaria" => $s->canBeNull($s->displayName($f['varchar_64'], "Cuenta Bancaria")),
+                        "id_tcuenta_banco" => $s->canBeNull($s->displayName(
                             $s->foreignKey($f['bigint'], 
                             [
                                 'table' => 'tipo_cuenta_banco',
                                 'field' => 'id',
                                 'format' => '{nombre}'
-                            ]), "Tipo de cuenta bancaria"),
+                            ]), "Tipo de cuenta bancaria")),
                         "hs_completa" => $s->displayName($f['int'], "Horas de jornada completa"),
                         "dias_completa" => $s->displayName($f['int'], "Días de jornada completa"),
                         "imp_detraccion" => $s->canBeNull(

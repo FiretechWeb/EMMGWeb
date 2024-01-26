@@ -340,6 +340,9 @@
 
             foreach($fields as $field => $fieldParams) {
                 if (!isset($fieldData[$field])) {
+                    if (!$fields[$field]['not_null']) {
+                        continue;
+                    }
                     return DBResponse::error("Field $field is not set");
                 }
                 if ($fieldParams['sql_type'] == "DATE") {
