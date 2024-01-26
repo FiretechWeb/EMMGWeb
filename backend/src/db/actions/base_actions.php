@@ -305,14 +305,14 @@
             if (!empty($relatedColumns)) {
                 $tableFieldNames = [];
                 foreach($fields as $fieldName => $fieldParams) {
-                    $tableFieldNames[] = "$table.$fieldName AS $table"."_"."$fieldName";
+                    $tableFieldNames[] = "$table.$fieldName AS $fieldName";
                     if ($fieldParams['foreign_key'] !== null) {
                         $foreingKeyData = $fieldParams['foreign_key'];
                         $foreignTable = $foreingKeyData['table'];
                         $foreignTableData = $tableStructure[$foreignTable];
                         $foreignFields = $foreignTableData['fields'];
                         foreach($foreignFields as $foreignFieldName => $data) {
-                            $tableFieldNames[] = "$foreignTable.$foreignFieldName AS $foreignTable"."_"."$foreignFieldName";
+                            $tableFieldNames[] = "$foreignTable.$foreignFieldName AS _$foreignTable"."_"."$foreignFieldName";
                         }
                     }
                 }
