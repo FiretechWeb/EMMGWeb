@@ -92,6 +92,129 @@
                     "actions" => $a['default'],
                     "display_name" => "Empresa",
                     "group" => "Empresas"
+                ],
+                "cuenta_contable" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "em_id" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Empresa")),
+                            [
+                                'table' => 'empresas',
+                                'field' => 'id',
+                                'format' => '{razon}'
+                            ]
+                        ),
+                        "codigo" => $s->unique($s->displayName($f['varchar_64'], "Código")),
+                        "nombre" => $s->displayName($f['varchar_64'], "Nombre"),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Cuenta Contable",
+                    "group" => "Empresas"
+                ],
+                "centro_costos" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "em_id" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Empresa")),
+                            [
+                                'table' => 'empresas',
+                                'field' => 'id',
+                                'format' => '{razon}'
+                            ]
+                        ),
+                        "nombre" => $s->unique($s->displayName($f['varchar_128'], "Nombre")),
+                        "cuenta" => $s->unique($s->displayName($f['varchar_64'], "Cuenta")),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Centro de Costos",
+                    "group" => "Empresas"
+                ],
+                "categoria_puesto" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "em_id" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Empresa")),
+                            [
+                                'table' => 'empresas',
+                                'field' => 'id',
+                                'format' => '{razon}'
+                            ]
+                        ),
+                        "numero" => $s->unique($s->displayName($f['int'], "Número de categoria")),
+                        "descripcion" => $s->unique($s->displayName($f['varchar_128'], "Descripción")),
+                        "valor" => $s->unique($s->displayName($f['decimal'], "Valor")),
+
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Puestos de trabajo",
+                    "group" => "Empresas"
+                ]
+                ,
+                "ART" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "em_id" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Empresa")),
+                            [
+                                'table' => 'empresas',
+                                'field' => 'id',
+                                'format' => '{razon}'
+                            ]
+                        ),
+                        "numero" => $s->unique($s->displayName($f['bigint'], "Número de seguro")),
+                        "descripcion" => $s->displayName($f['varchar_128'], "Descripción")
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "ART - Seguros de vida",
+                    "group" => "Empresas"
+                ],
+                "tabla_antiguedad" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "em_id" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Empresa")),
+                            [
+                                'table' => 'empresas',
+                                'field' => 'id',
+                                'format' => '{razon}'
+                            ]
+                        ),
+                        "antiguedad" => $s->unique($s->displayName($f['int'], "Antigüedad")),
+                        "valor" => $s->displayName($f['decimal'], "Valor")
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Tablas de antigüedad",
+                    "group" => "Empresas"
+                ],
+                "patronales" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "em_id" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Empresa")),
+                            [
+                                'table' => 'empresas',
+                                'field' => 'id',
+                                'format' => '{razon}'
+                            ]
+                        ),
+                        "descripcion" => $s->displayName($f['varchar_128'], "Descripción"),
+                        "tabla_1" => $s->canBeNull($s->displayName($f['decimal'], "Porcentaje I")),
+                        "tabla_2" => $s->canBeNull($s->displayName($f['decimal'], "Porcentaje II")),
+                        "tabla_3" => $s->canBeNull($s->displayName($f['decimal'], "Porcentaje III")),
+                        "tabla_4" => $s->canBeNull($s->displayName($f['decimal'], "Porcentaje IV")),
+                        "tabla_5" => $s->canBeNull($s->displayName($f['decimal'], "Porcentaje V")),
+                        "importe" => $s->displayName($f['decimal'], "Importe fijo"),
+                        "id_cuenta_contable" => $s->displayName(
+                            $s->foreignKey($f['bigint'], 
+                            [
+                                'table' => 'cuenta_contable',
+                                'field' => 'id',
+                                'format' => '{nombre}'
+                            ]), "Cuenta contable"),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Contribuciones Patronales",
+                    "group" => "Empresas"
                 ]
             ];
         }
