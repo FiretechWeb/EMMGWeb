@@ -16,6 +16,17 @@ export class DBActions {
             return typeof fieldValue !== 'undefined' ? String(fieldValue) : match;
         });
     }
+
+    /*
+    static showWithFormat(tableName: string, fieldName: string, fieldData: { [key: string]: any }, dbStructure: any = null) {
+        if (!dbStructure) {
+            dbStructure = _dbStructure;
+        }
+        if (!dbStructure || !dbStructure[tableName] || !dbStructure[tableName]['fields']) return null;
+
+        if 
+    }*/
+
     static generateKeyFromField(fieldData: any, primaryKeys: Array<string>): string {
         return primaryKeys.map( key => fieldData[key]).join('-');
     }
@@ -151,9 +162,14 @@ export class DBActions {
         let params: { [key: string]: any } = {
             'fields': {},
             'keys' : {},
-            'conditions': []
+            'conditions': [],
+            'related_data': false
         };
         paramsArgs.forEach(arg => {
+            if (arg.trim().toLocaleLowerCase() == 'related_data') {
+                params['related_data'] = true;
+                return;
+            }
             let fieldData: string[] = splitFirstOccurrence(arg, ':').map(e => e.trim());
             switch(fieldData[0]) {
                 case 'field':

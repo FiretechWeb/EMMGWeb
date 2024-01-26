@@ -44,7 +44,7 @@ export function DBElementsList(props: DBElementsListProps) {
             Object.keys(fields)
                 .filter(fieldName => fields[fieldName].allow_insert)
                 .map( (fieldName) => (
-                    <Column className="m-2 p-2" headerClassName="m-2 p-2" key={fieldName} field={fieldName} header={fieldName}></Column>
+                    <Column className="m-2 p-2" headerClassName="m-2 p-2" key={fieldName} field={fieldName} header={fields[fieldName].display_name ?? fieldName}></Column>
                 ))
         }
         </DataTable>

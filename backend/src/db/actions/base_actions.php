@@ -265,14 +265,21 @@
             if (!isset($tableStructure[$table])) {
                 return DBResponse::error("The given table does not exists.");
             }
-
             $tableData = $tableStructure[$table];
             $fields = $tableData['fields'];
             $conditions = $params['conditions'];
             $conditionColumns = [];
             $preparedStatements = [];
+            $relatedColumns = [];
             $i = 0;
-            
+            if (isset($params['related_data']) && $params['related_data']) {
+                foreach($fields as $fieldName => $fieldParams) {
+                    if ($fieldParams['foreign_key'] !== null) {
+                        $foreingKeyData = $fieldParams['foreign_key'];
+                        $relatedColumns[] = "JOIN {$foreingKeyData['table']} ON {$foreingKeyData['table']}.{$foreingKeyData['field']} = {$table}.{$fieldName}";
+                    }
+                }
+            }
             foreach($conditions as $conditionData) {
                 if (isset($fields[$conditionData['field']])) {
                     $fieldName = $conditionData['field'];
@@ -294,7 +301,27 @@
                 }
             }
 
-            $sql = "SELECT * FROM $table";
+            $sql = "";
+            if (!empty($relatedColumns)) {
+                $tableFieldNames = [];
+                foreach($fields as $fieldName => $fieldParams) {
+                    $tableFieldNames[] = "$table.$fieldName AS $table"."_"."$fieldName";
+                    if ($fieldParams['foreign_key'] !== null) {
+                        $foreingKeyData = $fieldParams['foreign_key'];
+                        $foreignTable = $foreingKeyData['table'];
+                        $foreignTableData = $tableStructure[$foreignTable];
+                        $foreignFields = $foreignTableData['fields'];
+                        foreach($foreignFields as $foreignFieldName => $data) {
+                            $tableFieldNames[] = "$foreignTable.$foreignFieldName AS $foreignTable"."_"."$foreignFieldName";
+                        }
+                    }
+                }
+
+                $sql = "SELECT ".implode(", ", $tableFieldNames)." FROM $table";
+                $sql.= " ".implode(" ", $relatedColumns)." ";
+            } else {
+                $sql = "SELECT * FROM $table";
+            }
             if (!empty($conditionColumns)) {
                 $sql.= " WHERE ";
                 $sql.= implode(" AND ", $conditionColumns)." ;";
@@ -304,7 +331,6 @@
             foreach($preparedStatements as $ps) {
                 $pdoParams[$ps['name']] = [$ps['value'], $ps['type']];
             }
-
             return DBAPI::execQueryAndGetRows($pdo, $sql, $pdoParams);
         }
 
