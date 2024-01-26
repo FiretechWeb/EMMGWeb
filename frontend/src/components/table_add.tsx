@@ -32,8 +32,6 @@ export default function TableAddComponent(props: TableAddComponentProps) {
             console.error("Missing fields or values to send data");
         }
 
-
-        
         event.preventDefault();
     };
 

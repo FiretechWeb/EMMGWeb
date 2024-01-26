@@ -18,7 +18,7 @@ export default function TableGroup({tableGroup} : TableGroupProps) {
         </TabView>)
         }
         {Object.keys(tableGroup).length == 1 && Object.keys(tableGroup).map( (key) => (
-            <DBTableComponent jsonTableData={JSON.stringify(tableGroup[key])} tableName={key}></DBTableComponent>
+            <DBTableComponent key={key} jsonTableData={JSON.stringify(tableGroup[key])} tableName={key}></DBTableComponent>
         ))}
         </>
     )

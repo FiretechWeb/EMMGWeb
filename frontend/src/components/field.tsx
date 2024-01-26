@@ -98,7 +98,7 @@ export default function FieldComponent(props: FieldComponentProps) {
             !fieldData.sql_type.toLowerCase().includes("tinyint") &&
             <div className="m-2">
                 <label className="mx-2">{fieldData.display_name ?? props.name}: </label>
-                <InputNumber name={props.name} aria-autocomplete="none" onValueChange={(e) => updateFieldValue(e.value)} value={fieldValue as number}></InputNumber>
+                <InputNumber name={props.name} aria-autocomplete="none" onChange={(e) => updateFieldValue(e.value)} value={fieldValue as number}></InputNumber>
             </div>
         }
         {
@@ -106,7 +106,7 @@ export default function FieldComponent(props: FieldComponentProps) {
             fieldData.sql_type.toLowerCase().includes("decimal") &&
             <div className="m-2">
                 <label className="mx-2">{fieldData.display_name ?? props.name}: </label>
-                <InputNumber name={props.name} aria-autocomplete="none" onValueChange={(e) => updateFieldValue(e.value)} value={fieldValue as number} minFractionDigits={2} maxFractionDigits={2}></InputNumber>
+                <InputNumber name={props.name} aria-autocomplete="none" onChange={(e) => updateFieldValue(e.value)} value={fieldValue as number} minFractionDigits={2} maxFractionDigits={2}></InputNumber>
             </div>
         }
         {
