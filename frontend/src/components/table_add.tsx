@@ -14,6 +14,8 @@ export default function TableAddComponent(props: TableAddComponentProps) {
     
     const [fields, setFields] = useState<{ [fieldName: string]: DBFieldType; }>({});
     const initialized: MutableRefObject<boolean> = useRef(false);
+    const fieldsData: MutableRefObject<any> = useRef({});
+
     const [displayName, setDisplayName] = useState<string>("");
     const setErrorState = useErrorState((state) => state.setError);
     const setSuccessState = useSuccessState((state) => state.setSuccess);
@@ -21,14 +23,12 @@ export default function TableAddComponent(props: TableAddComponentProps) {
     const setTableFieldsData = useCurrentTableState((state) => state.setData);
     const setPrevTableFieldsData = usePreviousTableState((state) => state.setData);
     const tableFieldsData = useCurrentTableState((state) => state.data);
-    let fieldValues: any = {};
+
     const addElement = (event: any) => {
 
-        console.log(JSON.stringify(fieldValues));
-
-        if (DBActions.isDataToSendValid(fieldValues, fields)) {
+        if (DBActions.isDataToSendValid(fieldsData.current, fields)) {
             DBActions.process(props.tableName, "insert", {
-                'fields': fieldValues,
+                'fields': fieldsData.current,
                 'conditions': [],
                 'keys': {}
             }).then(r => {
@@ -52,9 +52,9 @@ export default function TableAddComponent(props: TableAddComponentProps) {
     };
 
     const onFieldValueChanged = (fieldName: string, value: any) => {
-        fieldValues[fieldName] = value;
+        fieldsData.current[fieldName] = value;
         setPrevTableFieldsData({...tableFieldsData});
-        setTableFieldsData({...fieldValues});
+        setTableFieldsData({...fieldsData.current});
     }
 
     useEffect(() => {
@@ -65,7 +65,7 @@ export default function TableAddComponent(props: TableAddComponentProps) {
         setDisplayName(fieldsData['display_name'] ?? props.tableName);
 
         initialized.current = true;
-    }, [props, fieldValues]);
+    }, [props]);
 
     return (
         <div>

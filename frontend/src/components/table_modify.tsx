@@ -23,8 +23,7 @@ export default function TableModifyComponent(props: TableModifyComponentProps) {
     const setTableFieldsData = useCurrentTableState((state) => state.setData);
     const setPrevTableFieldsData = usePreviousTableState((state) => state.setData);
     const tableFieldsData = useCurrentTableState((state) => state.data);
-
-    let fieldValues: any = {};
+    const fieldsData: MutableRefObject<any> = useRef({});
 
     const modifyElement = (event: any) => {
         if (!rowSelected) return;
@@ -45,13 +44,13 @@ export default function TableModifyComponent(props: TableModifyComponentProps) {
             return;
         }
 
-        if (DBActions.isDataToSendValid(fieldValues, fields)) {
+        if (DBActions.isDataToSendValid(fieldsData.current, fields)) {
             let keysValues: any = {};
 
             primaryKeys.forEach(pkey => keysValues[pkey] = rowSelected[pkey]);
 
             DBActions.process(props.tableName, "update", {
-                'fields': fieldValues,
+                'fields': fieldsData.current,
                 'conditions': [],
                 'keys': keysValues
             }).then(r => {
@@ -74,9 +73,9 @@ export default function TableModifyComponent(props: TableModifyComponentProps) {
     };
 
     const onFieldValueChanged = (fieldName: string, value: any) => {
-        fieldValues[fieldName] = value;
+        fieldsData.current[fieldName] = value;
         setPrevTableFieldsData({...tableFieldsData});
-        setTableFieldsData({...fieldValues});
+        setTableFieldsData({...fieldsData.current});
     }
     const requestForceListUpdate = () => {
         setForceListUpdate(true);
@@ -98,7 +97,6 @@ export default function TableModifyComponent(props: TableModifyComponentProps) {
     }
 
     useEffect(() => {
-        console.log("POP");
         setPrevTableFieldsData({...tableFieldsData});
         setTableFieldsData({...rowSelected});
     }, [rowSelected]);

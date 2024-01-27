@@ -70,11 +70,7 @@ export default function FieldComponent(props: FieldComponentProps) {
     useEffect(() => {
         if (!fieldData || !fieldData.foreign_key) return;
 
-        console.log("part1");
-
         if (!fieldData.foreign_key.extra_relation && foreignListInit.current) return;
-        
-        console.log("part2");
 
         if (!fieldData.foreign_key.extra_relation || DBActions.shouldUpdateForeignList(fieldData, prevTableFieldsData, tableFieldsData)) {
             foreignListInit.current = true;
