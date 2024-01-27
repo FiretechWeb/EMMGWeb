@@ -14,6 +14,7 @@ interface TableModifyComponentProps {
 export default function TableModifyComponent(props: TableModifyComponentProps) {
     const [fields, setFields] = useState<{ [fieldName: string]: DBFieldType; }>({});
     const initialized: MutableRefObject<boolean> = useRef(false);
+    const fieldsData: MutableRefObject<any> = useRef({});
     const [rowSelected, setRowSelected] = useState<any>(null);
     const [forceFieldsUpdate, setForceFieldsUpdate] = useState(false);
     const [forceListUpdate, setForceListUpdate] = useState(false);
@@ -22,8 +23,9 @@ export default function TableModifyComponent(props: TableModifyComponentProps) {
     const setSuccessState = useSuccessState((state) => state.setSuccess);
     const setTableFieldsData = useCurrentTableState((state) => state.setData);
     const setPrevTableFieldsData = usePreviousTableState((state) => state.setData);
+    const cleanTableFieldsData = useCurrentTableState((state) => state.cleanData);
+    const cleanPrevTableFieldsData = usePreviousTableState((state) => state.cleanData);
     const tableFieldsData = useCurrentTableState((state) => state.data);
-    const fieldsData: MutableRefObject<any> = useRef({});
 
     const modifyElement = (event: any) => {
         if (!rowSelected) return;
@@ -90,8 +92,8 @@ export default function TableModifyComponent(props: TableModifyComponentProps) {
         });
     }
     const elementSelected = (e: any) => {
-        console.log(e);
-
+        cleanTableFieldsData();
+        cleanPrevTableFieldsData();
         setRowSelected(e);
         requestFieldsRender();
     }

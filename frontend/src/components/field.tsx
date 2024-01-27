@@ -7,7 +7,7 @@ import { Calendar } from 'primereact/calendar';
 import { DBActions } from "../lib/db_actions";
 import { Dropdown } from "primereact/dropdown";
 import { MutableRefObject } from "react";
-import { useErrorState, useCurrentTableState, usePreviousTableState } from "../lib/global_store";
+import { useErrorState, useCurrentTableState, usePreviousTableState, useUIActionState, UIActionStates } from "../lib/global_store";
 
 interface FieldComponentProps {
     name: string;
@@ -27,6 +27,7 @@ export default function FieldComponent(props: FieldComponentProps) {
     const [fieldValue, setFieldValue] = useState<any>(null);
     const tableFieldsData = useCurrentTableState((state) => state.data);
     const prevTableFieldsData = usePreviousTableState((state) => state.data);
+    const actionState = useUIActionState((state) => state.state);
 
     const setErrorState = useErrorState((state) => state.setError);
 
@@ -72,7 +73,8 @@ export default function FieldComponent(props: FieldComponentProps) {
 
         if (!fieldData.foreign_key.extra_relation && foreignListInit.current) return;
 
-        if (!fieldData.foreign_key.extra_relation || DBActions.shouldUpdateForeignList(fieldData, prevTableFieldsData, tableFieldsData)) {
+
+        if (!fieldData.foreign_key.extra_relation || actionState == UIActionStates.MODIFY || DBActions.shouldUpdateForeignList(fieldData, prevTableFieldsData, tableFieldsData)) {
             foreignListInit.current = true;
             updateDropdownList();
         }
