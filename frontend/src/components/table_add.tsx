@@ -53,7 +53,7 @@ export default function TableAddComponent(props: TableAddComponentProps) {
 
     const onFieldValueChanged = (fieldName: string, value: any) => {
         fieldValues[fieldName] = value;
-        setPrevTableFieldsData({...tableFieldsData})
+        setPrevTableFieldsData({...tableFieldsData});
         setTableFieldsData({...fieldValues});
     }
 

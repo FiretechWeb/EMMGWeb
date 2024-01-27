@@ -4,7 +4,7 @@ import { Button } from "primereact/button";
 import { DBElementsList } from "./elements";
 import { DBActions } from "../lib/db_actions";
 import FieldComponent from "./field";
-import { useErrorState, useSuccessState } from "../lib/global_store";
+import { useErrorState, useSuccessState, useCurrentTableState, usePreviousTableState } from "../lib/global_store";
 
 interface TableModifyComponentProps {
     jsonTableData: string;
@@ -20,7 +20,10 @@ export default function TableModifyComponent(props: TableModifyComponentProps) {
     const [displayName, setDisplayName] = useState<string>("");
     const setErrorState = useErrorState((state) => state.setError);
     const setSuccessState = useSuccessState((state) => state.setSuccess);
-    
+    const setTableFieldsData = useCurrentTableState((state) => state.setData);
+    const setPrevTableFieldsData = usePreviousTableState((state) => state.setData);
+    const tableFieldsData = useCurrentTableState((state) => state.data);
+
     let fieldValues: any = {};
 
     const modifyElement = (event: any) => {
@@ -72,6 +75,8 @@ export default function TableModifyComponent(props: TableModifyComponentProps) {
 
     const onFieldValueChanged = (fieldName: string, value: any) => {
         fieldValues[fieldName] = value;
+        setPrevTableFieldsData({...tableFieldsData});
+        setTableFieldsData({...fieldValues});
     }
     const requestForceListUpdate = () => {
         setForceListUpdate(true);
@@ -87,9 +92,16 @@ export default function TableModifyComponent(props: TableModifyComponentProps) {
     }
     const elementSelected = (e: any) => {
         console.log(e);
+
         setRowSelected(e);
         requestFieldsRender();
     }
+
+    useEffect(() => {
+        console.log("POP");
+        setPrevTableFieldsData({...tableFieldsData});
+        setTableFieldsData({...rowSelected});
+    }, [rowSelected]);
 
     useEffect(() => {
         if (initialized.current) return;
