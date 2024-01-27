@@ -74,7 +74,7 @@ export default function FieldComponent(props: FieldComponentProps) {
         if (!fieldData.foreign_key.extra_relation && foreignListInit.current) return;
 
 
-        if (!fieldData.foreign_key.extra_relation || actionState == UIActionStates.MODIFY || DBActions.shouldUpdateForeignList(fieldData, prevTableFieldsData, tableFieldsData)) {
+        if (!fieldData.foreign_key.extra_relation || (actionState == UIActionStates.MODIFY && !foreignListInit.current) || DBActions.shouldUpdateForeignList(fieldData, prevTableFieldsData, tableFieldsData)) {
             foreignListInit.current = true;
             updateDropdownList();
         }

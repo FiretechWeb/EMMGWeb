@@ -277,7 +277,16 @@
                 foreach($fields as $fieldName => $fieldParams) {
                     if ($fieldParams['foreign_key'] !== null) {
                         $foreingKeyData = $fieldParams['foreign_key'];
-                        $relatedColumns[] = "JOIN {$foreingKeyData['table']} ON {$foreingKeyData['table']}.{$foreingKeyData['field']} = {$table}.{$fieldName}";
+                        $joinSQL = "JOIN {$foreingKeyData['table']} ON {$foreingKeyData['table']}.{$foreingKeyData['field']} = {$table}.{$fieldName}";
+                        if (isset($foreingKeyData['extra_relation'])) {
+                            foreach(array_map(function($s) {
+                                    return explode(":", $s);
+                                }, explode(",", $foreingKeyData['extra_relation']))
+                                as $foreignData) {
+                                    $joinSQL.= " AND {$foreingKeyData['table']}.{$foreignData[0]} = {$table}.{$foreignData[1]} ";
+                            };
+                        }
+                        $relatedColumns[] = $joinSQL;
                     }
                 }
             }
