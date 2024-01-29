@@ -336,7 +336,11 @@
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Empleado",
-                    "group" => "Personal"
+                    "group" => "Personal",
+                    "field_groups" => [
+                        "Datos Personales" => ["id_tipo_documento", "nro_doc", "id_nacionalidad", "fecha_nac", "id_genero", "id_estado_civil", "nro_tel", "nro_cel", "nro_emergencias", "email", "dom_calle", "dom_numero", "dom_departamento", "dom_piso", "id_provincia", "cod_postal"],
+                        "Datos de Empresa" => ["legajo", "em_id", "cuil"]
+                    ] 
                 ]
             ];
         }
