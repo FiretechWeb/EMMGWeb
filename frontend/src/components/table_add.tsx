@@ -33,7 +33,7 @@ export default function TableAddComponent(props: TableAddComponentProps) {
                 'keys': {}
             }).then(r => {
                 if (!r.res) {
-                    setErrorState("Invalid response type.");
+                    setErrorState(`FATAL ERROR: ${r}`);
                 } else if (r.msg && r.res == 'error') {
                     setErrorState(r.msg)
                 } else if (r.res == 'ok') {

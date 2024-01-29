@@ -57,7 +57,7 @@ export default function TableModifyComponent(props: TableModifyComponentProps) {
                 'keys': keysValues
             }).then(r => {
                 if (!r.res) {
-                    setErrorState("Invalid response type.");
+                    setErrorState(`FATAL ERROR: ${r}`);
                 } else if (r.msg && r.res == 'error') {
                     setErrorState(r.msg)
                 } else if (r.res == 'ok') {
