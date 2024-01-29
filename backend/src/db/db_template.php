@@ -47,6 +47,16 @@
                 "foreign_key" => null,
                 "unique" => false
             ],
+            "varchar_16" => [
+                "primary" => false,
+                "sql_type" => "VARCHAR(16)",
+                "pdo_type" => PDO::PARAM_STR,
+                "not_null" => true,
+                "extra_params" => "",
+                "allow_insert" => true,
+                "foreign_key" => null,
+                "unique" => false
+            ],
             "varchar_32" => [
                 "primary" => false,
                 "sql_type" => "VARCHAR(32)",

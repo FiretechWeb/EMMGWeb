@@ -28,6 +28,42 @@
                     "display_name" => "Provincia",
                     "group" => "Configuración"
                 ],
+                "tipo_documento" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "nombre" => $s->unique($s->displayName($f['varchar_128'], "Tipo de documento")),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Tipo de documento",
+                    "group" => "Configuración"
+                ],
+                "nacionalidad" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "nombre" => $s->unique($s->displayName($f['varchar_128'], "Nacionalidad")),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Nacionalidad",
+                    "group" => "Configuración"
+                ],
+                "genero" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "genero" => $s->unique($s->displayName($f['varchar_128'], "Genero")),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Género",
+                    "group" => "Configuración"
+                ],
+                "estado_civil" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "estado" => $s->unique($s->displayName($f['varchar_128'], "Estado civil")),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Estado Civil",
+                    "group" => "Configuración"
+                ],
                 "actividad" => [
                     "fields" => [
                         "id" => $f['id'],
@@ -143,7 +179,6 @@
                         "numero" => $s->unique($s->displayName($f['int'], "Número de categoria")),
                         "descripcion" => $s->unique($s->displayName($f['varchar_128'], "Descripción")),
                         "valor" => $s->unique($s->displayName($f['decimal'], "Valor")),
-
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Puestos de trabajo",
@@ -216,6 +251,88 @@
                     "actions" => $a['default'],
                     "display_name" => "Contribuciones Patronales",
                     "group" => "Empresas"
+                ],
+                "departamentos" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "em_id" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Empresa")),
+                            [
+                                'table' => 'empresas',
+                                'field' => 'id',
+                                'format' => '{razon}'
+                            ]
+                        ),
+                        "tipo" => $s->unique($s->displayName($f['varchar_128'], "Departamento")),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Departamentos",
+                    "group" => "Empresas"   
+                ],
+                "empleado" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "em_id" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Empresa")),
+                            [
+                                'table' => 'empresas',
+                                'field' => 'id',
+                                'format' => '{razon}'
+                            ]
+                        ),
+                        "legajo" => $s->unique($s->displayName($f['int'], "Legajo")),
+                        "cuil" => $s->unique($s->displayName($f['bigint'], "CUIL Empleado")),
+                        "id_tipo_documento" => $s->displayName(
+                            $s->foreignKey($f['bigint'], 
+                            [
+                                'table' => 'tipo_documento',
+                                'field' => 'id',
+                                'format' => '{nombre}'
+                            ]), "Tipo de Documento"),
+                        "nro_doc" => $s->unique($s->displayName($f['bigint'], "Número de documento")),
+                        "id_nacionalidad" => $s->displayName(
+                            $s->foreignKey($f['bigint'], 
+                            [
+                                'table' => 'nacionalidad',
+                                'field' => 'id',
+                                'format' => '{nombre}'
+                            ]), "Nacionalidad"),
+                        "fecha_nac" => $s->displayName($f['date'], "Fecha de nacimiento"),
+                        "id_genero" => $s->displayName(
+                            $s->foreignKey($f['bigint'], 
+                            [
+                                'table' => 'genero',
+                                'field' => 'id',
+                                'format' => '{genero}'
+                            ]), "Género"),
+                        "id_estado_civil" => $s->displayName(
+                            $s->foreignKey($f['bigint'], 
+                            [
+                                'table' => 'estado_civil',
+                                'field' => 'id',
+                                'format' => '{estado}'
+                            ]), "Estado Civil"),
+                        "nro_tel" => $s->canBeNull($s->displayName($f['varchar_64'], "Número telefónico")),
+                        "nro_cel" => $s->canBeNull($s->displayName($f['varchar_64'], "Número de celular")),
+                        "nro_emergencias" => $s->canBeNull($s->displayName($f['varchar_64'], "Número de emergencias")),
+                        "email" => $s->canBeNull($s->displayName($f['varchar_128'], "Correo electrónico")),
+                        "dom_calle" => $s->canBeNull($s->displayName($f['varchar_128'], "Domicilio - Calle")),
+                        "dom_numero" => $s->canBeNull($s->displayName($f['varchar_32'], "Domicilio - Número")),
+                        "dom_departamento" => $s->canBeNull($s->displayName($f['varchar_128'], "Departamento")),
+                        "dom_piso" => $s->canBeNull($s->displayName($f['varchar_16'], "Piso")),
+                        "id_provincia" => $s->canBeNull($s->displayName(
+                            $s->foreignKey($f['bigint'], 
+                            [
+                                'table' => 'provincia',
+                                'field' => 'id',
+                                'format' => '{nombre}'
+                            ]), "Provincia")),
+                        "cod_postal" => $s->canBeNull($s->displayName($f['varchar_32'], "Código Postal")),
+
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Empleado",
+                    "group" => "Personal"
                 ]
             ];
         }
