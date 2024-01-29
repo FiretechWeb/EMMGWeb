@@ -37,7 +37,9 @@
             $fieldData = $params['fields'];
             $primaryKeys = [];
             if (isset($params['keys'])) {
-                $primaryKeys = $params['keys'];
+                foreach($params['keys'] as $key => $keyValue) {
+                    $primaryKeys[$key] = isset($fieldData[$key]) ? $fieldData[$key] : $keyValue;
+                }
             }
             $conditionColumns = [];
             $primaryConditions = [];
@@ -46,7 +48,11 @@
 
             foreach ($primaryKeys as $key => $keyValue) {
                 if (isset($fields[$key]) && $fields[$key]['primary']) {
-                    $primaryConditions[] = "$key <> :result_$i";
+                    if (!empty($fields[$key]['extra_params']) && strpos("AUTO_INCREMENT", $fields[$key]['extra_params']) !== FALSE) {
+                        $primaryConditions[] = "$key <> :result_$i";
+                    } else {
+                        $primaryConditions[] = "$key = :result_$i";
+                    }
                     $preparedStatements[] = ["name" => "result_$i", "value" => $keyValue, "type" =>  $fields[$key]['pdo_type']];
                     $i++;
                 }
@@ -54,7 +60,7 @@
             
             foreach($fields as $field => $fieldParams) {
                 if (isset($fieldData[$field])) {
-                    if ($fieldParams['unique']) {
+                    if ($fieldParams['unique']  || ($fieldParams['primary'] && (!empty($primaryKeys) || !isset($primaryKeys[$field])))) {
                         if ($fieldParams['sql_type'] == "DATE") {
                             $fieldData[$field] = (new DateTime($fieldData[$field]))->format('Y-m-d');
                         }
@@ -63,8 +69,11 @@
                         if (strpos($fieldParams['sql_type'], "DECIMAL") !== false) {
                             $preparedValue = strval($preparedValue);
                         }
-
-                        $conditionColumns[] = "$field = :result_$i";
+                        if ($fieldParams['primary']) { //Stradex: will never be auto_increment.
+                            $primaryConditions[] = "$field = :result_$i";
+                        } else {
+                            $conditionColumns[] = "$field = :result_$i";
+                        }
                         $preparedStatements[] = ["name" => "result_$i", "value" => $preparedValue, "type" =>  $fieldParams['pdo_type']];
                         $i++;
                     }
