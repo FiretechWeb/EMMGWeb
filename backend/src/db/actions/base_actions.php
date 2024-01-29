@@ -19,6 +19,68 @@
 
     class DBBaseActions {
 
+        public static function foreignKeysExists($pdo, $table, $params =  [], $tableStructure = null) {
+            if ($tableStructure === null) {
+                $tableStructure == DBStructure::getStructure();
+            }
+
+            if (!isset($tableStructure[$table])) {
+                return DBResponse::error("The given table does not exists.");
+            }
+
+            $tableData = $tableStructure[$table];
+            $fields = $tableData['fields'];
+            $fieldData = $params['fields'];
+            $queries = [];
+            foreach($fields as $fieldName => $fieldParams) {
+                if (isset($fieldData[$fieldName]) && $fieldParams['foreign_key'] !== null) {
+                    $i=0;
+                    $preparedStatements = [];
+
+                    $fieldValue = $fieldData[$fieldName];
+
+                    $foreingKeyData = $fieldParams['foreign_key'];
+                    $foreignTable = $foreingKeyData['table'];
+                    $foreignField = $foreingKeyData['field'];
+                    $sql = "SELECT * FROM $foreignTable WHERE $foreignField = :result_$i";
+                    $preparedStatements[] = ["name" => "result_$i", "value" => $fieldValue, "type" => $fieldParams['pdo_type']];
+                    $i++;
+                    
+                    if (isset($foreingKeyData['extra_relation'])) {
+                        foreach(array_map(function($s) {
+                                return explode(":", $s);
+                            }, explode(",", $foreingKeyData['extra_relation']))
+                            as $foreignData) {
+                                if (isset($fields[$foreignData[1]]) && isset($fieldData[$foreignData[1]])) {
+                                    $relatedFieldParams = $fields[$foreignData[1]];
+                                    $relatedFieldValue = $fieldData[$foreignData[1]];
+                                    $relatedForeignField = $foreignData[0]; 
+                                    $sql .= " AND $relatedForeignField = :result_$i";
+                                    $preparedStatements[] = ["name" => "result_$i", "value" => $relatedFieldValue, "type" => $relatedFieldParams['pdo_type']];
+                                    $i++;
+                                }
+                        };
+                    }
+                    
+                    $queries[] = ["sql" => $sql, "pdo" => $preparedStatements];
+                }
+            }
+
+            foreach($queries as $query) {
+                $pdoParams = [];
+                foreach($query['pdo'] as $ps) {
+                    $pdoParams[$ps['name']] = [$ps['value'], $ps['type']];
+                }
+                $res = DBAPI::execQueryAndCheckExists($pdo, $query['sql'], $pdoParams);
+                if (DBResponse::isERROR($res)) {
+                    return $res;
+                }
+                if (!DBResponse::getData($res)) {
+                    return DBResponse::error("Foreign key value does not exists");
+                }
+            }
+            return DBResponse::ok(true);
+        }
         public static function duplicated($pdo, $table, $params = [], $tableStructure = null) {
             if ($tableStructure === null) {
                 $tableStructure == DBStructure::getStructure();
@@ -36,11 +98,13 @@
             $fields = $tableData['fields'];
             $fieldData = $params['fields'];
             $primaryKeys = [];
+
             if (isset($params['keys'])) {
                 foreach($params['keys'] as $key => $keyValue) {
                     $primaryKeys[$key] = isset($fieldData[$key]) ? $fieldData[$key] : $keyValue;
                 }
             }
+
             $conditionColumns = [];
             $primaryConditions = [];
             $preparedStatements = [];
@@ -171,6 +235,11 @@
 
             if (!isset($params['fields'])) {
                 return DBResponse::error("No fields to update given.");
+            }
+
+            $fkCheckRes = self::foreignKeysExists($pdo, $table, $params, $tableStructure);
+            if (DBResponse::isERROR($fkCheckRes)) {
+                return $fkCheckRes;
             }
 
             $duplicatedRes = DBAPI::execAction($pdo, $table, 'duplicated', $params, $tableStructure);
@@ -372,6 +441,10 @@
             }
             if (DBResponse::getData($duplicatedRes)) {
                 return DBResponse::error("Duplicated already exists");
+            }
+            $fkCheckRes = self::foreignKeysExists($pdo, $table, $params, $tableStructure);
+            if (DBResponse::isERROR($fkCheckRes)) {
+                return $fkCheckRes;
             }
 
             $tableData = $tableStructure[$table];
