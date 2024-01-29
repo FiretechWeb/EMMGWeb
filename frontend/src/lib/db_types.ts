@@ -23,4 +23,5 @@ export interface DBTableType {
     };
     actions: any;
     display_name?: string;
+    field_groups?: any;
 }

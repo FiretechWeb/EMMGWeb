@@ -1,10 +1,10 @@
-import type { DBFieldType } from "../lib/db_types"
+import type { DBFieldType, DBTableType } from "../lib/db_types"
 import { useState, useEffect, MutableRefObject, useRef } from "react"
 import { Button } from "primereact/button";
-import FieldComponent from "./field";
 import { DBActions } from "../lib/db_actions";
 import { useErrorState, useSuccessState, useUIActionState, UIActionStates, useCurrentTableState, usePreviousTableState } from "../lib/global_store";
-
+import { DBTableFields } from "./table_fields";
+import { Accordion, AccordionTab } from "primereact/accordion";
 interface TableAddComponentProps {
     jsonTableData: string;
     tableName: string;
@@ -12,6 +12,7 @@ interface TableAddComponentProps {
 
 export default function TableAddComponent(props: TableAddComponentProps) {
     
+    const [fieldsGroups, setFieldsGroups] = useState<{ [fieldGroupName: string]: Array<string>; }>({});
     const [fields, setFields] = useState<{ [fieldName: string]: DBFieldType; }>({});
     const initialized: MutableRefObject<boolean> = useRef(false);
     const fieldsData: MutableRefObject<any> = useRef({});
@@ -60,9 +61,23 @@ export default function TableAddComponent(props: TableAddComponentProps) {
     useEffect(() => {
         if (initialized.current) return;
         
-        const fieldsData: any = JSON.parse(props.jsonTableData);
-        setFields(fieldsData['fields']);
-        setDisplayName(fieldsData['display_name'] ?? props.tableName);
+        const decodedTableData: any = JSON.parse(props.jsonTableData);
+        const fieldGroups: any = decodedTableData['field_groups'];
+        const tmpFieldData = decodedTableData['fields'];
+        if (fieldGroups) {
+            let fieldGroupsData: any = {};
+            Object.keys(fieldGroups).forEach(fieldGroupName => {
+                if (!fieldGroupsData[fieldGroupName]) {
+                    fieldGroupsData[fieldGroupName] = {};
+                }
+                const fieldNames: Array<string> = fieldGroups[fieldGroupName];
+                fieldNames.forEach(fieldName => fieldGroupsData[fieldGroupName][fieldName] = tmpFieldData[fieldName]);
+            });
+            setFieldsGroups(fieldGroupsData);
+        }
+        setFields(tmpFieldData);
+       
+        setDisplayName(decodedTableData['display_name'] ?? props.tableName);
 
         initialized.current = true;
     }, [props]);
@@ -72,11 +87,22 @@ export default function TableAddComponent(props: TableAddComponentProps) {
             <h3 className="text-xl font-bold">Agregar {displayName}</h3>
         <form className="flex flex-col" autoComplete="off">
         {
-        Object.keys(fields)
-            .filter(fieldName => fields[fieldName].allow_insert)
-            .map( (fieldName) => (
-                <FieldComponent key={fieldName} name={fieldName} onValueChanged={onFieldValueChanged} jsonFieldData={JSON.stringify(fields[fieldName])}></FieldComponent>
-            ))
+            Object.keys(fieldsGroups).length <= 0 && Object.keys(fields).length > 0 && <DBTableFields fieldsList={fields} onValueChanged={onFieldValueChanged}></DBTableFields>
+        }
+        {
+            Object.keys(fieldsGroups).length > 0 && Object.keys(fields).length > 0 && 
+            <Accordion multiple activeIndex={0}>
+            {
+            Object.keys(fieldsGroups).map(fieldGroupName => (
+                <AccordionTab header={            
+                <span className="flex items-center h-14">
+                <span className="font-bold white-space-nowrap">{fieldGroupName}</span>
+                </span>
+                }>
+                    <DBTableFields fieldsList={fieldsGroups[fieldGroupName]} onValueChanged={onFieldValueChanged}></DBTableFields>
+                </AccordionTab>))
+            }
+            </Accordion>
         }
         <Button onClick={addElement} className="bg-slate-500 p-1 m-1 self-center place-self-center" label="Agregar"></Button>
         </form>

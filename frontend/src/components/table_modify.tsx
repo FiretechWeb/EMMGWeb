@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, MutableRefObject } from "react"
 import { Button } from "primereact/button";
 import { DBElementsList } from "./elements";
 import { DBActions } from "../lib/db_actions";
-import FieldComponent from "./field";
+import { DBTableFields } from "./table_fields";
 import { useErrorState, useSuccessState, useCurrentTableState, usePreviousTableState } from "../lib/global_store";
 
 interface TableModifyComponentProps {
@@ -118,16 +118,12 @@ export default function TableModifyComponent(props: TableModifyComponentProps) {
             <h3 className="text-xl font-bold">Modificar {displayName}</h3>
         <form className="flex flex-col" autoComplete="off">
         {
-        !forceListUpdate &&<DBElementsList tableName={props.tableName} jsonTableData={props.jsonTableData} selectionChanged={elementSelected}></DBElementsList>
+            !forceListUpdate && <DBElementsList tableName={props.tableName} jsonTableData={props.jsonTableData} selectionChanged={elementSelected}></DBElementsList>
         }
 
         {
-        !forceFieldsUpdate && rowSelected &&
-        Object.keys(fields)
-            .filter(fieldName => fields[fieldName].allow_insert)
-            .map( (fieldName) => (
-                <FieldComponent key={fieldName} name={fieldName} onValueChanged={onFieldValueChanged} jsonFieldData={JSON.stringify(fields[fieldName])} value={rowSelected[fieldName]}></FieldComponent>
-            ))
+            !forceFieldsUpdate && rowSelected && Object.keys(fields).length > 0 &&
+            <DBTableFields fieldsList={fields} fieldsValues={rowSelected} onValueChanged={onFieldValueChanged}></DBTableFields>
         }
 
         {

@@ -64,7 +64,7 @@ export default function FieldComponent(props: FieldComponentProps) {
                 }
             }).catch(e => {
                 setErrorState(e);
-                setFieldForeignOptions([])
+                setFieldForeignOptions([]);
             });
     }
 
@@ -92,7 +92,9 @@ export default function FieldComponent(props: FieldComponentProps) {
         if (initialized.current) return;
 
         updateFieldValue(props.value);
-        setFieldData(JSON.parse(props.jsonFieldData) as DBFieldType);
+        if (props.jsonFieldData) {
+            setFieldData(JSON.parse(props.jsonFieldData) as DBFieldType);
+        }
 
         initialized.current = true;
     }, [props, fieldData]);
