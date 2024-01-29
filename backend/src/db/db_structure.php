@@ -127,7 +127,11 @@
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Empresa",
-                    "group" => "Empresas"
+                    "group" => "Empresas",
+                    "field_groups" => [
+                        "Datos Generales" => ["cuit", "razon", "tel", "domicilio", "ciudad", "id_provincia", "id_tipo"],
+                        "Tipo y Actividad" => ["id_actividad", "cuenta_bancaria", "id_tcuenta_banco", "hs_completa", "dias_completa", "imp_detraccion"]
+                    ] 
                 ],
                 "cuenta_contable" => [
                     "fields" => [
