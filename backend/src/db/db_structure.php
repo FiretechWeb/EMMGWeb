@@ -323,6 +323,8 @@
                         ),
                         "legajo" => $s->unique($s->displayName($f['int'], "Legajo")),
                         "cuil" => $s->unique($s->displayName($f['bigint'], "CUIL Empleado")),
+                        "nombre" => $s->displayName($f['varchar_64'], "Nombre"),
+                        "apellido" => $s->displayName($f['varchar_64'], "Apellido"),
                         "id_tipo_documento" => $s->displayName(
                             $s->foreignKey($f['bigint'], 
                             [
@@ -387,13 +389,43 @@
                                 'format' => '{descripcion}'
                             ]
                         ),
+                        "cal_categoria" => $s->canBeNull($s->displayName($f['varchar_64'], "Calific./Categoría")),
+                        "area" => $s->canBeNull($s->displayName($f['varchar_64'], "Área")),
+                        "tarea_asignada" => $s->canBeNull($s->displayName($f['varchar_64'], "Tarea Asignada")),
+                        "seccion" => $s->canBeNull($s->displayName($f['varchar_64'], "Sección")),
+                        "fecha_ingreso" => $s->displayName($f['date'], "Fecha de ingreso"),
+                        "fecha_baja" => $s->canBeNull($s->displayName($f['date'], "Fecha de baja")),
+                        "id_departamento" => $s->canBeNull($s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Departamento")),
+                            [
+                                'table' => 'departamentos',
+                                'field' => 'id',
+                                'extra_relation' => 'em_id:em_id',
+                                'format' => '{tipo}'
+                            ]
+                        )),
+                        "fab_campo_libre" => $s->canBeNull($s->displayName($f['varchar_64'], "Fábrica / Campo Libre")),
+                        "lugar_trabajo" => $s->canBeNull($s->displayName($f['varchar_64'], "Lugar de Trabajo")),
+                        "seguro_obligatorio" => $s->displayName($f['boolean'], "Seguro de vida Obligatorio (SICOSS)"),
+                        "dias_vacaciones" => $s->canBeNull($s->displayName($f['int'], "Días de vacaciones")),
+                        "nro_cuenta_cbu" => $s->canBeNull($s->displayName($f['varchar_64'], "Nro. de cuenta o CBU")),
+                        "nro_cuenta_alt" => $s->canBeNull($s->displayName($f['varchar_64'], "Nro. de cuenta 2")),
+                        "id_tcuenta_banco" => $s->canBeNull($s->displayName(
+                            $s->foreignKey($f['bigint'], 
+                            [
+                                'table' => 'tipo_cuenta_banco',
+                                'field' => 'id',
+                                'format' => '{nombre}'
+                            ]), "Tipo de cuenta bancaria")),
+                        "sueldo_base" => $s->displayName($f['decimal'], "Sueldo base"),
+                        "sucursal" => $s->displayName($f['varchar_64'], "Sucursal"),
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Empleado",
                     "group" => "Personal",
                     "field_groups" => [
-                        "Datos Personales" => ["id_tipo_documento", "nro_doc", "id_nacionalidad", "fecha_nac", "id_genero", "id_estado_civil", "nro_tel", "nro_cel", "nro_emergencias", "email", "dom_calle", "dom_numero", "dom_departamento", "dom_piso", "id_provincia", "cod_postal"],
-                        "Datos de Empresa" => ["legajo", "em_id", "cuil", "id_tabla_cat", "id_puesto"]
+                        "Datos Personales" => ["id_tipo_documento", "nro_doc", "nombre", "apellido", "id_nacionalidad", "fecha_nac", "id_genero", "id_estado_civil", "nro_tel", "nro_cel", "nro_emergencias", "email", "dom_calle", "dom_numero", "dom_departamento", "dom_piso", "id_provincia", "cod_postal"],
+                        "Datos de Empresa" => ["legajo", "em_id", "cuil", "id_tabla_cat", "id_puesto", "cal_categoria", "area", "tarea_asignada", "seccion", "fecha_ingreso", "fecha_baja", "id_departamento", "fab_campo_libre", "lugar_trabajo", "seguro_obligatorio", "dias_vacaciones", "nro_cuenta_cbu", "nro_cuenta_alt", "id_tcuenta_banco", "sueldo_base", "sucursal"]
                     ] 
                 ]
             ];
