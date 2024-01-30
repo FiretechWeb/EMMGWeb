@@ -18,7 +18,7 @@
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Tipo de cuenta bancaria",
-                    "group" => "Configuración",
+                    "group" => "Configuración>General",
                     "default_data" => $d['tipo_cuenta_banco']
                 ],
                 "provincia" => [
@@ -28,7 +28,7 @@
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Provincia",
-                    "group" => "Configuración",
+                    "group" => "Configuración>General",
                     "default_data" => $d['provincia']
                     
                 ],
@@ -39,7 +39,7 @@
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Tipo de documento",
-                    "group" => "Configuración",
+                    "group" => "Configuración>General",
                     "default_data" => $d['tipo_documento']
                 ],
                 "nacionalidad" => [
@@ -49,7 +49,7 @@
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Nacionalidad",
-                    "group" => "Configuración",
+                    "group" => "Configuración>General",
                     "default_data" => $d['nacionalidad']
                 ],
                 "genero" => [
@@ -59,7 +59,7 @@
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Género",
-                    "group" => "Configuración",
+                    "group" => "Configuración>General",
                     "default_data" => $d['genero']
                 ],
                 "estado_civil" => [
@@ -69,7 +69,7 @@
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Estado Civil",
-                    "group" => "Configuración",
+                    "group" => "Configuración>General",
                     "default_data" => $d['estado_civil']
                 ],
                 "actividad" => [
@@ -80,7 +80,7 @@
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Actividad",
-                    "group" => "Empresas",
+                    "group" => "Configuración>Empresas",
                     "default_data" => $d['actividad']
                 ],
                 "tipos_empresa" => [
@@ -91,7 +91,7 @@
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Tipo de Empresa",
-                    "group" => "Empresas",
+                    "group" => "Configuración>Empresas",
                     "default_data" => $d['tipos_empresa']
                 ],
                 "empresas" => [

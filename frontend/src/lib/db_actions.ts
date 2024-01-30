@@ -107,11 +107,14 @@ export class DBActions {
         }
         let tableGroups: any = {};
         Object.keys(dbStructure).forEach( tableName => {
-            const groupName: string = dbStructure[tableName]['group'] ?? "_nogroup_";
-            if (!tableGroups[groupName]) {
-                tableGroups[groupName] = {};
-            }
-            tableGroups[groupName][tableName] = dbStructure[tableName];
+            const groupsData: string = dbStructure[tableName]['group'] ?? "_nogroup_";
+            groupsData.split('>').forEach(groupName => {
+                if (!tableGroups[groupName]) {
+                    tableGroups[groupName] = {};
+                }
+                //groupName.split('>').forEach(g);
+                tableGroups[groupName][tableName] = dbStructure[tableName];
+            });
         });
         console.log(tableGroups);
         return tableGroups;
