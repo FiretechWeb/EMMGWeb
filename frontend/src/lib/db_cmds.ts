@@ -1,6 +1,7 @@
 import { addCMD, processCMD } from "./cmds";
 import type { cmdType } from "./cmds";
 import { DBActions } from "./db_actions";
+import { removeHTMLTags } from "./stringExt";
 
 export function createDBcmds() {
     addCMD(
@@ -9,7 +10,7 @@ export function createDBcmds() {
             usage:'used to initialize db',
             multiArgs: false,
             callback: async () => {
-                processCMD(`echo ${JSON.stringify(await DBActions.createMainDB(), null, 3)}`);
+                processCMD(`echo ${removeHTMLTags(JSON.stringify(await DBActions.createMainDB(), null, 3))}`);
             }
         } as cmdType
     );
@@ -20,7 +21,7 @@ export function createDBcmds() {
             usage:'get API DB structure',
             multiArgs: false,
             callback: async () => {
-                processCMD(`echo ${JSON.stringify(await DBActions.getStructure(), null, 3)}`);
+                processCMD(`echo ${removeHTMLTags(JSON.stringify(await DBActions.getStructure(), null, 3))}`);
             }
         } as cmdType
     );
@@ -31,7 +32,7 @@ export function createDBcmds() {
             usage:'action <<table>>, <<action>>, ...<<field: field_name = value>>, <<cond: field COND value>>',
             multiArgs: true,
             callback: async (table: string, action: string, ...args: string[]) => {
-                processCMD(`echo ${JSON.stringify(await DBActions.process(table, action, DBActions.toParams(args)), null, 3)}`);
+                processCMD(`echo ${removeHTMLTags(JSON.stringify(await DBActions.process(table, action, DBActions.toParams(args)), null, 3))}`);
             }
         } as cmdType
     );

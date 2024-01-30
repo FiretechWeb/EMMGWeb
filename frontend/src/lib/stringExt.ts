@@ -9,3 +9,7 @@ export function splitFirstOccurrence(inputString: string, separator: string): st
 
     return [inputString];
 }
+
+export function removeHTMLTags(input: string): string {
+    return input.replace(/<[^>]*>/g, '');
+}
