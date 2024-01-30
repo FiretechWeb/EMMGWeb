@@ -116,3 +116,29 @@ a {
     color-scheme: dark;
   }
 }
+
+
+.accordion-custom i,
+.accordion-custom span {
+  vertical-align: middle;
+}
+
+.accordion-custom span {
+  margin: 0 0.5rem;
+}
+
+.p-accordion p {
+  line-height: 1.5;
+  margin: 0;
+}
+
+.p-accordion-tab:not(.p-accordion-tab-active)
+  .p-toggleable-content:not(.p-toggleable-content-enter):not(.p-toggleable-content-enter-done):not(.p-toggleable-content-exit):not(.p-toggleable-content-exit-done)
+  .p-accordion-content {
+  display: none;
+}
+.p-accordion-tab:not(.p-accordion-tab-active)
+  .p-toggleable-content.p-toggleable-content-exit-done
+  .p-accordion-content {
+  display: none;
+}

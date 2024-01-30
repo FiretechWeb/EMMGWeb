@@ -5,10 +5,20 @@ import { DBActions } from "../lib/db_actions";
 import { useErrorState, useSuccessState, useUIActionState, UIActionStates, useCurrentTableState, usePreviousTableState } from "../lib/global_store";
 import { DBTableFields } from "./table_fields";
 import { Accordion, AccordionTab } from "primereact/accordion";
+
 interface TableAddComponentProps {
     jsonTableData: string;
     tableName: string;
 }
+
+interface CSSTransitionProps {
+    in: boolean;
+    timeout: number;
+    classNames: string | { enter: string; enterActive: string; exit: string; exitActive: string };
+    unmountOnExit?: boolean;
+    mountOnEnter?: boolean;
+    // Other optional properties...
+  }
 
 export default function TableAddComponent(props: TableAddComponentProps) {
     
@@ -91,7 +101,7 @@ export default function TableAddComponent(props: TableAddComponentProps) {
         }
         {
             Object.keys(fieldsGroups).length > 0 && Object.keys(fields).length > 0 && 
-            <Accordion multiple activeIndex={0}>
+            <Accordion multiple activeIndex={0} transitionOptions={{ unmountOnExit: false } as CSSTransitionProps}>
             {
             Object.keys(fieldsGroups).map(fieldGroupName => (
                 <AccordionTab header={            
