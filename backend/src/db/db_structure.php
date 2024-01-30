@@ -209,7 +209,7 @@
                                 'format' => '{razon}'
                             ]
                         ),
-                        "tabla_cat_id" => $s->foreignKey(
+                        "id_tabla_cat" => $s->foreignKey(
                             $s->primary($s->displayName($f['bigint'], "Tabla de Categoria")),
                             [
                                 'table' => 'tablas_categoria',
@@ -220,7 +220,7 @@
                         ),
                         "numero" => $s->unique($s->displayName($f['int'], "Número de categoria")),
                         "descripcion" => $s->unique($s->displayName($f['varchar_128'], "Descripción")),
-                        "valor" => $s->unique($s->displayName($f['decimal'], "Valor")),
+                        "valor" => $s->displayName($f['decimal'], "Valor"),
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Puestos de trabajo",
@@ -369,14 +369,31 @@
                                 'format' => '{nombre}'
                             ]), "Provincia")),
                         "cod_postal" => $s->canBeNull($s->displayName($f['varchar_32'], "Código Postal")),
-
+                        "id_tabla_cat" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Tabla Categoria")),
+                            [
+                                'table' => 'tablas_categoria',
+                                'field' => 'id',
+                                'extra_relation' => 'em_id:em_id',
+                                'format' => 'Tabla Nº {numero}'
+                            ]
+                        ),
+                        "id_puesto" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Puesto de Trabajo")),
+                            [
+                                'table' => 'categoria_puesto',
+                                'field' => 'id',
+                                'extra_relation' => 'em_id:em_id,id_tabla_cat:id_tabla_cat',
+                                'format' => '{descripcion}'
+                            ]
+                        ),
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Empleado",
                     "group" => "Personal",
                     "field_groups" => [
                         "Datos Personales" => ["id_tipo_documento", "nro_doc", "id_nacionalidad", "fecha_nac", "id_genero", "id_estado_civil", "nro_tel", "nro_cel", "nro_emergencias", "email", "dom_calle", "dom_numero", "dom_departamento", "dom_piso", "id_provincia", "cod_postal"],
-                        "Datos de Empresa" => ["legajo", "em_id", "cuil"]
+                        "Datos de Empresa" => ["legajo", "em_id", "cuil", "id_tabla_cat", "id_puesto"]
                     ] 
                 ]
             ];
