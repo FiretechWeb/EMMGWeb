@@ -1,9 +1,26 @@
 <?php
     include_once 'db_response.php';
     include_once dirname(__FILE__).'/../config/def.php';
-
+    
     class DBAPI {
 
+        public static function insertDefaultDataFromStructure($conn, $tableStructure) {
+            $sqlColumns = [];
+            foreach ($tableStructure as $tableName => $data) {
+                if (isset($data['default_data'])) {
+                    $defaultData = $data['default_data'];
+                    foreach($defaultData as $columnData) {
+                        $sqlColumns[] = "INSERT INTO $tableName (" . implode(", ", array_keys($columnData)) . ") VALUES ( " . implode(", ", array_map(function($value) { return "'".strval($value)."'"; }, $columnData)). " );";
+                    }
+                }
+            }
+            foreach ($sqlColumns as $sql) {
+                if (!mysqli_query($conn, $sql)) {
+                    return false;
+                }
+            }
+            return true;
+        }
         public static function generateTablesFromStructure($conn, $tableStructure) {
             $tables = [];
             $dropTables = [];

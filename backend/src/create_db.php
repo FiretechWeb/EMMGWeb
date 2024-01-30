@@ -35,9 +35,13 @@
                 echo JSONResponse::error("Error creating Tables From Structure ".mysqli_error($conn));
                 exit(0);
             }
+            if (!DBAPI::insertDefaultDataFromStructure($conn, DBStructure::getStructure())) {
+                echo JSONResponse::error("Error inserting default data from Structure ".mysqli_error($conn));
+                exit(0);  
+            }
 
             mysqli_close($conn);
-            echo JSONResponse::ok("Database structure created successfully");
+            echo JSONResponse::ok("Database structure created successfully with default data.");
         } catch(Exception $e) {
             echo JSONResponse::error($e->getMessage());
         }
