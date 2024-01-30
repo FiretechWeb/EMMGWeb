@@ -186,36 +186,28 @@ export class DBActions {
 
         if (relatedTables.length < 1) return false;
 
-        let returnResult = true;
-        relatedTables.forEach(relatedString => {
+        return relatedTables.every(relatedString => {
             const extraRelatedData: Array<string> = relatedString.split(':');
             if (extraRelatedData.length < 2) {
-                returnResult &&= false;
-                return;
+                return false;
             }
     
             const [foreingFieldName, fieldName] = extraRelatedData;
     
-            returnResult &&= fieldsData[fieldName] != null && fieldsData[fieldName] != undefined;
+            return fieldsData[fieldName] != null && fieldsData[fieldName] != undefined;
         });
-
-        return returnResult;
-
     }
     static shouldUpdateForeignList(field: DBFieldType, prevFieldsData: any, currentFieldsData: any): boolean {
         if (!DBActions.foreignRelatedDataExists(field, currentFieldsData)) 
             return false;
 
         const relatedTables: Array<string> = field.foreign_key!.extra_relation!.split(',');
-        let returnResult = false;
 
-        relatedTables.forEach(relatedString => {
+        return relatedTables.some(relatedString => {
             const [foreingFieldName, fieldName] = relatedString.split(':');
 
-            returnResult ||= !prevFieldsData[fieldName] || (currentFieldsData[fieldName] != prevFieldsData[fieldName]);
+            return !prevFieldsData[fieldName] || (currentFieldsData[fieldName] != prevFieldsData[fieldName]);
         });
-
-        return returnResult;
     }
 
     static foreignKeyGetParams(field: DBFieldType, fieldsData: any) {
@@ -232,15 +224,15 @@ export class DBActions {
         const relatedTables: Array<string> = field.foreign_key!.extra_relation!.split(',');
         let returnResult = false;
 
-        relatedTables.forEach(relatedString => {
+        r['conditions'] = relatedTables.map(relatedString => {
             const [foreingFieldName, fieldName] = relatedString.split(':');
             const fieldValue: any = fieldsData[fieldName];
 
-            r['conditions'].push({
+            return {
                 'field': foreingFieldName,
                 'condition': '=',
                 'result': fieldValue
-            });
+            };
         });
 
         return r;
