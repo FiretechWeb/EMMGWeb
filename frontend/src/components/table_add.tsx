@@ -17,8 +17,7 @@ interface CSSTransitionProps {
     classNames: string | { enter: string; enterActive: string; exit: string; exitActive: string };
     unmountOnExit?: boolean;
     mountOnEnter?: boolean;
-    // Other optional properties...
-  }
+}
 
 export default function TableAddComponent(props: TableAddComponentProps) {
     
