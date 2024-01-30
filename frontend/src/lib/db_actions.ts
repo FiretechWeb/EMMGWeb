@@ -181,22 +181,41 @@ export class DBActions {
     static foreignRelatedDataExists(field: DBFieldType, fieldsData: any) {
         if (!field || !field.foreign_key || !field.foreign_key.extra_relation)
             return false;
-        const extraRelatedData: Array<string> = field.foreign_key.extra_relation.split(':');
-        if (extraRelatedData.length < 2)
-            return false;
 
-        const [foreingFieldName, fieldName] = extraRelatedData;
+        const relatedTables: Array<string> = field.foreign_key.extra_relation.split(',');
 
-        return fieldsData[fieldName] != null && fieldsData[fieldName] != undefined;
+        if (relatedTables.length < 1) return false;
+
+        let returnResult = true;
+        relatedTables.forEach(relatedString => {
+            const extraRelatedData: Array<string> = relatedString.split(':');
+            if (extraRelatedData.length < 2) {
+                returnResult &&= false;
+                return;
+            }
+    
+            const [foreingFieldName, fieldName] = extraRelatedData;
+    
+            returnResult &&= fieldsData[fieldName] != null && fieldsData[fieldName] != undefined;
+        });
+
+        return returnResult;
 
     }
     static shouldUpdateForeignList(field: DBFieldType, prevFieldsData: any, currentFieldsData: any): boolean {
         if (!DBActions.foreignRelatedDataExists(field, currentFieldsData)) 
             return false;
-        
-        const [foreingFieldName, fieldName] = field.foreign_key!.extra_relation!.split(':');
 
-        return !prevFieldsData[fieldName] || (currentFieldsData[fieldName] != prevFieldsData[fieldName]);
+        const relatedTables: Array<string> = field.foreign_key!.extra_relation!.split(',');
+        let returnResult = false;
+
+        relatedTables.forEach(relatedString => {
+            const [foreingFieldName, fieldName] = relatedString.split(':');
+
+            returnResult ||= !prevFieldsData[fieldName] || (currentFieldsData[fieldName] != prevFieldsData[fieldName]);
+        });
+
+        return returnResult;
     }
 
     static foreignKeyGetParams(field: DBFieldType, fieldsData: any) {
@@ -210,21 +229,21 @@ export class DBActions {
         if (!DBActions.foreignRelatedDataExists(field, fieldsData)) 
             return r;
 
-        const [foreingFieldName, fieldName] = field.foreign_key!.extra_relation!.split(':');
-        
-        const fieldValue: any = fieldsData[fieldName];
-        return {
-            'fields': {},
-            'keys' : {},
-            'conditions': [
-                {
+        const relatedTables: Array<string> = field.foreign_key!.extra_relation!.split(',');
+        let returnResult = false;
+
+        relatedTables.forEach(relatedString => {
+            const [foreingFieldName, fieldName] = relatedString.split(':');
+            const fieldValue: any = fieldsData[fieldName];
+
+            r['conditions'].push({
                 'field': foreingFieldName,
                 'condition': '=',
                 'result': fieldValue
-                }
-            ],
-            'related_data': false
-        };
+            });
+        });
+
+        return r;
     }
 
     static toParams(paramsArgs: string[]): Object {
