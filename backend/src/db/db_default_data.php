@@ -3,6 +3,18 @@
 class DBDefaultValues {
     public static function getDefaultData() {
         return [
+            "configuracion" => [
+                [
+                    "valor_mopre" => 556.71,
+                    "cant_mopre_max" => 75,
+                    "cant_mopre_min" => 3,
+                    "min_remunerativo" => 16881.84,
+                    "max_remunerativo" => 548651.9,
+                    "min_remunerativo_sac" => 25322.76,
+                    "max_remunerativo_sac" => 822977.85,
+                    "mb_vac_sac" => 1
+                ]
+            ],
             "tipo_cuenta_banco" => [
                 ["nombre" => "Cuenta Corriente"],
                 ["nombre" => "Caja de Ahorro"]

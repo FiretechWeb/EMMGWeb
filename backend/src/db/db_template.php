@@ -11,6 +11,15 @@
                     "update" => ['DBBaseActions', 'update'],
                     "delete" => ['DBBaseActions', 'delete'],
                     "duplicated" => ['DBBaseActions', 'duplicated']
+                ],
+                "readonly" => [
+                    "get" => ['DBBaseActions', 'get'],
+                    "duplicated" => ['DBBaseActions', 'duplicated']
+                ],
+                "updateonly" => [
+                    "get" => ['DBBaseActions', 'get'],
+                    "update" => ['DBBaseActions', 'update'],
+                    "duplicated" => ['DBBaseActions', 'duplicated']
                 ]
             ];
         }

@@ -14,6 +14,7 @@ interface TableComponentProps {
 
 export default function DBTableComponent(props: TableComponentProps) {
     const [fields, setFields] = useState<{ [fieldName: string]: DBFieldType; }>({});
+    const [actions, setActions] = useState<any>({});
     const actionState: UIActionStates = useUIActionState((state) => state.state);
     const setActionState = useUIActionState((state) => state.setUIActionState);
 
@@ -25,6 +26,7 @@ export default function DBTableComponent(props: TableComponentProps) {
         if (initialized.current) return;
         const tableData: any = JSON.parse(props.jsonTableData);
         setFields(tableData['fields']);
+        setActions(tableData['actions'])
         setDisplayName(tableData['display_name'] ?? props.tableName);
         initialized.current = true;
     }, [props]);
@@ -47,15 +49,15 @@ export default function DBTableComponent(props: TableComponentProps) {
             <hr />
             <div className="flex flex-row items-center text-center place-items-center place-content-center content-center justify-center">
             {
-                actionState === UIActionStates.NONE &&
+                actions.hasOwnProperty('insert') && actionState === UIActionStates.NONE &&
                 <Button onClick={() => setActionState(UIActionStates.ADD)} className="bg-slate-500 p-1 m-1 self-center place-self-center" label="Agregar"></Button>
             }
             {
-                actionState === UIActionStates.NONE &&
+                actions.hasOwnProperty('update') && actionState === UIActionStates.NONE &&
                 <Button onClick={() => setActionState(UIActionStates.MODIFY)} className="bg-slate-500 p-1 m-1 self-center place-self-center" label="Modificar"></Button>
             }
             {
-                actionState === UIActionStates.NONE &&
+                actions.hasOwnProperty('delete') && actionState === UIActionStates.NONE &&
                 <Button onClick={() => setActionState(UIActionStates.DELETE)} className="bg-slate-500 p-1 m-1 self-center place-self-center" label="Eliminar"></Button>
             }
             {

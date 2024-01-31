@@ -11,6 +11,23 @@
             $d = DBDefaultValues::getDefaultData();
 
             return [
+                "configuracion" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "valor_mopre" => $s->displayName($f['decimal'], "Valor de MOPRE"),
+                        "cant_mopre_max" => $s->displayName($f['decimal'], "Cantidad Máxima MOPRE"),
+                        "cant_mopre_min" => $s->displayName($f['decimal'], "Cantidad Mínima MOPRE"),
+                        "min_remunerativo" => $s->displayName($f['decimal'], "Mínimo remunerativo"),
+                        "max_remunerativo" => $s->displayName($f['decimal'], "Máximo remunerativo"),
+                        "min_remunerativo_sac" => $s->displayName($f['decimal'], "Mínimo remunerativo con SAC"),
+                        "max_remunerativo_sac" => $s->displayName($f['decimal'], "Máximo remunerativo con SAC"),
+                        "mb_vac_sac" => $s->displayName($f['boolean'], "MAXBRUTO incluye topes de vacaciones y SAC")
+                    ],
+                    "actions" => $a['updateonly'],
+                    "display_name" => "Configuración General",
+                    "group" => "Configuración",
+                    "default_data" => $d['configuracion']
+                ],
                 "tipo_cuenta_banco" => [
                     "fields" => [
                         "id" => $f['id'],
@@ -18,7 +35,7 @@
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Tipo de cuenta bancaria",
-                    "group" => "Configuración>General",
+                    "group" => "Configuración>Datos",
                     "default_data" => $d['tipo_cuenta_banco']
                 ],
                 "provincia" => [
@@ -28,7 +45,7 @@
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Provincia",
-                    "group" => "Configuración>General",
+                    "group" => "Configuración>Datos",
                     "default_data" => $d['provincia']
                     
                 ],
@@ -39,7 +56,7 @@
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Tipo de documento",
-                    "group" => "Configuración>General",
+                    "group" => "Configuración>Datos",
                     "default_data" => $d['tipo_documento']
                 ],
                 "nacionalidad" => [
@@ -49,7 +66,7 @@
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Nacionalidad",
-                    "group" => "Configuración>General",
+                    "group" => "Configuración>Datos",
                     "default_data" => $d['nacionalidad']
                 ],
                 "genero" => [
@@ -59,7 +76,7 @@
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Género",
-                    "group" => "Configuración>General",
+                    "group" => "Configuración>Datos",
                     "default_data" => $d['genero']
                 ],
                 "estado_civil" => [
@@ -69,7 +86,7 @@
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Estado Civil",
-                    "group" => "Configuración>General",
+                    "group" => "Configuración>Datos",
                     "default_data" => $d['estado_civil']
                 ],
                 "actividad" => [
