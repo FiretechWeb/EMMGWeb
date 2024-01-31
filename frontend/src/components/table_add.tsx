@@ -103,7 +103,7 @@ export default function TableAddComponent(props: TableAddComponentProps) {
             <Accordion multiple activeIndex={0} transitionOptions={{ unmountOnExit: false } as CSSTransitionProps}>
             {
             Object.keys(fieldsGroups).map(fieldGroupName => (
-                <AccordionTab header={            
+                <AccordionTab key={fieldGroupName} header={            
                 <span className="flex items-center h-14">
                 <span className="font-bold white-space-nowrap">{fieldGroupName}</span>
                 </span>
