@@ -4,12 +4,12 @@
     
     class DBAPI {
 
-        public static function insertDefaultDataFromStructure($conn, $tableStructure) {
+        public static function insertDefaultDataFromStructure($conn, $defaultData, $tableStructure) {
             $sqlColumns = [];
             foreach ($tableStructure as $tableName => $data) {
-                if (isset($data['default_data'])) {
-                    $defaultData = $data['default_data'];
-                    foreach($defaultData as $columnData) {
+                if (isset($defaultData[$tableName])) {
+                    $defaultTableData = $defaultData[$tableName];
+                    foreach($defaultTableData as $columnData) {
                         $sqlColumns[] = "INSERT INTO $tableName (" . implode(", ", array_keys($columnData)) . ") VALUES ( " . implode(", ", array_map(function($value) { return "'".strval($value)."'"; }, $columnData)). " );";
                     }
                 }

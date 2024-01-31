@@ -5,7 +5,10 @@
     include_once 'lib/enable_cors.php';
     include_once 'lib/json_utils.php';
     include_once 'db/db_structure.php';
+    include_once 'db/db_default_data.php';
     include_once 'db/db_api.php';
+    
+    set_time_limit(45);
     
     if ($_SERVER["REQUEST_METHOD"] == "POST") {    
         try {
@@ -35,8 +38,8 @@
                 echo JSONResponse::error("Error creating Tables From Structure ".mysqli_error($conn));
                 exit(0);
             }
-            if (!DBAPI::insertDefaultDataFromStructure($conn, DBStructure::getStructure())) {
-                echo JSONResponse::error("Error inserting default data from Structure ".mysqli_error($conn));
+            if (!DBAPI::insertDefaultDataFromStructure($conn, DBDefaultValues::getDefaultData(), DBStructure::getStructure())) {
+                echo JSONResponse::error("Error inserting default data ".mysqli_error($conn));
                 exit(0);  
             }
 

@@ -34,7 +34,8 @@
                 "extra_params" => "AUTO_INCREMENT",
                 "allow_insert" => false,
                 "foreign_key" => null,
-                "unique" => true
+                "unique" => true,
+                "enabled_by" => null
             ],
             "bigint" => [
                 "primary" => false,
@@ -44,7 +45,8 @@
                 "extra_params" => "",
                 "allow_insert" => true,
                 "foreign_key" => null,
-                "unique" => false
+                "unique" => false,
+                "enabled_by" => null
             ],
             "int" => [
                 "primary" => false,
@@ -54,7 +56,8 @@
                 "extra_params" => "",
                 "allow_insert" => true,
                 "foreign_key" => null,
-                "unique" => false
+                "unique" => false,
+                "enabled_by" => null
             ],
             "varchar_16" => [
                 "primary" => false,
@@ -64,7 +67,8 @@
                 "extra_params" => "",
                 "allow_insert" => true,
                 "foreign_key" => null,
-                "unique" => false
+                "unique" => false,
+                "enabled_by" => null
             ],
             "varchar_32" => [
                 "primary" => false,
@@ -74,7 +78,8 @@
                 "extra_params" => "",
                 "allow_insert" => true,
                 "foreign_key" => null,
-                "unique" => false
+                "unique" => false,
+                "enabled_by" => null
             ],
              "varchar_64" => [
                 "primary" => false,
@@ -84,7 +89,8 @@
                 "extra_params" => "",
                 "allow_insert" => true,
                 "foreign_key" => null,
-                "unique" => false
+                "unique" => false,
+                "enabled_by" => null
             ],
             "varchar_128" => [
                 "primary" => false,
@@ -94,7 +100,8 @@
                 "extra_params" => "",
                 "allow_insert" => true,
                 "foreign_key" => null,
-                "unique" => false
+                "unique" => false,
+                "enabled_by" => null
             ],
             "varchar_256" => [
                 "primary" => false,
@@ -104,7 +111,8 @@
                 "extra_params" => "",
                 "allow_insert" => true,
                 "foreign_key" => null,
-                "unique" => false
+                "unique" => false,
+                "enabled_by" => null
             ],
             "varchar_512" => [
                 "primary" => false,
@@ -114,7 +122,8 @@
                 "extra_params" => "",
                 "allow_insert" => true,
                 "foreign_key" => null,
-                "unique" => false
+                "unique" => false,
+                "enabled_by" => null
             ],
             "date" => [
                 "primary" => false,
@@ -124,7 +133,8 @@
                 "extra_params" => "",
                 "allow_insert" => true,
                 "foreign_key" => null,
-                "unique" => false
+                "unique" => false,
+                "enabled_by" => null
             ],
             "boolean" => [
                 "primary" => false,
@@ -134,7 +144,8 @@
                 "extra_params" => "",
                 "allow_insert" => true,
                 "foreign_key" => null,
-                "unique" => false
+                "unique" => false,
+                "enabled_by" => null
             ],
             "decimal" => [
                 "primary" => false,
@@ -144,7 +155,8 @@
                 "extra_params" => "",
                 "allow_insert" => true,
                 "foreign_key" => null,
-                "unique" => false
+                "unique" => false,
+                "enabled_by" => null
             ],
             "low_decimal" => [
                 "primary" => false,
@@ -154,7 +166,8 @@
                 "extra_params" => "",
                 "allow_insert" => true,
                 "foreign_key" => null,
-                "unique" => false
+                "unique" => false,
+                "enabled_by" => null
             ],
             "high_decimal" => [
                 "primary" => false,
@@ -164,7 +177,8 @@
                 "extra_params" => "",
                 "allow_insert" => true,
                 "foreign_key" => null,
-                "unique" => false
+                "unique" => false,
+                "enabled_by" => null
             ],
         ];
         }
@@ -284,12 +298,10 @@
             $field['foreign_key'] = $foreingKey;
             return $field;     
         }
-        /*
-                "primary" => true,
-                "not_null" => true,
-                "allow_insert" => false,
-                "unique" => true
-        */
+        public function enabledBy($field, $enablerFieldName) {
+            $field['enabled_by'] = $enablerFieldName;
+            return $field;     
+        }
         public function params($field, $params) {
             if (strpos($params, "primary") !== false) {
                 $field["primary"] = strpos($params, "!primary") === false;

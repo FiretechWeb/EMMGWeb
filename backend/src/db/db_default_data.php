@@ -15,9 +15,220 @@ class DBDefaultValues {
                     "mb_vac_sac" => 1
                 ]
             ],
+            "periodo_pago" => [
+                [
+                    "periodo" => "Diario",
+                    "dias" => "1",
+                    "meses" => "0",
+                    "anios" => "0",
+                ],
+                [
+                    "periodo" => "Semanal",
+                    "dias" => "7",
+                    "meses" => "0",
+                    "anios" => "0",
+                ],
+                [
+                    "periodo" => "Quincenal",
+                    "dias" => "15",
+                    "meses" => "0",
+                    "anios" => "0",
+                ],
+                [
+                    "periodo" => "Mensual",
+                    "dias" => "0",
+                    "meses" => "1",
+                    "anios" => "0",
+                ],
+            ],
             "tipo_cuenta_banco" => [
                 ["nombre" => "Cuenta Corriente"],
                 ["nombre" => "Caja de Ahorro"]
+            ],
+            "regimen_jubilatorio" => [
+                ["descripcion" => "SIPA"]
+            ],
+            "modalidad_contratacion" => [
+                [
+                    "codigo" => "0",
+                    "modalidad" => "Contrato Modalidad Promovida.Reducción 0%"
+                ],
+                [
+                    "codigo" => "1",
+                    "modalidad" => "A tiempo parcial: Indeterminado/permanente"
+                ],
+                [
+                    "codigo" => "10",
+                    "modalidad" => "Práctica profesionalizante - Dcto. 1374/11 - Pasantía sin obra social"
+                ],
+                [
+                    "codigo" => "100",
+                    "modalidad" => "Contrato modalidad promovida.Reducción 100%"
+                ],
+                [
+                    "codigo" => "101",
+                    "modalidad" => "Pre-SIJP (Anterior a 07/1994)"
+                ],
+                [
+                    "codigo" => "102",
+                    "modalidad" => "Empleado Servicio Eventual en Usuaria DTO 762"
+                ],
+                [
+                    "codigo" => "103",
+                    "modalidad" => "Retiro Voluntario - Decreto 263/2018 y otros"
+                ],
+                [
+                    "codigo" => "11",
+                    "modalidad" => "Trabajo de temporada"
+                ],
+                [
+                    "codigo" => "110",
+                    "modalidad" => "Trabajo permanente prestación continua Ley 26727"
+                ],
+                [
+                    "codigo" => "111",
+                    "modalidad" => "Trabajo temporario Ley 26727"
+                ],
+                [
+                    "codigo" => "112",
+                    "modalidad" => "Trabajo permanente discontinuo ley 26727"
+                ],
+                [
+                    "codigo" => "113",
+                    "modalidad" => "Trabajo por equipo o cuadrilla fafmilar Ley 26727"
+                ],
+                [
+                    "codigo" => "114",
+                    "modalidad" => "Trabajo temporario con Reducción Ley 26727"
+                ],
+                [
+                    "codigo" => "115",
+                    "modalidad" => "Trabajo permanente discontinuo con Reducción ley 26727"
+                ],
+                [
+                    "codigo" => "12",
+                    "modalidad" => "Trabajo eventual"
+                ]
+            ],
+            "situacion_revista" => [
+                [
+                    "codigo" => "1",
+                    "descripcion" => "Activo"
+                ],
+                [
+                    "codigo" => "2",
+                    "descripcion" => "Bajas otras causales"
+                ],
+                [
+                    "codigo" => "3",
+                    "descripcion" => "Activo Decreto N°796/97"
+                ],
+                [
+                    "codigo" => "4",
+                    "descripcion" => "Baja otras causales Decreto N° 796/97"
+                ],
+                [
+                    "codigo" => "5",
+                    "descripcion" => "Licencia por maternidad"
+                ],
+                [
+                    "codigo" => "6",
+                    "descripcion" => "Suspensiones otras causales"
+                ],
+                [
+                    "codigo" => "7",
+                    "descripcion" => "Baja por despido"
+                ],
+                [
+                    "codigo" => "8",
+                    "descripcion" => "Baja por despido Decreto N° 796/97"
+                ],
+                [
+                    "codigo" => "9",
+                    "descripcion" => "Suspendido. Ley 20744 art.223bis"
+                ],
+                [
+                    "codigo" => "10",
+                    "descripcion" => "Licencia por excedencia"
+                ],
+            ],
+            "condiciones" => [
+                [
+                    "codigo" => "1",
+                    "descripcion" => "SERVICIOS COMUNES Mayor de 18 años"
+                ],
+                [
+                    "codigo" => "10",
+                    "descripcion" => "Pensión (NO SIPA)"
+                ],
+                [
+                    "codigo" => "11",
+                    "descripcion" => "Pensión no Contributiva (NO SIPA)"
+                ],
+                [
+                    "codigo" => "12",
+                    "descripcion" => "Art. 8º Ley Nº 27426"
+                ],
+                [
+                    "codigo" => "13",
+                    "descripcion" => "Servicios Diferenciados no alcanzados por el Dto. 633/2018"
+                ],
+                [
+                    "codigo" => "2",
+                    "descripcion" => "Jubilado"
+                ],
+                [
+                    "codigo" => "3",
+                    "descripcion" => "Menor"
+                ],
+                [
+                    "codigo" => "4",
+                    "descripcion" => "Menor Anterior"
+                ],
+                [
+                    "codigo" => "5",
+                    "descripcion" => "SERVICIOS DIFERENCIADOS Mayor de 18 años"
+                ],
+                [
+                    "codigo" => "6",
+                    "descripcion" => "SIN SERVICIOS REALES"
+                ]
+            ],
+            "actividades" => [
+                [
+                    "codigo" => "0",
+                    "descripcion" => "Zona de Desastre. Decreto 1386/01 excepto actividad agropecuaria"
+                ],
+                [
+                    "codigo" => "1",
+                    "descripcion" => "Producción Primaria excepto actividad agropecuaria"
+                ],
+                [
+                    "codigo" => "10",
+                    "descripcion" => "UNIVERSIDADES PRIVADAS. Personal no Docente D.1123/99"
+                ],
+                [
+                    "codigo" => "100",
+                    "descripcion" => "CSJN Corte Supr de Justicia, Magistrados provinciales, Revisores de Cta sin"
+                ]
+            ],
+            "obras_sociales" => [
+                [
+                    "codigo" => "307",
+                    "descripcion" => "OS  PORTUARIOS ARGENTINOS DE MAR DEL PLATA"
+                ],
+                [
+                    "codigo" => "406",
+                    "descripcion" => "OS  DEL PERSONAL DE ORGANISMOS DE CONTROL EXTERNO"
+                ],
+                [
+                    "codigo" => "505",
+                    "descripcion" => "OS  DE CAPITANES,  PILOTOS Y PATRONES DE PESCA"
+                ],
+                [
+                    "codigo" => "604",
+                    "descripcion" => "O.S.DE AGENTES DE LOTERIAS Y AFINES DE LA REPUBLICA ARGENTINA"
+                ],
             ],
             "provincia" => [
                 ["nombre" => "Buenos Aires"],

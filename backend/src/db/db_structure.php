@@ -1,14 +1,13 @@
 <?php
     include_once dirname(__FILE__).'/../lib/json_utils.php';
     include_once dirname(__FILE__).'/db_template.php';
-    include_once dirname(__FILE__).'/db_default_data.php';
+
     class DBStructure {
         public static function getStructure() {
             $f = DBTemplate::getFieldTemplates();
             $t = DBTemplate::getTableTemplates();
             $a = DBTemplate::getTemplateActions();
             $s = new DBFieldShortHand();
-            $d = DBDefaultValues::getDefaultData();
 
             return [
                 "configuracion" => [
@@ -25,8 +24,57 @@
                     ],
                     "actions" => $a['updateonly'],
                     "display_name" => "Configuración General",
-                    "group" => "Configuración",
-                    "default_data" => $d['configuracion']
+                    "group" => "Configuración"
+                ],
+                "modalidad_contratacion" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "codigo" => $s->unique($s->displayName($f['bigint'], "Código")),
+                        "modalidad" => $s->unique($s->displayName($f['varchar_256'], "Nombre de modalidad")),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Modalidad de contratación",
+                    "group" => "Configuración>Laborales"
+                ],
+                "situacion_revista" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "codigo" => $s->unique($s->displayName($f['bigint'], "Código")),
+                        "descripcion" => $s->unique($s->displayName($f['varchar_256'], "Descripción")),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Situación de Revista",
+                    "group" => "Configuración>Laborales"
+                ],
+                "condiciones" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "codigo" => $s->unique($s->displayName($f['bigint'], "Código")),
+                        "descripcion" => $s->unique($s->displayName($f['varchar_256'], "Descripción")),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Condiciones",
+                    "group" => "Configuración>Laborales"
+                ],
+                "actividades" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "codigo" => $s->unique($s->displayName($f['bigint'], "Código")),
+                        "descripcion" => $s->unique($s->displayName($f['varchar_256'], "Descripción")),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Actividades",
+                    "group" => "Configuración>Laborales"
+                ],
+                "obras_sociales" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "codigo" => $s->unique($s->displayName($f['bigint'], "Código")),
+                        "descripcion" => $s->unique($s->displayName($f['varchar_256'], "Descripción")),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Obras Sociales",
+                    "group" => "Configuración>Laborales"
                 ],
                 "tipo_cuenta_banco" => [
                     "fields" => [
@@ -35,8 +83,7 @@
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Tipo de cuenta bancaria",
-                    "group" => "Configuración>Datos",
-                    "default_data" => $d['tipo_cuenta_banco']
+                    "group" => "Configuración>Datos"
                 ],
                 "provincia" => [
                     "fields" => [
@@ -45,9 +92,7 @@
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Provincia",
-                    "group" => "Configuración>Datos",
-                    "default_data" => $d['provincia']
-                    
+                    "group" => "Configuración>Datos"
                 ],
                 "tipo_documento" => [
                     "fields" => [
@@ -56,8 +101,7 @@
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Tipo de documento",
-                    "group" => "Configuración>Datos",
-                    "default_data" => $d['tipo_documento']
+                    "group" => "Configuración>Datos"
                 ],
                 "nacionalidad" => [
                     "fields" => [
@@ -66,8 +110,7 @@
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Nacionalidad",
-                    "group" => "Configuración>Datos",
-                    "default_data" => $d['nacionalidad']
+                    "group" => "Configuración>Datos"
                 ],
                 "genero" => [
                     "fields" => [
@@ -76,8 +119,7 @@
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Género",
-                    "group" => "Configuración>Datos",
-                    "default_data" => $d['genero']
+                    "group" => "Configuración>Datos"
                 ],
                 "estado_civil" => [
                     "fields" => [
@@ -86,8 +128,7 @@
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Estado Civil",
-                    "group" => "Configuración>Datos",
-                    "default_data" => $d['estado_civil']
+                    "group" => "Configuración>Datos"
                 ],
                 "actividad" => [
                     "fields" => [
@@ -97,8 +138,7 @@
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Actividad",
-                    "group" => "Configuración>Empresas",
-                    "default_data" => $d['actividad']
+                    "group" => "Configuración>Empresas"
                 ],
                 "tipos_empresa" => [
                     "fields" => [
@@ -108,8 +148,28 @@
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Tipo de Empresa",
-                    "group" => "Configuración>Empresas",
-                    "default_data" => $d['tipos_empresa']
+                    "group" => "Configuración>Empresas"
+                ],
+                "periodo_pago" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "periodo" => $s->unique($s->displayName($f['varchar_64'], "Nombre de periodo de pago")),
+                        "dias" => $s->canBeNull($s->displayName($f['int'], "Días")),
+                        "meses" => $s->canBeNull($s->displayName($f['int'], "Meses")),
+                        "anios" => $s->canBeNull($s->displayName($f['int'], "Años")),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Periodo de Pago",
+                    "group" => "Configuración>Empresas"
+                ],
+                "regimen_jubilatorio" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "descripcion" => $s->unique($s->displayName($f['varchar_64'], "Descripción")),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Régimen Jubilatorio",
+                    "group" => "Configuración>Empresas"
                 ],
                 "empresas" => [
                     "fields" => [
@@ -398,7 +458,7 @@
                             ]
                         ),
                         "id_puesto" => $s->foreignKey(
-                            $s->primary($s->displayName($f['bigint'], "Puesto de Trabajo")),
+                            $s->primary($s->displayName($f['bigint'], "Categoria Puesto")),
                             [
                                 'table' => 'categoria_puesto',
                                 'field' => 'id',
@@ -435,14 +495,95 @@
                                 'format' => '{nombre}'
                             ]), "Tipo de cuenta bancaria")),
                         "sueldo_base" => $s->displayName($f['decimal'], "Sueldo base"),
-                        "sucursal" => $s->displayName($f['varchar_64'], "Sucursal"),
+                        "sucursal" => $s->canBeNull($s->displayName($f['varchar_64'], "Sucursal")),
+                        "ant_ad_anios" => $s->canBeNull($s->displayName($f['int'], "Años")),
+                        "ant_ad_meses" => $s->canBeNull($s->displayName($f['int'], "Meses")),
+                        "ant_ad_dias" => $s->canBeNull($s->displayName($f['int'], "Dias")),
+                        "renum_suma_fija1" => $s->canBeNull($s->displayName($f['decimal'], "Suma Fija 1")),
+                        "renum_suma_fija2" => $s->canBeNull($s->displayName($f['decimal'], "Suma Fija 2")),
+                        "renum_suma_fija3" => $s->canBeNull($s->displayName($f['decimal'], "Suma Fija 3")),
+                        "renum_suma_fija4" => $s->canBeNull($s->displayName($f['decimal'], "Suma Fija 4")),
+                        "renum_suma_fija5" => $s->canBeNull($s->displayName($f['decimal'], "Suma Fija 5")),
+                        "id_tabla_cat_sec" => $s->canBeNull($s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Tabla Categoria Secundaria")),
+                            [
+                                'table' => 'tablas_categoria',
+                                'field' => 'id',
+                                'extra_relation' => 'em_id:em_id',
+                                'format' => 'Tabla Nº {numero}'
+                            ]
+                        )),
+                        "id_puesto_sec" => $s->canBeNull($s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Categoria secundaria")),
+                            [
+                                'table' => 'categoria_puesto',
+                                'field' => 'id',
+                                'extra_relation' => 'em_id:em_id,id_tabla_cat:id_tabla_cat_sec',
+                                'format' => '{descripcion}'
+                            ]
+                        )),
+                        "id_tabla_cat_ter" => $s->canBeNull($s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Tabla Categoria Terciaria")),
+                            [
+                                'table' => 'tablas_categoria',
+                                'field' => 'id',
+                                'extra_relation' => 'em_id:em_id',
+                                'format' => 'Tabla Nº {numero}'
+                            ]
+                        )),
+                        "id_puesto_ter" => $s->canBeNull($s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Categoria terciaria")),
+                            [
+                                'table' => 'categoria_puesto',
+                                'field' => 'id',
+                                'extra_relation' => 'em_id:em_id,id_tabla_cat:id_tabla_cat_ter',
+                                'format' => '{descripcion}'
+                            ]
+                        )),
+                        "id_periodo_pago" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Periodo de pago")),
+                            [
+                                'table' => 'periodo_pago',
+                                'field' => 'id',
+                                'format' => '{periodo}'
+                            ]
+                        ),
+                        "renum_lugar_pago" => $s->canBeNull($s->displayName($f['varchar_64'], "Lugar de pago")),
+                        "renum_cuenta_desempleo" => $s->canBeNull($s->displayName($f['varchar_128'], "Cuenta fondo desempleo")),
+                        "id_regimen_jub" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Régimen Jubilatorio")),
+                            [
+                                'table' => 'regimen_jubilatorio',
+                                'field' => 'id',
+                                'format' => '{descripcion}'
+                            ]
+                        ),
+                        "renum_admin" =>  $s->canBeNull($s->displayName($f['varchar_128'], "Administradora")),
+                        "renum_convencionado" => $s->displayName($f['boolean'], "Convencionado"),
+                        "cont_aporte_adicional" => $s->displayName($f['decimal'], "Aporte Adicional SS %"),
+                        "cont_diferencial" => $s->displayName($f['decimal'], "Contribución Diferencial SS %"),
+                        "cont_num_patronal" => $s->displayName($f['decimal'], "Número de tabla para contribuciones"),
+                        "cont_patronal_aporta" => $s->displayName($f['boolean'], "Aporta"),
+                        "gan_enable_renum_acom" => $s->displayName($f['boolean'], "Forzar la remuneración acumulada"),
+                        "gan_value_renum_acom" => $s->enabledBy($s->displayName($f['decimal'], "Valor de remuneración acumulada forzada"), "gan_enable_renum_acom"),
+                        "gan_calc_12vo_sac" => $s->displayName($f['boolean'], "Calcular 12vo. SAC"),
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Empleado",
                     "group" => "Personal",
                     "field_groups" => [
                         "Datos Personales" => ["id_tipo_documento", "nro_doc", "nombre", "apellido", "id_nacionalidad", "fecha_nac", "id_genero", "id_estado_civil", "nro_tel", "nro_cel", "nro_emergencias", "email", "dom_calle", "dom_numero", "dom_departamento", "dom_piso", "id_provincia", "cod_postal"],
-                        "Datos de Empresa" => ["legajo", "em_id", "cuil", "id_tabla_cat", "id_puesto", "cal_categoria", "area", "tarea_asignada", "seccion", "fecha_ingreso", "fecha_baja", "id_departamento", "fab_campo_libre", "lugar_trabajo", "seguro_obligatorio", "dias_vacaciones", "nro_cuenta_cbu", "nro_cuenta_alt", "id_tcuenta_banco", "sueldo_base", "sucursal"]
+                        
+                        "Datos de Empresa" => ["legajo", "em_id", "cuil", "id_tabla_cat", "id_puesto", "cal_categoria", "area", "tarea_asignada", "seccion", "fecha_ingreso", "fecha_baja", "id_departamento", "fab_campo_libre", "lugar_trabajo", "seguro_obligatorio", "dias_vacaciones", "nro_cuenta_cbu", "nro_cuenta_alt", "id_tcuenta_banco", "sueldo_base", "sucursal"],
+
+                        "Antigüedad reconocida adicional" => ["ant_ad_anios", "ant_ad_meses", "ant_ad_dias"],
+
+                        "Remuneraciones" => ["renum_suma_fija1", "renum_suma_fija2", "renum_suma_fija3", "renum_suma_fija4", "renum_suma_fija5", "id_tabla_cat_sec", "id_puesto_sec", "id_tabla_cat_ter", "id_puesto_ter", "id_periodo_pago", "renum_lugar_pago", "renum_cuenta_desempleo", "id_regimen_jub", "renum_admin", "renum_convencionado"],
+
+                        "Contribuciones" => ["cont_aporte_adicional", "cont_diferencial", "cont_num_patronal", "cont_patronal_aporta"],
+
+                        "Ganancias" => ["gan_enable_renum_acom", "gan_value_renum_acom", "gan_calc_12vo_sac"]
+                        
                     ] 
                 ]
             ];
