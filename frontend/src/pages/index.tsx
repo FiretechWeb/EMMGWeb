@@ -88,14 +88,8 @@ export default function Home({dataStructure} : HomeProps) {
             <h1 className='p-2 text-3xl text-center'>Liquidación de sueldos</h1>
 
             <h2 className='p-2 text-2xl text-center'>Carga de datos</h2>
-            <TabView scrollable panelContainerClassName='p-5'>
-            {
-            Object.keys(tableGroups).map( (groupName) => (
-                <TabPanel headerStyle={{background: 'none'}} headerClassName="border-dashed border-2 border-sky-500 *:p-2" key={groupName} header={groupName}>
-                    <TableGroup tableGroup={tableGroups[groupName]}></TableGroup>
-                </TabPanel>
-            ))}
-            </TabView>
+            <TableGroup tableGroup={tableGroups}></TableGroup>
+
         </main>
     )
 }

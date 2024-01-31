@@ -1,6 +1,7 @@
 import { GlobalVars } from "../cfg/config";
 import axios from "axios";
 import { splitFirstOccurrence } from "./stringExt";
+import { groupStringToObject, mergeObjects } from "./util";
 import type { DBFieldType, DBForeignKey } from "./db_types";
 
 let _dbStructure: any = null;
@@ -108,14 +109,9 @@ export class DBActions {
         let tableGroups: any = {};
         Object.keys(dbStructure).forEach( tableName => {
             const groupsData: string = dbStructure[tableName]['group'] ?? "_nogroup_";
-            groupsData.split('>').forEach(groupName => {
-                if (!tableGroups[groupName]) {
-                    tableGroups[groupName] = {};
-                }
-                //groupName.split('>').forEach(g);
-                tableGroups[groupName][tableName] = dbStructure[tableName];
-            });
+            tableGroups = mergeObjects(tableGroups, groupStringToObject(groupsData, {[tableName]: dbStructure[tableName]}));
         });
+        
         console.log(tableGroups);
         return tableGroups;
     }
