@@ -36,6 +36,24 @@
                     "display_name" => "Modalidad de contratación",
                     "group" => "Configuración>Laborales"
                 ],
+                "tipo_contratacion" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "tipo" => $s->unique($s->displayName($f['varchar_64'], "Tipo")),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Tipo de contratación",
+                    "group" => "Configuración>Laborales"
+                ],
+                "forma_pago" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "forma" => $s->unique($s->displayName($f['varchar_128'], "Forma de pago")),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Forma de pago",
+                    "group" => "Configuración>Laborales"
+                ],
                 "situacion_revista" => [
                     "fields" => [
                         "id" => $f['id'],
@@ -56,7 +74,7 @@
                     "display_name" => "Condiciones",
                     "group" => "Configuración>Laborales"
                 ],
-                "actividades" => [
+                "actividad_laboral" => [
                     "fields" => [
                         "id" => $f['id'],
                         "codigo" => $s->unique($s->displayName($f['bigint'], "Código")),
@@ -92,6 +110,23 @@
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Provincia",
+                    "group" => "Configuración>Datos"
+                ],
+                "localidades" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "prov_id" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Empresa")),
+                            [
+                                'table' => 'provincia',
+                                'field' => 'id',
+                                'format' => '{nombre}'
+                            ]
+                        ),
+                        "nombre" => $s->unique($s->displayName($f['varchar_128'], "Nombre"))
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Localidades",
                     "group" => "Configuración>Datos"
                 ],
                 "tipo_documento" => [
@@ -130,7 +165,7 @@
                     "display_name" => "Estado Civil",
                     "group" => "Configuración>Datos"
                 ],
-                "actividad" => [
+                "actividad_empresa" => [
                     "fields" => [
                         "id" => $f['id'],
                         "codigo" => $s->unique($s->displayName($f['bigint'], "Código")),
@@ -171,6 +206,87 @@
                     "display_name" => "Régimen Jubilatorio",
                     "group" => "Configuración>Empresas"
                 ],
+                "ganancias_config" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "ali_calc_12vo" => $s->displayName($f['boolean'], "Cálcular 12vo sin considerar descuentos deducibles"),
+                        "ali_dec249_ley617" => $s->displayName($f['boolean'], "Áplica Dec. 249/21 - Ley 27.617"),
+                        "ali_tope_inf_2do" => $s->displayName($f['decimal'], "Tope inferior deducción especial Incr. - 2da Parte"),
+                        "ali_tope_sup_2do" => $s->displayName($f['decimal'], "Tope superior deducción especial Incr. - 2da Parte")
+                    ],
+                    "actions" => $a['updateonly'],
+                    "display_name" => "Configuración",
+                    "group" => "Configuración>Ganancias",
+                    "field_groups" => [
+                        "Álicuotas" => ["ali_calc_12vo", "ali_dec249_ley617", "ali_tope_inf_2do", "ali_tope_sup_2do"],
+                    ] 
+                ],
+                "tipo_tope" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "tipo" => $s->unique($s->displayName($f['varchar_64'], "Tipo"))
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Tipos de tope",
+                    "group" => "Configuración>Ganancias"
+                ],
+                "alicuotas" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "anio" => $s->displayName($f['int'], "Año"),
+                        "mes" => $s->displayName($f['int'], "Mes"),
+                        "desde" => $s->displayName($f['decimal'], "Desde"),
+                        "impuesto_base" => $s->displayName($f['decimal'], "Impuesto Base"),
+                        "alicuota" => $s->displayName($f['int'], "Alícuota"),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Álicuotas",
+                    "group" => "Configuración>Ganancias"
+                ],
+                "deducciones_personales" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "anio" => $s->displayName($f['int'], "Año"),
+                        "mes" => $s->displayName($f['int'], "Mes"),
+                        "minimo_no_imp" => $s->displayName($f['decimal'], "Mínimo no Imp."),
+                        "deduccion_esp" => $s->displayName($f['decimal'], "Deducción Esp."),
+                        "conyuge" => $s->displayName($f['decimal'], "Cónyuge"),
+                        "hijos" => $s->displayName($f['decimal'], "Hijos"),
+                        "otras_cargas" => $s->displayName($f['decimal'], "Otras cargas")
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Deducciones Personales",
+                    "group" => "Configuración>Ganancias"
+                ],
+                "deducciones_generales" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "anio" => $s->displayName($f['int'], "Año"),
+                        "descripcion" => $s->displayName($f['varchar_128'], "Descripción"),
+                        "id_tipo_tope" => $s->displayName(
+                            $s->foreignKey($f['bigint'], 
+                            [
+                                'table' => 'tipo_tope',
+                                'field' => 'id',
+                                'format' => '{tipo}'
+                            ]), "Tipo Tope"),
+                        "enero" => $s->displayName($f['decimal'], "Enero"),
+                        "febrero" => $s->displayName($f['decimal'], "Febrero"),
+                        "marzo" => $s->displayName($f['decimal'], "Marzo"),
+                        "abril" => $s->displayName($f['decimal'], "Abril"),
+                        "mayo" => $s->displayName($f['decimal'], "Mayo"),
+                        "junio" => $s->displayName($f['decimal'], "Junio"),
+                        "julio" => $s->displayName($f['decimal'], "Julio"),
+                        "agosto" => $s->displayName($f['decimal'], "Agosto"),
+                        "septiembre" => $s->displayName($f['decimal'], "Septiembre"),
+                        "octubre" => $s->displayName($f['decimal'], "Octubre"),
+                        "noviembre" => $s->displayName($f['decimal'], "Noviembre"),
+                        "diciembre" => $s->displayName($f['decimal'], "Diciembre")
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Deducciones Generales",
+                    "group" => "Configuración>Ganancias"
+                ],
                 "empresas" => [
                     "fields" => [
                         "id" => $f['id'],
@@ -196,7 +312,7 @@
                         "id_actividad" => $s->displayName(
                             $s->foreignKey($f['bigint'], 
                             [
-                                'table' => 'actividad',
+                                'table' => 'actividad_empresa',
                                 'field' => 'id',
                                 'format' => '{nombre}'
                             ]), "Actividad"),
@@ -449,7 +565,7 @@
                             ]), "Provincia")),
                         "cod_postal" => $s->canBeNull($s->displayName($f['varchar_32'], "Código Postal")),
                         "id_tabla_cat" => $s->foreignKey(
-                            $s->primary($s->displayName($f['bigint'], "Tabla Categoria")),
+                            $s->displayName($f['bigint'], "Tabla Categoria"),
                             [
                                 'table' => 'tablas_categoria',
                                 'field' => 'id',
@@ -458,7 +574,7 @@
                             ]
                         ),
                         "id_puesto" => $s->foreignKey(
-                            $s->primary($s->displayName($f['bigint'], "Categoria Puesto")),
+                            $s->displayName($f['bigint'], "Categoria Puesto"),
                             [
                                 'table' => 'categoria_puesto',
                                 'field' => 'id',
@@ -473,7 +589,7 @@
                         "fecha_ingreso" => $s->displayName($f['date'], "Fecha de ingreso"),
                         "fecha_baja" => $s->canBeNull($s->displayName($f['date'], "Fecha de baja")),
                         "id_departamento" => $s->canBeNull($s->foreignKey(
-                            $s->primary($s->displayName($f['bigint'], "Departamento")),
+                            $s->displayName($f['bigint'], "Departamento"),
                             [
                                 'table' => 'departamentos',
                                 'field' => 'id',
@@ -505,7 +621,7 @@
                         "renum_suma_fija4" => $s->canBeNull($s->displayName($f['decimal'], "Suma Fija 4")),
                         "renum_suma_fija5" => $s->canBeNull($s->displayName($f['decimal'], "Suma Fija 5")),
                         "id_tabla_cat_sec" => $s->canBeNull($s->foreignKey(
-                            $s->primary($s->displayName($f['bigint'], "Tabla Categoria Secundaria")),
+                            $s->displayName($f['bigint'], "Tabla Categoria Secundaria"),
                             [
                                 'table' => 'tablas_categoria',
                                 'field' => 'id',
@@ -514,7 +630,7 @@
                             ]
                         )),
                         "id_puesto_sec" => $s->canBeNull($s->foreignKey(
-                            $s->primary($s->displayName($f['bigint'], "Categoria secundaria")),
+                            $s->displayName($f['bigint'], "Categoria secundaria"),
                             [
                                 'table' => 'categoria_puesto',
                                 'field' => 'id',
@@ -523,7 +639,7 @@
                             ]
                         )),
                         "id_tabla_cat_ter" => $s->canBeNull($s->foreignKey(
-                            $s->primary($s->displayName($f['bigint'], "Tabla Categoria Terciaria")),
+                            $s->displayName($f['bigint'], "Tabla Categoria Terciaria"),
                             [
                                 'table' => 'tablas_categoria',
                                 'field' => 'id',
@@ -532,7 +648,7 @@
                             ]
                         )),
                         "id_puesto_ter" => $s->canBeNull($s->foreignKey(
-                            $s->primary($s->displayName($f['bigint'], "Categoria terciaria")),
+                            $s->displayName($f['bigint'], "Categoria terciaria"),
                             [
                                 'table' => 'categoria_puesto',
                                 'field' => 'id',
@@ -540,33 +656,134 @@
                                 'format' => '{descripcion}'
                             ]
                         )),
-                        "id_periodo_pago" => $s->foreignKey(
-                            $s->primary($s->displayName($f['bigint'], "Periodo de pago")),
+                        "id_periodo_pago" => $s->canBeNull($s->foreignKey(
+                            $s->displayName($f['bigint'], "Periodo de pago"),
                             [
                                 'table' => 'periodo_pago',
                                 'field' => 'id',
                                 'format' => '{periodo}'
                             ]
-                        ),
+                        )),
                         "renum_lugar_pago" => $s->canBeNull($s->displayName($f['varchar_64'], "Lugar de pago")),
                         "renum_cuenta_desempleo" => $s->canBeNull($s->displayName($f['varchar_128'], "Cuenta fondo desempleo")),
-                        "id_regimen_jub" => $s->foreignKey(
-                            $s->primary($s->displayName($f['bigint'], "Régimen Jubilatorio")),
+                        "id_regimen_jub" => $s->canBeNull($s->foreignKey(
+                            $s->displayName($f['bigint'], "Régimen Jubilatorio"),
                             [
                                 'table' => 'regimen_jubilatorio',
                                 'field' => 'id',
                                 'format' => '{descripcion}'
                             ]
-                        ),
+                        )),
                         "renum_admin" =>  $s->canBeNull($s->displayName($f['varchar_128'], "Administradora")),
-                        "renum_convencionado" => $s->displayName($f['boolean'], "Convencionado"),
-                        "cont_aporte_adicional" => $s->displayName($f['decimal'], "Aporte Adicional SS %"),
-                        "cont_diferencial" => $s->displayName($f['decimal'], "Contribución Diferencial SS %"),
-                        "cont_num_patronal" => $s->displayName($f['decimal'], "Número de tabla para contribuciones"),
-                        "cont_patronal_aporta" => $s->displayName($f['boolean'], "Aporta"),
-                        "gan_enable_renum_acom" => $s->displayName($f['boolean'], "Forzar la remuneración acumulada"),
-                        "gan_value_renum_acom" => $s->enabledBy($s->displayName($f['decimal'], "Valor de remuneración acumulada forzada"), "gan_enable_renum_acom"),
-                        "gan_calc_12vo_sac" => $s->displayName($f['boolean'], "Calcular 12vo. SAC"),
+                        "renum_convencionado" => $s->canBeNull($s->displayName($f['boolean'], "Convencionado")),
+                        "cont_aporte_adicional" => $s->canBeNull($s->displayName($f['decimal'], "Aporte Adicional SS %")),
+                        "cont_diferencial" => $s->canBeNull($s->displayName($f['decimal'], "Contribución Diferencial SS %")),
+                        "cont_num_patronal" => $s->canBeNull($s->displayName($f['decimal'], "Número de tabla para contribuciones")),
+                        "cont_patronal_aporta" => $s->canBeNull($s->displayName($f['boolean'], "Aporta")),
+                        "gan_enable_renum_acom" => $s->canBeNull($s->displayName($f['boolean'], "Forzar la remuneración acumulada")),
+                        "gan_value_renum_acom" => $s->canBeNull($s->enabledBy($s->displayName($f['decimal'], "Valor de remuneración acumulada forzada"), "gan_enable_renum_acom")),
+                        "gan_calc_12vo_sac" => $s->canBeNull($s->displayName($f['boolean'], "Calcular 12vo. SAC")),
+                        "id_modalidad_cont" => $s->canBeNull($s->foreignKey(
+                            $s->displayName($f['bigint'], "Modalidad de contratación"),
+                            [
+                                'table' => 'modalidad_contratacion',
+                                'field' => 'id',
+                                'format' => '{codigo} - {modalidad}'
+                            ]
+                        )),
+                        "id_tipo_contratacion" => $s->canBeNull($s->foreignKey(
+                            $s->displayName($f['bigint'], "Tipo de contratación"),
+                            [
+                                'table' => 'tipo_contratacion',
+                                'field' => 'id',
+                                'format' => '{tipo}'
+                            ]
+                        )),
+                        "lab_vencimiento" => $s->canBeNull($s->displayName($f['date'], "Vencimiento")),
+                        "lab_ley26940" => $s->canBeNull($s->displayName($f['boolean'], "Ley 26940 - No detraer mínimo")),
+                        "id_jurisdiccion" => $s->canBeNull($s->displayName(
+                            $s->foreignKey($f['bigint'], 
+                            [
+                                'table' => 'provincia',
+                                'field' => 'id',
+                                'format' => '{nombre}'
+                            ]), "Jurisdicción")),
+                        "id_revista1" => $s->canBeNull($s->foreignKey(
+                            $s->displayName($f['bigint'], "Situación de Revista 1"),
+                            [
+                                'table' => 'situacion_revista',
+                                'field' => 'id',
+                                'format' => '{codigo} {descripcion}'
+                            ]
+                        )),
+                        "lab_dia_revista1" => $s->canBeNull($s->displayName($f['int'], "Día Inicio Sit Rev. 1")),
+                        "id_revista2" => $s->canBeNull($s->foreignKey(
+                            $s->displayName($f['bigint'], "Situación de Revista 2"),
+                            [
+                                'table' => 'situacion_revista',
+                                'field' => 'id',
+                                'format' => '{codigo} {descripcion}'
+                            ]
+                        )),
+                        "lab_dia_revista2" => $s->canBeNull($s->displayName($f['int'], "Día Inicio Sit Rev. 2")),
+                        "id_revista3" => $s->canBeNull($s->foreignKey(
+                            $s->displayName($f['bigint'], "Situación de Revista 3"),
+                            [
+                                'table' => 'situacion_revista',
+                                'field' => 'id',
+                                'format' => '{codigo} {descripcion}'
+                            ]
+                        )),
+                        "lab_dia_revista3" => $s->canBeNull($s->displayName($f['int'], "Día Inicio Sit Rev. 3")),
+                        "id_condicion" => $s->canBeNull($s->foreignKey(
+                            $s->displayName($f['bigint'], "Condición"),
+                            [
+                                'table' => 'condiciones',
+                                'field' => 'id',
+                                'format' => '{codigo} {descripcion}'
+                            ]
+                        )),
+                        "id_actividad" => $s->canBeNull($s->foreignKey(
+                            $s->displayName($f['bigint'], "Actividad"),
+                            [
+                                'table' => 'actividad_laboral',
+                                'field' => 'id',
+                                'format' => '{codigo} {descripcion}'
+                            ]
+                        )),
+                        "id_obra_social" => $s->canBeNull($s->foreignKey(
+                            $s->displayName($f['bigint'], "Obra social"),
+                            [
+                                'table' => 'obras_sociales',
+                                'field' => 'id',
+                                'format' => '{codigo} {descripcion}'
+                            ]
+                        )),
+                        "id_provincia_laboral" => $s->canBeNull($s->displayName(
+                            $s->foreignKey($f['bigint'], 
+                            [
+                                'table' => 'provincia',
+                                'field' => 'id',
+                                'format' => '{nombre}'
+                            ]), "Provincia")),
+                        "id_localidad_laboral" => $s->canBeNull($s->foreignKey(
+                            $s->displayName($f['bigint'], "Localidad"),
+                            [
+                                'table' => 'localidades',
+                                'field' => 'id',
+                                'extra_relation' => 'prov_id:id_provincia_laboral',
+                                'format' => '{nombre}'
+                            ]
+                        )),
+                        "id_forma_pago" => $s->canBeNull($s->foreignKey(
+                            $s->displayName($f['bigint'], "Forma de pago"),
+                            [
+                                'table' => 'forma_pago',
+                                'field' => 'id',
+                                'format' => '{forma}'
+                            ]
+                        )),
+                        "lab_obs" => $s->canBeNull($s->displayName($f['varchar_256'], "Observaciones")),
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Empleado",
@@ -582,7 +799,9 @@
 
                         "Contribuciones" => ["cont_aporte_adicional", "cont_diferencial", "cont_num_patronal", "cont_patronal_aporta"],
 
-                        "Ganancias" => ["gan_enable_renum_acom", "gan_value_renum_acom", "gan_calc_12vo_sac"]
+                        "Ganancias" => ["gan_enable_renum_acom", "gan_value_renum_acom", "gan_calc_12vo_sac"],
+
+                        "Laborales" => ["id_modalidad_cont", "id_tipo_contratacion", "lab_vencimiento", "lab_ley26940", "id_jurisdiccion", "id_revista1", "lab_dia_revista1", "id_revista2", "lab_dia_revista2", "id_revista3", "lab_dia_revista3", "id_condicion", "id_actividad", "id_obra_social", "id_provincia_laboral", "id_localidad_laboral", "id_forma_pago", "lab_obs"]
                         
                     ] 
                 ]

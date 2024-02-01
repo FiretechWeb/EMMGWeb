@@ -48,6 +48,16 @@ class DBDefaultValues {
             "regimen_jubilatorio" => [
                 ["descripcion" => "SIPA"]
             ],
+            "forma_pago" => [
+                ["forma" => "Efectivo"],
+                ["forma" => "Cheque"],
+                ["forma" => "Acreditación en cuenta"]
+            ],
+            "tipo_contratacion" => [
+                ["tipo" => "Tiempo Parcial"],
+                ["tipo" => "Jornada completa"],
+                ["tipo" => "Media Jornada"]
+            ],
             "modalidad_contratacion" => [
                 [
                     "codigo" => "0",
@@ -194,7 +204,7 @@ class DBDefaultValues {
                     "descripcion" => "SIN SERVICIOS REALES"
                 ]
             ],
-            "actividades" => [
+            "actividad_laboral" => [
                 [
                     "codigo" => "0",
                     "descripcion" => "Zona de Desastre. Decreto 1386/01 excepto actividad agropecuaria"
@@ -243,6 +253,28 @@ class DBDefaultValues {
                 ["nombre" => "Tierra del fuego"],
                 ["nombre" => "Formosa"]
             ],
+            "localidades" => [
+                [
+                    "prov_id" => 1, //Buenos Aires
+                    "nombre" => "Monte Grande"
+                ],
+                [
+                    "prov_id" => 1, //Buenos Aires
+                    "nombre" => "Lomas de Zamora"
+                ],
+                [
+                    "prov_id" => 1, //Buenos Aires
+                    "nombre" => "Banfield"
+                ],
+                [
+                    "prov_id" => 1, //Buenos Aires
+                    "nombre" => "Jagüel"
+                ],
+                [
+                    "prov_id" => 1, //Buenos Aires
+                    "nombre" => "Luis Guillon"
+                ],
+            ],
             "tipo_documento" => [
                 ["nombre" => "DNI"],
                 ["nombre" => "Pasaporte"],
@@ -281,7 +313,7 @@ class DBDefaultValues {
                 ["estado" => "Separado/a"],
                 ["estado" => "Concubino/a"]
             ],
-            "actividad" => [
+            "actividad_empresa" => [
                 [
                     "codigo" => 171200,
                     "nombre" => "ACABADO DE PRODUCTOS TEXTILES"
@@ -360,7 +392,20 @@ class DBDefaultValues {
                     "codigo" => 8,
                     "tipo" => "Decreto 212/03, AFA Clubes"
                 ]
-            ]
+            ],
+            "ganancias_config" => [
+                [
+                    "ali_calc_12vo" => 0,
+                    "ali_dec249_ley617" => 1,
+                    "ali_tope_inf_2do" => 700875.0,
+                    "ali_tope_sup_2do" => 808341.0,
+                ]
+            ],
+            "tipo_tope" => [
+                [ "tipo" => "Valor Tope" ],
+                [ "tipo" => "Tope Porcentural"],
+                [ "tipo" => "Sin Tope"]
+            ],
         ];
     }
 }
