@@ -287,6 +287,142 @@
                     "display_name" => "Deducciones Generales",
                     "group" => "Configuración>Ganancias"
                 ],
+                "uocra_categoria" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "nombre" => $s->unique($s->displayName($f['varchar_64'], "Categoria"))
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Categorias",
+                    "group" => "Sindicatos>UOCRA"
+                ],
+                "uocra_convenio" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "nombre" => $s->unique($s->displayName($f['varchar_128'], "Convenio"))
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Convenios",
+                    "group" => "Sindicatos>UOCRA"
+                ],
+                "aec_rosario_categoria" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "nombre" => $s->unique($s->displayName($f['varchar_32'], "Categoria"))
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Categorias",
+                    "group" => "Sindicatos>AEC Rosario"
+                ],
+                "aec_rosario_puesto" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "nombre" => $s->unique($s->displayName($f['varchar_128'], "Puesto"))
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Puestos",
+                    "group" => "Sindicatos>AEC Rosario"
+                ],
+                "aec_rosario_licencia" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "nombre" => $s->unique($s->displayName($f['varchar_128'], "Licencia"))
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Licencias",
+                    "group" => "Sindicatos>AEC Rosario"
+                ],
+                "uom_categoria" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "nombre" => $s->unique($s->displayName($f['varchar_128'], "Categoría"))
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Categoria",
+                    "group" => "Sindicatos>UOM"
+                ],
+                "uom_revista" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "nombre" => $s->unique($s->displayName($f['varchar_128'], "Sit. Revista"))
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Situación de revista",
+                    "group" => "Sindicatos>UOM"
+                ],
+                "sec_santiago_categoria" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "nombre" => $s->unique($s->displayName($f['varchar_128'], "Categoría"))
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Categoría",
+                    "group" => "Sindicatos>SEC Santiago del Estero"
+                ],
+                "faecys_categoria" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "nombre" => $s->unique($s->displayName($f['varchar_128'], "Categoría"))
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Categoría",
+                    "group" => "Sindicatos>FAECYS"
+                ],
+                "spep_sgto_estero_cargo" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "codigo" => $s->unique($s->displayName($f['bigint'], "Código AFIP")),
+                        "nombre" => $s->unique($s->displayName($f['varchar_128'], "Cargo"))
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Cargos",
+                    "group" => "Sindicatos>SPEP Stgo. del Estero"
+                ],
+                "spep_sgto_estero_sit" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "nombre" => $s->unique($s->displayName($f['varchar_128'], "Situación de cargo"))
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Situación",
+                    "group" => "Sindicatos>SPEP Stgo. del Estero"
+                ],
+                "spep_sgto_estero_rev" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "nombre" => $s->unique($s->displayName($f['varchar_128'], "Revista cargo"))
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Revista",
+                    "group" => "Sindicatos>SPEP Stgo. del Estero"
+                ],
+                "spep_sgto_estero_lvl" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "nombre" => $s->unique($s->displayName($f['varchar_128'], "Nivel de enseñanza"))
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Nivel de enseñanza",
+                    "group" => "Sindicatos>SPEP Stgo. del Estero"
+                ],
+                "spep_sgto_estero_obra" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "nombre" => $s->unique($s->displayName($f['varchar_128'], "Obra social obligatoría"))
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Obra Social",
+                    "group" => "Sindicatos>SPEP Stgo. del Estero"
+                ],
+                "spep_sgto_estero_cat" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "categoria" => $s->unique($s->displayName($f['int'], "Categoría"))
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Categoría",
+                    "group" => "Sindicatos>SPEP Stgo. del Estero"
+                ],
                 "empresas" => [
                     "fields" => [
                         "id" => $f['id'],
@@ -784,6 +920,56 @@
                             ]
                         )),
                         "lab_obs" => $s->canBeNull($s->displayName($f['varchar_256'], "Observaciones")),
+                        "id_spep_lvl" => $s->canBeNull($s->foreignKey(
+                            $s->displayName($f['bigint'], "Nivel de enseñanza"),
+                            [
+                                'table' => 'spep_sgto_estero_lvl',
+                                'field' => 'id',
+                                'format' => '{nombre}'
+                            ]
+                        )),
+                        "spep_por_desc" => $s->canBeNull($s->displayName($f['decimal'], "Porc. Descuentos")),
+                        "id_spep_obra" => $s->canBeNull($s->foreignKey(
+                            $s->displayName($f['bigint'], "Obra social obligatoria"),
+                            [
+                                'table' => 'spep_sgto_estero_obra',
+                                'field' => 'id',
+                                'format' => '{nombre}'
+                            ]
+                        )),
+                        "id_spep_cat" => $s->canBeNull($s->foreignKey(
+                            $s->displayName($f['bigint'], "Categoría"),
+                            [
+                                'table' => 'spep_sgto_estero_cat',
+                                'field' => 'id',
+                                'format' => '{nombre}'
+                            ]
+                        )),
+                        "id_spep_cargo1" => $s->canBeNull($s->foreignKey(
+                            $s->displayName($f['bigint'], "Cargo 1"),
+                            [
+                                'table' => 'spep_sgto_estero_cargo',
+                                'field' => 'id',
+                                'format' => '{codigo} {nombre}'
+                            ]
+                        )),
+                        "id_spep_sit1" => $s->canBeNull($s->foreignKey(
+                            $s->displayName($f['bigint'], "Situación cargo 1"),
+                            [
+                                'table' => 'spep_sgto_estero_sit',
+                                'field' => 'id',
+                                'format' => '{nombre}'
+                            ]
+                        )),
+                        "spep_horas_cargo1" => $s->canBeNull($s->displayName($f['boolean'], "Horas cargo 1")),
+                        "id_spep_rev1" => $s->canBeNull($s->foreignKey(
+                            $s->displayName($f['bigint'], "Revista cargo 1"),
+                            [
+                                'table' => 'spep_sgto_estero_rev',
+                                'field' => 'id',
+                                'format' => '{nombre}'
+                            ]
+                        )),
                     ],
                     "actions" => $a['default'],
                     "display_name" => "Empleado",
@@ -801,10 +987,214 @@
 
                         "Ganancias" => ["gan_enable_renum_acom", "gan_value_renum_acom", "gan_calc_12vo_sac"],
 
-                        "Laborales" => ["id_modalidad_cont", "id_tipo_contratacion", "lab_vencimiento", "lab_ley26940", "id_jurisdiccion", "id_revista1", "lab_dia_revista1", "id_revista2", "lab_dia_revista2", "id_revista3", "lab_dia_revista3", "id_condicion", "id_actividad", "id_obra_social", "id_provincia_laboral", "id_localidad_laboral", "id_forma_pago", "lab_obs"]
-                        
+                        "Laborales" => ["id_modalidad_cont", "id_tipo_contratacion", "lab_vencimiento", "lab_ley26940", "id_jurisdiccion", "id_revista1", "lab_dia_revista1", "id_revista2", "lab_dia_revista2", "id_revista3", "lab_dia_revista3", "id_condicion", "id_actividad", "id_obra_social", "id_provincia_laboral", "id_localidad_laboral", "id_forma_pago", "lab_obs"],
+
+                        "SPEP Sgo. del Estero" => ["id_spep_lvl", "spep_por_desc", "id_spep_obra", "id_spep_cat", "id_spep_cargo1", "id_spep_sit1", "spep_horas_cargo1", "id_spep_rev1"],
                     ] 
-                ]
+                ],
+                "empleado_uocra" => [
+                    "fields" => [
+                        "em_id" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Empresa")),
+                            [
+                                'table' => 'empresas',
+                                'field' => 'id',
+                                'format' => '{razon}'
+                            ]
+                        ),
+                        "pr_id" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Empleado")),
+                            [
+                                'table' => 'empleado',
+                                'field' => 'id',
+                                'extra_relation' => 'em_id:em_id',
+                                'format' => '{cuil} - {nombre} {apellido}'
+                            ]
+                        ),
+                        "id_uocra_cat" => $s->canBeNull($s->foreignKey(
+                            $s->displayName($f['bigint'], "Categoría"),
+                            [
+                                'table' => 'uocra_categoria',
+                                'field' => 'id',
+                                'format' => '{nombre}'
+                            ]
+                        )),
+                        "id_uocra_convenio" => $s->canBeNull($s->foreignKey(
+                            $s->displayName($f['bigint'], "Convenio"),
+                            [
+                                'table' => 'uocra_convenio',
+                                'field' => 'id',
+                                'format' => '{nombre}'
+                            ]
+                        )),
+                        "uocra_afiliado" => $s->canBeNull($s->displayName($f['boolean'], "Afiliado")),
+                        "uocra_admin_pub" => $s->canBeNull($s->displayName($f['boolean'], "Administración Pública")),
+                        "uocra_gremio" => $s->canBeNull($s->displayName($f['boolean'], "Pertenece al gremio")),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "UOCRA",
+                    "group" => "Personal"   
+                ],
+                "empleado_aoec_rosario" => [
+                    "fields" => [
+                        "em_id" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Empresa")),
+                            [
+                                'table' => 'empresas',
+                                'field' => 'id',
+                                'format' => '{razon}'
+                            ]
+                        ),
+                        "pr_id" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Empleado")),
+                            [
+                                'table' => 'empleado',
+                                'field' => 'id',
+                                'extra_relation' => 'em_id:em_id',
+                                'format' => '{cuil} - {nombre} {apellido}'
+                            ]
+                        ),
+                        "id_aec_rosario_cat" => $s->canBeNull($s->foreignKey(
+                            $s->displayName($f['bigint'], "Convenio"),
+                            [
+                                'table' => 'aec_rosario_categoria',
+                                'field' => 'id',
+                                'format' => '{nombre}'
+                            ]
+                        )),
+                        "id_aec_rosario_puesto" => $s->canBeNull($s->foreignKey(
+                            $s->displayName($f['bigint'], "Puesto"),
+                            [
+                                'table' => 'aec_rosario_puesto',
+                                'field' => 'id',
+                                'format' => '{nombre}'
+                            ]
+                        )),
+                        "id_aec_rosario_licencia" => $s->canBeNull($s->foreignKey(
+                            $s->displayName($f['bigint'], "Licencia"),
+                            [
+                                'table' => 'aec_rosario_licencia',
+                                'field' => 'id',
+                                'format' => '{nombre}'
+                            ]
+                        )),
+                        "aec_rosario_afiliado" => $s->canBeNull($s->displayName($f['boolean'], "Afiliado")),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "AEC Rosario",
+                    "group" => "Personal"   
+                ],
+                "empleado_uom" => [
+                    "fields" => [
+                        "em_id" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Empresa")),
+                            [
+                                'table' => 'empresas',
+                                'field' => 'id',
+                                'format' => '{razon}'
+                            ]
+                        ),
+                        "pr_id" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Empleado")),
+                            [
+                                'table' => 'empleado',
+                                'field' => 'id',
+                                'extra_relation' => 'em_id:em_id',
+                                'format' => '{cuil} - {nombre} {apellido}'
+                            ]
+                        ),
+                        "id_uom_categoria" => $s->canBeNull($s->foreignKey(
+                            $s->displayName($f['bigint'], "Categoria"),
+                            [
+                                'table' => 'uom_categoria',
+                                'field' => 'id',
+                                'format' => '{nombre}'
+                            ]
+                        )),
+                        "id_uom_revista" => $s->canBeNull($s->foreignKey(
+                            $s->displayName($f['bigint'], "Situación de revista"),
+                            [
+                                'table' => 'uom_revista',
+                                'field' => 'id',
+                                'format' => '{nombre}'
+                            ]
+                        )),
+                        "uom_afiliado" => $s->canBeNull($s->displayName($f['boolean'], "Afiliado")),
+                        "uom_sindicato" => $s->canBeNull($s->displayName($f['boolean'], "Sindicato")),
+                        "uom_incapacitado" => $s->canBeNull($s->displayName($f['boolean'], "Incapacitado")),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "UOM",
+                    "group" => "Personal"   
+                ],
+                "empleado_sec_stgo" => [
+                    "fields" => [
+                        "em_id" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Empresa")),
+                            [
+                                'table' => 'empresas',
+                                'field' => 'id',
+                                'format' => '{razon}'
+                            ]
+                        ),
+                        "pr_id" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Empleado")),
+                            [
+                                'table' => 'empleado',
+                                'field' => 'id',
+                                'extra_relation' => 'em_id:em_id',
+                                'format' => '{cuil} - {nombre} {apellido}'
+                            ]
+                        ),
+                        "id_sec_santiago_cat" => $s->canBeNull($s->foreignKey(
+                            $s->displayName($f['bigint'], "Categoria"),
+                            [
+                                'table' => 'sec_santiago_categoria',
+                                'field' => 'id',
+                                'format' => '{nombre}'
+                            ]
+                        )),
+                        "sec_santiago_afiliado" => $s->canBeNull($s->displayName($f['boolean'], "Afiliado")),
+                        "sec_santiago_jubilado" => $s->canBeNull($s->displayName($f['boolean'], "Jubilado")),
+                        "sec_santiago_cargas" => $s->canBeNull($s->displayName($f['boolean'], "Cargas de familia")),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "SEC Santiago del Estero",
+                    "group" => "Personal"   
+                ],
+                "empleado_faecys" => [
+                    "fields" => [
+                        "em_id" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Empresa")),
+                            [
+                                'table' => 'empresas',
+                                'field' => 'id',
+                                'format' => '{razon}'
+                            ]
+                        ),
+                        "pr_id" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Empleado")),
+                            [
+                                'table' => 'empleado',
+                                'field' => 'id',
+                                'extra_relation' => 'em_id:em_id',
+                                'format' => '{cuil} - {nombre} {apellido}'
+                            ]
+                        ),
+                        "id_faecys_cat" => $s->canBeNull($s->foreignKey(
+                            $s->displayName($f['bigint'], "Categoria"),
+                            [
+                                'table' => 'faecys_categoria',
+                                'field' => 'id',
+                                'format' => '{nombre}'
+                            ]
+                        )),
+                        "faecys_afiliado" => $s->canBeNull($s->displayName($f['boolean'], "Afiliado")),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "FAECYS",
+                    "group" => "Personal"   
+                ],
             ];
         }
     }

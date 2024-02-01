@@ -15,6 +15,198 @@ class DBDefaultValues {
                     "mb_vac_sac" => 1
                 ]
             ],
+            //Sindicatos START
+            "uocra_categoria" => [
+                ["nombre" => "No informado"],
+                ["nombre" => "Oficial especializado"],
+                ["nombre" => "Oficial"],
+                ["nombre" => "Medio oficial"],
+                ["nombre" => "Ayudante"],
+                ["nombre" => "Sereno"],
+            ],
+            "uocra_convenio" => [
+                ["nombre" => "Arte estrafalario y religioso"],
+                ["nombre" => "Aserraderos de Marmol"],
+                ["nombre" => "Calefaccionistas"],
+                ["nombre" => "Caleros"],
+                ["nombre" => "Caños de Hormigón"],
+                ["nombre" => "Electricistas de obras y afines"],
+                ["nombre" => "Obreros de la construcción"],
+                ["nombre" => "Areas petroleras y gasíferas"]
+            ],
+            "aec_rosario_categoria" => [
+                ["nombre" => "A"],
+                ["nombre" => "A 16A"],
+                ["nombre" => "B"],
+                ["nombre" => "B 16A"],
+                ["nombre" => "C"],
+                ["nombre" => "C 16A"],
+                ["nombre" => "A"],
+                ["nombre" => "D"],
+                ["nombre" => "E"],
+                ["nombre" => "F"]
+            ],
+            "aec_rosario_puesto" => [
+                ["nombre" => "Administrativo"],
+                ["nombre" => "Vendedor"],
+                ["nombre" => "Cajero"],
+                ["nombre" => "Aux. Especializado"],
+                ["nombre" => "Auxiliar"],
+                ["nombre" => "Maestranza"],
+                ["nombre" => "Jornada 6 horas"]
+            ],
+            "aec_rosario_licencia" => [
+                ["nombre" => "Sin licencia"],
+                ["nombre" => "Reserva de puesto"],
+                ["nombre" => "Licencia sin goze de sueldo"],
+                ["nombre" => "Licencia por maternidad"],
+                ["nombre" => "Suspensión"],
+                ["nombre" => "Estado de excedencia"],
+                ["nombre" => "Enfermedad familiar"]
+            ],
+            "uom_categoria" => [
+                ["nombre" => "Operario"],
+                ["nombre" => "Operario calificado"],
+                ["nombre" => "Operario especializado"],
+                ["nombre" => "Operario especialiado multiple"],
+                ["nombre" => "Ayudante"],
+                ["nombre" => "Medio oficial"],
+                ["nombre" => "Oficial"],
+                ["nombre" => "Oficial multiple"],
+                ["nombre" => "Técnico de 1a."],
+                ["nombre" => "Técnico de 2a."],
+                ["nombre" => "Técnico de 3a."],
+                ["nombre" => "Técnico de 4a."],
+                ["nombre" => "Técnico de 5a."],
+                ["nombre" => "Técnico de 6a."]
+            ],
+            "uom_revista" => [
+                ["nombre" => "Recibe haberes regularmente"],
+                ["nombre" => "Maternidad"],
+                ["nombre" => "Reserva por enfermedad"],
+                ["nombre" => "Reserva por accidente"],
+                ["nombre" => "Desempleo"],
+                ["nombre" => "Excedencia"],
+                ["nombre" => "Licencia extraordinaria"],
+                ["nombre" => "Receso contrato temporada"],
+                ["nombre" => "Licencia gremial"],
+                ["nombre" => "Otras suspensiones màs de tres meses"],
+                ["nombre" => "No se conoce situaciòn de revista"],
+                ["nombre" => "Contrato"],
+                ["nombre" => "Normal"]
+            ],
+            "sec_santiago_categoria" => [
+                ["nombre" => "ADMINISTRATIVO A"],
+                ["nombre" => "ADMINISTRATIVO B"],
+                ["nombre" => "ADMINISTRATIVO C"],
+                ["nombre" => "ADMINISTRATIVO D"],
+                ["nombre" => "ADMINISTRATIVO E"],
+                ["nombre" => "ADMINISTRATIVO F"],
+                ["nombre" => "AUXILIAR ESPECIALIAZDO A"],
+                ["nombre" => "AUXILIAR ESPECIALIAZDO B"],
+                ["nombre" => "CAJERO A"],
+                ["nombre" => "CAJERO B"],
+                ["nombre" => "CAJERO C"],
+                ["nombre" => "MAESTRANZA A"],
+                ["nombre" => "MAESTRANZA B"],
+                ["nombre" => "MAESTRANZA C"],
+                ["nombre" => "PERSONAL AUXILIAR A"],
+                ["nombre" => "PERSONAL AUXILIAR B"],
+                ["nombre" => "PERSONAL AUXILIAR C"],
+                ["nombre" => "VENDEDOR A"],
+                ["nombre" => "VENDEDOR B"],
+                ["nombre" => "VENDEDOR C"],
+                ["nombre" => "VENDEDOR D"],
+            ],
+            "faecys_categoria" => [
+                ["nombre" => "Maestranza A"],
+                ["nombre" => "Maestranza B"],
+                ["nombre" => "Maestranza C"],
+                ["nombre" => "Administrativo A"],
+                ["nombre" => "Administrativo B"],
+                ["nombre" => "Administrativo C"],
+                ["nombre" => "Administrativo D"],
+                ["nombre" => "Administrativo E"],
+                ["nombre" => "Administrativo F"],
+                ["nombre" => "Cajeros A"],
+                ["nombre" => "Cajeros B"],
+                ["nombre" => "Cajeros C"],
+                ["nombre" => "Personal Auxiliar A"],
+                ["nombre" => "Personal Auxiliar B"],
+                ["nombre" => "Personal Auxiliar C"]
+            ],
+            "spep_sgto_estero_cargo" => [
+                [
+                    "codigo" => 112396,
+                    "nombre" => "Cat. Ordenanza"
+                ],
+                [
+                    "codigo" => 60013,
+                    "nombre" => "Rector de instituto superior"
+                ],
+                [
+                    "codigo" => 60045,
+                    "nombre" => "Secretario de instituto superior"
+                ],
+                [
+                    "codigo" => 60084,
+                    "nombre" => "Director de instituto superior"
+                ],
+                [
+                    "codigo" => 60105,
+                    "nombre" => "Bedel"
+                ],
+                [
+                    "codigo" => 60113,
+                    "nombre" => "Bibliotecario de instituto superior"
+                ],
+                [
+                    "codigo" => 60127,
+                    "nombre" => "Ayudante de trabajos pràcticos"
+                ],
+                [
+                    "codigo" => 60132,
+                    "nombre" => "Hora cátedra nivel superior"
+                ],
+                [
+                    "codigo" => 60492,
+                    "nombre" => "Profesor de trabajs prácticos"
+                ],
+                [
+                    "codigo" => 60610,
+                    "nombre" => "Instructor J.C."
+                ],
+                [
+                    "codigo" => 60735,
+                    "nombre" => "Jefe de trabajos prácticos"
+                ]
+            ],
+            "spep_sgto_estero_sit" => [
+                ["nombre" => "SUBVENCIONADO"],
+                ["nombre" => "PRIVADO"]
+            ],
+            "spep_sgto_estero_rev" => [
+                ["nombre" => "No aplica"],
+                ["nombre" => "Titular"],
+                ["nombre" => "Provisorio"],
+                ["nombre" => "Suplente"],
+            ],
+            "spep_sgto_estero_lvl" => [
+                ["nombre" => "Inicial"],
+                ["nombre" => "Primaria"],
+                ["nombre" => "Medio"],
+                ["nombre" => "Superior no universitario"],
+                ["nombre" => "Especial"],
+                ["nombre" => "Adultos"]
+            ],
+            "spep_sgto_estero_obra" => [
+                ["nombre" => "OPLAD"],
+                ["nombre" => "OSDOP"],
+                ["nombre" => "Otra provincial obligatoria"],
+                ["nombre" => "Otras"]
+            ],
+            "spep_sgto_estero_cat" => array_map(function($val) { return ["categoria" => $val]; }, range(1, 30)),
+            //Sindicatos END
             "periodo_pago" => [
                 [
                     "periodo" => "Diario",
