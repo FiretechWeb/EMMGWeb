@@ -82,7 +82,7 @@ export class AxiosQueueClass
         return await this.#request({method: 'post', url, data: axiosData, config: axiosConfig, retriesLeft: retryTimes} as RequestDataType);
     }
 
-    async get<T = any, R = AxiosResponse<T>, D = any>(url: string, axiosConfig?: AxiosRequestConfig<D>, retryTimes: number = 0) {
+    async get<T = any, R = AxiosResponse<T>, D = any>(url: string, axiosConfig?: AxiosRequestConfig<D>, retryTimes: number = 0): Promise<R> {
         return await this.#request({method: 'get', url, config: axiosConfig, retriesLeft: retryTimes} as RequestDataType);
     }
 }
