@@ -1,5 +1,5 @@
 import { GlobalVars } from "../cfg/config";
-import axios from "axios";
+import { axiosQueue } from "./axios_queue";
 import { splitFirstOccurrence } from "./stringExt";
 import { groupStringToObject, mergeObjects } from "./util";
 import type { DBFieldType, DBForeignKey } from "./db_types";
@@ -81,7 +81,7 @@ export class DBActions {
 
     static async createMainDB() {
         try {
-            let res = await axios.post(`${GlobalVars.backend_path!}/create_db.php`, { },
+            let res = await axiosQueue.post(`${GlobalVars.backend_path!}/create_db.php`, { },
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -117,7 +117,7 @@ export class DBActions {
     }
     static async getStructure() {
         try {
-            let res = await axios.post(`${GlobalVars.backend_path!}/api/get_structure.php`, { },
+            let res = await axiosQueue.post(`${GlobalVars.backend_path!}/api/get_structure.php`, { },
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -155,7 +155,7 @@ export class DBActions {
     static async process(table: string, action: string, params: Object) {
         console.log(`DBAction.process: ${table} - ${action}`, params);
         try {
-            let res = await axios.post(`${GlobalVars.backend_path!}/api/action.php`, {
+            let res = await axiosQueue.post(`${GlobalVars.backend_path!}/api/action.php`, {
                 table,
                 action,
                 params

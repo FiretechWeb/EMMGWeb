@@ -1,4 +1,5 @@
 import axios from "axios";
+import { AxiosResponse, AxiosRequestConfig } from "axios";
 
 interface RequestDataType {
     method: string;
@@ -36,7 +37,7 @@ export class AxiosQueueClass
         this.#config = {...newConfig};
     }
 
-    #request(reqData: RequestDataType) {
+    #request<T = any, R = AxiosResponse<T>, D = any>(reqData: RequestDataType): Promise<R> {
         return new Promise( async (resolve, reject) => {
             let failed: boolean = false;
             let resData: any;
@@ -77,12 +78,12 @@ export class AxiosQueueClass
         });
     }
 
-    post(url: string, axiosData: any = {}, axiosConfig: any = {}, retryTimes: number = 0) {
-        return this.#request({method: 'post', url, data: axiosData, config: axiosConfig, retriesLeft: retryTimes} as RequestDataType);
+    async post<T = any, R = AxiosResponse<T>, D = any>(url: string, axiosData?: D, axiosConfig?: AxiosRequestConfig<D>, retryTimes: number = 0): Promise<R> {
+        return await this.#request({method: 'post', url, data: axiosData, config: axiosConfig, retriesLeft: retryTimes} as RequestDataType);
     }
 
-    get(url: string, axiosConfig: any = {}, retryTimes: number = 0) {
-        return this.#request({method: 'get', url, config: axiosConfig, retriesLeft: retryTimes} as RequestDataType);
+    async get<T = any, R = AxiosResponse<T>, D = any>(url: string, axiosConfig?: AxiosRequestConfig<D>, retryTimes: number = 0) {
+        return await this.#request({method: 'get', url, config: axiosConfig, retriesLeft: retryTimes} as RequestDataType);
     }
 }
 
