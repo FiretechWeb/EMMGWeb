@@ -60,7 +60,7 @@ export default function FieldComponent(props: FieldComponentProps) {
                         }
                     }));
                 } else {
-                    setErrorState(`Invalid response type or data: ${props.name} - Foreign: ${fieldData.foreign_key!.table}`)
+                    setErrorState(`Invalid response type or data: ${props.name} - Foreign: ${fieldData.foreign_key!.table} - data: : ${r}`)
                     setFieldForeignOptions([]);
                 }
             }).catch(e => {

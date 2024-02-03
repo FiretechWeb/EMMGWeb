@@ -350,21 +350,26 @@
             $conditionColumns = [];
             $preparedStatements = [];
             $relatedColumns = [];
+            $joinedTables = [];
             $i = 0;
             if (isset($params['related_data']) && $params['related_data']) {
                 foreach($fields as $fieldName => $fieldParams) {
                     if ($fieldParams['foreign_key'] !== null) {
                         $foreingKeyData = $fieldParams['foreign_key'];
-                        $joinSQL = "JOIN {$foreingKeyData['table']} ON {$foreingKeyData['table']}.{$foreingKeyData['field']} = {$table}.{$fieldName}";
-                        if (isset($foreingKeyData['extra_relation'])) {
-                            foreach(array_map(function($s) {
-                                    return explode(":", $s);
-                                }, explode(",", $foreingKeyData['extra_relation']))
-                                as $foreignData) {
-                                    $joinSQL.= " AND {$foreingKeyData['table']}.{$foreignData[0]} = {$table}.{$foreignData[1]} ";
-                            };
+                        $foreignTable = $foreingKeyData['table'];
+                        if (!in_array($foreignTable, $joinedTables)) {
+                            $joinSQL = "JOIN {$foreignTable} ON {$foreignTable}.{$foreingKeyData['field']} = {$table}.{$fieldName}";
+                            if (isset($foreingKeyData['extra_relation'])) {
+                                foreach(array_map(function($s) {
+                                        return explode(":", $s);
+                                    }, explode(",", $foreingKeyData['extra_relation']))
+                                    as $foreignData) {
+                                        $joinSQL.= " AND {$foreignTable}.{$foreignData[0]} = {$table}.{$foreignData[1]} ";
+                                };
+                            }
+                            $relatedColumns[] = $joinSQL;
+                            $joinedTables[] = $foreignTable;
                         }
-                        $relatedColumns[] = $joinSQL;
                     }
                 }
             }

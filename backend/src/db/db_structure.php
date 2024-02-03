@@ -160,6 +160,16 @@
                     "group" => "Configuración>Datos",
                     "store_clientside" => true
                 ],
+                "parentesco" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "tipo" => $s->unique($s->displayName($f['varchar_64'], "Tipo de parentesco")),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Parentesco",
+                    "group" => "Configuración>Datos",
+                    "store_clientside" => true
+                ],
                 "genero" => [
                     "fields" => [
                         "id" => $f['id'],
@@ -241,6 +251,16 @@
                     ],
                     "store_clientside" => true
                 ],
+                "deduc_ganancias_hijo" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "porcentaje" => $s->displayName($f['decimal'], "Tipo")
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Deducción hijo",
+                    "group" => "Configuración>Ganancias",
+                    "store_clientside" => true
+                ],
                 "tipo_tope" => [
                     "fields" => [
                         "id" => $f['id'],
@@ -309,6 +329,77 @@
                     "actions" => $a['default'],
                     "display_name" => "Deducciones Generales",
                     "group" => "Configuración>Ganancias",
+                    "store_clientside" => true
+                ],
+                "concepto_liquidaciones" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "nombre" => $s->unique($s->displayName($f['varchar_128'], "Nombre de inclusión")),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Liquidaciones",
+                    "group" => "Configuración>Conceptos",
+                    "store_clientside" => true
+                ],
+                "concepto_cat_ganancias" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "nombre" => $s->unique($s->displayName($f['varchar_128'], "Nombre de categoria")),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Categoría Ganancias",
+                    "group" => "Configuración>Conceptos",
+                    "store_clientside" => true
+                ],
+                "concepto_unidad_lsueldo" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "nombre" => $s->unique($s->displayName($f['varchar_32'], "Unidad en libro sueldo digital")),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Unidad libro sueldo",
+                    "group" => "Configuración>Conceptos",
+                    "store_clientside" => true
+                ],
+                "concepto_tipo" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "nombre" => $s->unique($s->displayName($f['varchar_64'], "Tipo")),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Tipos de conceptos",
+                    "group" => "Configuración>Conceptos",
+                    "store_clientside" => true
+                ],
+                "concepto_cat_aplicar" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "nombre" => $s->unique($s->displayName($f['varchar_128'], "Categoría")),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Categorías a aplicar",
+                    "group" => "Configuración>Conceptos",
+                    "store_clientside" => true
+                ],
+                "concepto_codigo_spep" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "codigo" => $s->unique($s->displayName($f['bigint'], "Código")),
+                        "nombre" => $s->unique($s->displayName($f['varchar_128'], "Descripción"))
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "SPEP Sgo del Estero",
+                    "group" => "Configuración>Conceptos",
+                    "store_clientside" => true
+                ],
+                "concepto_tipo_afip" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "nombre" => $s->unique($s->displayName($f['varchar_128'], "Descripción"))
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Tipo de conceptos AFIP",
+                    "group" => "Configuración>Conceptos",
                     "store_clientside" => true
                 ],
                 "uocra_categoria" => [
@@ -792,8 +883,7 @@
                         "ant_ad_dias" => $s->canBeNull($s->displayName($f['int'], "Dias")),
                         "cont_aporte_adicional" => $s->canBeNull($s->displayName($f['decimal'], "Aporte Adicional SS %")),
                         "cont_diferencial" => $s->canBeNull($s->displayName($f['decimal'], "Contribución Diferencial SS %")),
-                        "cont_num_patronal" => $s->canBeNull($s->displayName($f['decimal'], "Número de tabla para contribuciones")),
-                        "cont_patronal_aporta" => $s->canBeNull($s->displayName($f['boolean'], "Aporta")),
+                        "cont_num_patronal" => $s->canBeNull($s->displayName($f['int'], "Número de tabla para contribuciones")),
                         "gan_enable_renum_acom" => $s->canBeNull($s->displayName($f['boolean'], "Forzar la remuneración acumulada")),
                         "gan_value_renum_acom" => $s->canBeNull($s->enabledBy($s->displayName($f['decimal'], "Valor de remuneración acumulada forzada"), "gan_enable_renum_acom")),
                         "gan_calc_12vo_sac" => $s->canBeNull($s->displayName($f['boolean'], "Calcular 12vo. SAC")),
@@ -1327,6 +1417,159 @@
                     "actions" => $a['default'],
                     "display_name" => "SPEP Cargos",
                     "group" => "Personal>Sindicatos / Organismos"   
+                ],
+                "empleado_patronales" => [
+                    "fields" => [
+                        "em_id" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Empresa")),
+                            [
+                                'table' => 'empresas',
+                                'field' => 'id',
+                                'format' => '{razon}'
+                            ]
+                        ),
+                        "pr_id" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Empleado")),
+                            [
+                                'table' => 'empleado',
+                                'field' => 'id',
+                                'extra_relation' => 'em_id:em_id',
+                                'format' => '{cuil} - {nombre} {apellido}'
+                            ]
+                        ),
+                        "pat_id" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Patronales")),
+                            [
+                                'table' => 'patronales',
+                                'field' => 'id',
+                                'extra_relation' => 'em_id:em_id',
+                                'format' => '{descripcion}'
+                            ]
+                        )
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Aportes patronales",
+                    "group" => "Personal>Contribuciones"   
+                ],
+                "empleado_costos_asoc" => [
+                    "fields" => [
+                        "em_id" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Empresa")),
+                            [
+                                'table' => 'empresas',
+                                'field' => 'id',
+                                'format' => '{razon}'
+                            ]
+                        ),
+                        "pr_id" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Empleado")),
+                            [
+                                'table' => 'empleado',
+                                'field' => 'id',
+                                'extra_relation' => 'em_id:em_id',
+                                'format' => '{cuil} - {nombre} {apellido}'
+                            ]
+                        ),
+                        "centro_costo_id" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Patronales")),
+                            [
+                                'table' => 'centro_costos',
+                                'field' => 'id',
+                                'extra_relation' => 'em_id:em_id',
+                                'format' => '{nombre}'
+                            ]
+                        ),
+                        "porcentaje" => $s->displayName($f['decimal'], "Porcentaje")
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Centros de costos asociados",
+                    "group" => "Personal>Contribuciones"   
+                ],
+                "empleado_embargos" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "em_id" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Empresa")),
+                            [
+                                'table' => 'empresas',
+                                'field' => 'id',
+                                'format' => '{razon}'
+                            ]
+                        ),
+                        "pr_id" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Empleado")),
+                            [
+                                'table' => 'empleado',
+                                'field' => 'id',
+                                'extra_relation' => 'em_id:em_id',
+                                'format' => '{cuil} - {nombre} {apellido}'
+                            ]
+                        ),
+                        "descripcion" => $s->displayName($f['varchar_128'], "Descripción del embargo"),
+                        "monto" => $s->displayName($f['decimal'], "Monto"),
+                        "monto_abonar" => $s->displayName($f['decimal'], "Monto a abonar"),
+                        "cbu_judicial" => $s->displayName($f['varchar_64'], "CBU Dep. Judiciar"),
+                        "caratula_exp" => $s->displayName($f['varchar_64'], "Carátula Exp."),
+                        "nro_doc_bef" => $s->displayName($f['bigint'], "Nro. Doc. Beneficiario"),
+                        "orden_exp" => $s->displayName($f['int'], "Orden en Exportación"),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Embargos",
+                    "group" => "Personal"   
+                ],
+                "empleado_familiares" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "em_id" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Empresa")),
+                            [
+                                'table' => 'empresas',
+                                'field' => 'id',
+                                'format' => '{razon}'
+                            ]
+                        ),
+                        "pr_id" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Empleado")),
+                            [
+                                'table' => 'empleado',
+                                'field' => 'id',
+                                'extra_relation' => 'em_id:em_id',
+                                'format' => '{cuil} - {nombre} {apellido}'
+                            ]
+                        ),
+                        "nombre" => $s->displayName($f['varchar_128'], "Nombre del familiar"),
+                        "vinculo_comienzo" => $s->canBeNull($s->displayName($f['date'], "Comienzo del vínculo")),
+                        "vinculo_fin" => $s->canBeNull($s->displayName($f['date'], "Finalización del vínculo")),
+                        "id_tipo_documento" => $s->displayName(
+                            $s->foreignKey($f['bigint'], 
+                            [
+                                'table' => 'tipo_documento',
+                                'field' => 'id',
+                                'format' => '{nombre}'
+                            ]), "Tipo de Documento"),
+                        "nro_doc" => $s->unique($s->displayName($f['bigint'], "Número de documento")),
+                        "id_parentesco" => $s->displayName(
+                            $s->foreignKey($f['bigint'],
+                            [
+                                'table' => 'parentesco',
+                                'field' => 'id',
+                                'format' => '{tipo}'
+                            ]), "Parentesco"),
+                        "imp_libro_ley" => $s->displayName($f['boolean'], "Imprime en libro ley"),
+                        "escolarizado" => $s->displayName($f['boolean'], "Escolarizado/a"),
+                        "discapacitado" => $s->displayName($f['boolean'], "Discapacitado/a"),
+                        "deduce_ganancias" => $s->displayName($f['boolean'], "Deduce ganancias"),
+                        "id_dec_ganancias_hijo" => $s->enabledBy($s->displayName(
+                            $s->foreignKey($f['bigint'],
+                            [
+                                'table' => 'deduc_ganancias_hijo',
+                                'field' => 'id',
+                                'format' => '{porcentaje}'
+                            ]), "% Deducción Ganancias Hijo"), "deduce_ganancias"),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Familiares",
+                    "group" => "Personal"   
                 ],
             ];
         }

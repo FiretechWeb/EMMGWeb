@@ -64,7 +64,7 @@ export default function TableModifyComponent(props: TableModifyComponentProps) {
                     requestForceListUpdate();
                     setSuccessState("Data modified correctly.");
                 } else {
-                    setErrorState("Invalid response type.");
+                    setErrorState(`Invalid response type. ${JSON.stringify(r)}`);
                 }
             }).catch(e => setErrorState(e));
         } else {

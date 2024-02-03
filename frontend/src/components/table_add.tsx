@@ -50,7 +50,7 @@ export default function TableAddComponent(props: TableAddComponentProps) {
                     setSuccessState("Data added correctly.");
                     setActionState(UIActionStates.NONE);
                 } else {
-                    setErrorState("Invalid response type.");
+                    setErrorState(`Invalid response type. ${r}`);
                 }
                 
             }).catch(e => setErrorState(e));

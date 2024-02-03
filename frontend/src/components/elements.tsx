@@ -54,7 +54,7 @@ export function DBElementsList(props: DBElementsListProps) {
                     }
                 ));
             } else {
-                setErrorState(`Invalid response type or data at DBElementsList`);
+                setErrorState(`Invalid response type or data at DBElementsList: ${JSON.stringify(r, null, 2)}`);
                 setElements([]);
             }
         }).catch(e => setErrorState(e));

@@ -54,14 +54,14 @@ export default function TableDeleteComponent(props: TableDeleteComponentProps) {
                 'keys': keysValues
         }).then(r => {
             if (!r.res) {
-                setErrorState("Invalid response type.");
+                setErrorState(`Invalid response type. ${r}`);
             } else if (r.msg && r.res == 'error') {
                 setErrorState(r.msg)
             } else if (r.res == 'ok') {
                 requestForceListUpdate();
                 setSuccessState("Data removed correctly.");
             } else {
-                setErrorState("Invalid response type.");
+                setErrorState(`Invalid response type. ${r}`);
             }
         }).catch(e => setErrorState(e));
 

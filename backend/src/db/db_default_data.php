@@ -207,6 +207,21 @@ class DBDefaultValues {
             ],
             "spep_sgto_estero_cat" => array_map(function($val) { return ["categoria" => $val]; }, range(1, 30)),
             //Sindicatos END
+            //CONCEPTOS START
+            "concepto_liquidaciones" => [
+                ["nombre" => "Todas las liquidaciones"],
+                ["nombre" => "1º Quincena"],
+                ["nombre" => "2º Quincena / Mes"],
+                ["nombre" => "Por única vez"]
+            ],
+            "concepto_cat_ganancias" => [
+                ["nombre" => "Remuneración habitual"],
+                ["nombre" => "Remuneración NO habitual"],
+                ["nombre" => "Descuento deducible"],
+                ["nombre" => "Indemnización o asignación"],
+                ["nombre" => "No aplica"]
+            ],
+            //CONCEPTOS END
             "periodo_pago" => [
                 [
                     "periodo" => "Diario",
@@ -504,6 +519,19 @@ class DBDefaultValues {
                 ["estado" => "Viudo/a"],
                 ["estado" => "Separado/a"],
                 ["estado" => "Concubino/a"]
+            ],
+            "parentesco" => [
+                ["tipo" => "Conyuge"],
+                ["tipo" => "Hijo/a"],
+                ["tipo" => "Esposa"],
+                ["tipo" => "Adherente"],
+                ["tipo" => "Adherente Voluntario"],
+                ["tipo" => "Concubino/a"],
+                ["tipo" => "Otro"]
+            ],
+            "deduc_ganancias_hijo" => [
+                ["porcentaje" => 0.5],
+                ["porcentaje" => 1.0]
             ],
             "actividad_empresa" => [
                 [
