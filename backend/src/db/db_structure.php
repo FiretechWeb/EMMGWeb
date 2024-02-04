@@ -999,7 +999,7 @@
 
                         "Antigüedad reconocida adicional" => ["ant_ad_anios", "ant_ad_meses", "ant_ad_dias"],
 
-                        "Contribuciones" => ["cont_aporte_adicional", "cont_diferencial", "cont_num_patronal", "cont_patronal_aporta"],
+                        "Contribuciones" => ["cont_aporte_adicional", "cont_diferencial", "cont_num_patronal"],
 
                         "Ganancias" => ["gan_enable_renum_acom", "gan_value_renum_acom", "gan_calc_12vo_sac"],
 

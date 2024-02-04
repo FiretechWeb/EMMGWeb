@@ -8,7 +8,7 @@
     include_once 'db/db_default_data.php';
     include_once 'db/db_api.php';
     
-    set_time_limit(45);
+    set_time_limit(60);
     
     if ($_SERVER["REQUEST_METHOD"] == "POST") {    
         try {
