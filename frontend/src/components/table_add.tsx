@@ -80,7 +80,17 @@ export default function TableAddComponent(props: TableAddComponentProps) {
                     fieldGroupsData[fieldGroupName] = {};
                 }
                 const fieldNames: Array<string> = fieldGroups[fieldGroupName];
-                fieldNames.forEach(fieldName => fieldGroupsData[fieldGroupName][fieldName] = tmpFieldData[fieldName]);
+                const invalidFieldNames: Array<string> = [];
+                fieldNames.forEach(fieldName => {
+                    if (tmpFieldData[fieldName]) {
+                        fieldGroupsData[fieldGroupName][fieldName] = tmpFieldData[fieldName];
+                    } else {
+                        invalidFieldNames.push(fieldName);
+                    }
+                } );
+                if (invalidFieldNames.length > 0) {
+                    setErrorState(`Invalid field names ${invalidFieldNames.join(',')}`);
+                }
             });
             setFieldsGroups(fieldGroupsData);
         }
