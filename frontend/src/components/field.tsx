@@ -20,11 +20,10 @@ export default function FieldComponent(props: FieldComponentProps) {
     const initialized: MutableRefObject<boolean> = useRef(false);
     const foreignListInit: MutableRefObject<boolean> = useRef(false);
 
-
     const [fieldData, setFieldData] = useState<DBFieldType | null>(null);
     const [fieldSelected, setFieldSelected] = useState<any>(null);
     const [fieldForeignOptions, setFieldForeignOptions] = useState<Array<any>>([]);
-    const [fieldValue, setFieldValue] = useState<any>(null);
+    const [fieldValue, setFieldValue] = useState<any>(props.value ?? null);
     const tableFieldsData = useCurrentTableState((state) => state.data);
     const prevTableFieldsData = usePreviousTableState((state) => state.data);
     const actionState = useUIActionState((state) => state.state);
@@ -95,14 +94,23 @@ export default function FieldComponent(props: FieldComponentProps) {
     }, [fieldForeignOptions]);
 
     useEffect(() => {
+        if (fieldValue) {
+            setFieldSelected(fieldForeignOptions.find(fo => fo.code == fieldValue));
+        }
+    }, [fieldForeignOptions]);
+
+    useEffect(() => {
+        if (fieldData && fieldData.sql_type.toLowerCase().includes("tinyint")) {
+            updateFieldValue(!!parseInt(props.value));
+        }
+    }, [fieldData]);
+    useEffect(() => {
         
         if (initialized.current) return;
-
         updateFieldValue(props.value);
         if (props.jsonFieldData) {
             setFieldData(JSON.parse(props.jsonFieldData) as DBFieldType);
         }
-
         initialized.current = true;
     }, [props, fieldData]);
 
@@ -111,7 +119,7 @@ export default function FieldComponent(props: FieldComponentProps) {
         {
             fieldData && fieldData && fieldData.foreign_key && 
             <div className="m-2">
-                <label className="mx-2">{fieldData.display_name ?? props.name}: </label>
+                <label className={fieldData.not_null ? "mx-2 font-bold" : "mx-2"}>{fieldData.display_name ?? props.name}: </label>
                 <Dropdown disabled={isDisabled} filter value={fieldSelected} onChange={(e) => updateFieldSelected(e.value)} options={fieldForeignOptions} placeholder="Seleccionar" optionLabel="name" ></Dropdown>
             </div>
 
@@ -120,7 +128,7 @@ export default function FieldComponent(props: FieldComponentProps) {
             fieldData && fieldData && !fieldData.foreign_key && 
             fieldData.sql_type.toLowerCase().includes("varchar") &&
             <div className="m-2">
-                <label className="mx-2">{fieldData.display_name ?? props.name}: </label>
+                <label className={fieldData.not_null ? "mx-2 font-bold" : "mx-2"}>{fieldData.display_name ?? props.name}: </label>
                 <InputText disabled={isDisabled} name={props.name} autoComplete="off" aria-autocomplete="none" onChange={(e) => updateFieldValue(e.target.value)} value={fieldValue as string} ></InputText>
             </div>
         }
@@ -130,7 +138,7 @@ export default function FieldComponent(props: FieldComponentProps) {
             fieldData.sql_type.toLowerCase().includes("int")) &&
             !fieldData.sql_type.toLowerCase().includes("tinyint") &&
             <div className="m-2">
-                <label className="mx-2">{fieldData.display_name ?? props.name}: </label>
+                <label className={fieldData.not_null ? "mx-2 font-bold" : "mx-2"}>{fieldData.display_name ?? props.name}: </label>
                 <InputNumber disabled={isDisabled} name={props.name} useGrouping={false} aria-autocomplete="none" onChange={(e) => updateFieldValue(e.value)} value={fieldValue as number}></InputNumber>
             </div>
         }
@@ -138,7 +146,7 @@ export default function FieldComponent(props: FieldComponentProps) {
              fieldData && fieldData && !fieldData.foreign_key && 
             fieldData.sql_type.toLowerCase().includes("decimal") &&
             <div className="m-2">
-                <label className="mx-2">{fieldData.display_name ?? props.name}: </label>
+                <label className={fieldData.not_null ? "mx-2 font-bold" : "mx-2"}>{fieldData.display_name ?? props.name}: </label>
                 <InputNumber disabled={isDisabled} name={props.name} aria-autocomplete="none" onChange={(e) => updateFieldValue(e.value)} value={fieldValue as number} minFractionDigits={2} maxFractionDigits={2}></InputNumber>
             </div>
         }
@@ -146,7 +154,7 @@ export default function FieldComponent(props: FieldComponentProps) {
             fieldData && fieldData && !fieldData.foreign_key && 
             fieldData.sql_type.toLowerCase().includes("tinyint") &&
             <div className="m-2">
-                <label className="mx-2">{fieldData.display_name ?? props.name}: </label>
+                <label className={fieldData.not_null ? "mx-2 font-bold" : "mx-2"}>{fieldData.display_name ?? props.name}: </label>
                 <Checkbox disabled={isDisabled} onChange={e => updateFieldValue(!fieldValue)} name={props.name} checked={fieldValue as boolean}></Checkbox>
             </div>
         }
@@ -154,7 +162,7 @@ export default function FieldComponent(props: FieldComponentProps) {
             fieldData && fieldData && !fieldData.foreign_key && 
             fieldData.sql_type.toLowerCase().includes("date") &&
             <div className="m-2">
-                <label className="mx-2">{fieldData.display_name ?? props.name}: </label>
+                <label className={fieldData.not_null ? "mx-2 font-bold" : "mx-2"}>{fieldData.display_name ?? props.name}: </label>
                 <Calendar disabled={isDisabled} name={props.name} onChange={(e) => updateFieldValue(e.value)} value={fieldValue as Date}></Calendar>
             </div>
         }
