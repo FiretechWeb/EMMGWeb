@@ -4,7 +4,7 @@
     
     class DBAPI {
 
-        public static function insertDefaultDataFromStructure($conn, $defaultData, $tableStructure) {
+        public static function insertDataFromStructure($conn, $defaultData, $tableStructure) {
             $sqlColumns = [];
             foreach ($tableStructure as $tableName => $data) {
                 if (isset($defaultData[$tableName])) {

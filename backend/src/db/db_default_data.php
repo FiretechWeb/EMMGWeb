@@ -221,6 +221,159 @@ class DBDefaultValues {
                 ["nombre" => "Indemnización o asignación"],
                 ["nombre" => "No aplica"]
             ],
+            "concepto_unidad_lsueldo" => [
+                ["nombre" => "$"],
+                ["nombre" => "%"],
+                ["nombre" => "A"],
+                ["nombre" => "Q"],
+                ["nombre" => "M"],
+                ["nombre" => "D"],
+                ["nombre" => "H"]
+            ],
+            "concepto_tipo_empleador" => [
+                ["nombre" => "Remunerativo"],
+                ["nombre" => "Descuento"],
+                ["nombre" => "Asignación / Créditos"],
+                ["nombre" => "Para cálculos"],
+                ["nombre" => "No remunerativos"]
+            ],
+            "concepto_tipo_afip" => [
+                ["nombre" => "Remunerativo"],
+                ["nombre" => "No remunerativos"],
+                ["nombre" => "Descuentos"]
+            ],
+            "concepto_cat_aplicar" => [
+                ["nombre" => "Sueldo (Dec. en Línea y LSD)"],
+                ["nombre" => "SAC (Dec. en línea y LSD)"],
+                ["nombre" => "Cant. horas exactas (Dec. en línea y LSD)"],
+                ["nombre" => "Zona desfavorable (Dec. en linea)"],
+                ["nombre" => "Vacaciones (Dec. en linea)"],
+                ["nombre" => "Decreto Nro. 1273/02 (Dec. en linea y LSD)"],
+                ["nombre" => "Cant. Días trabajados (Dec. en linea y LSD)"],
+                ["nombre" => "Adicionales (Dec. en linea)"],
+                ["nombre" => "Premios (Dec. en linea)"],
+                ["nombre" => "Decreto 788/05 (Dec. en linea)"],
+                ["nombre" => "Cantidad horas trabajadas (Dec. en linea y LSD)"],
+                ["nombre" => "No informar (Dec. en linea)"],
+                ["nombre" => "Aporte Adic. OS (Dec. en linea)"],
+                ["nombre" => "Importe R4 y R8 para tiempor parcial (Dec. en linea y LSD)"],
+                ["nombre" => "Detracción manual Rem. 10 (Dec. en linea y LSD)"],
+                ["nombre" => "Días para tope SAC proporcional (LSD)"],
+                ["nombre" => "Días para tope adelanto vacacional (LSD)"],
+                ["nombre" => "Cantidad para concepto AFIP 130000 Horas Extras (LSD)"],
+                ["nombre" => "Ajuste decreto 561/2019 (Dec. en linea y LSD)"],
+                ["nombre" => "Informar solo en Rem. 9 (Dec. en linea y LSD)"],
+                ["nombre" => "Contribución adicional (LSD)"],
+                ["nombre" => "Cantidad para concepto AFIP 130001 Horas Extras 50% (LSD)"],
+                ["nombre" => "Cantidad para concepto AFIP 130002 Horas Extras 100% (LSD)"],
+                ["nombre" => "Cantidad para concepto AFIP 130003 Horas Extras 200% (LSD)"]
+            ],
+            "concepto_codigo_spep" => [
+                [
+                    "codigo" => 2,
+                    "nombre" => "IMPORTE DE LA ASIG.",
+                ],
+                [
+                    "codigo" => 11,
+                    "nombre" => "INCREMENTO DE EMERG.",
+                ],
+                [
+                    "codigo" => 20,
+                    "nombre" => "ANTIGÜEDAD",
+                ],
+                [
+                    "codigo" => 21,
+                    "nombre" => "TIT. UNIVERSITARIO 1",
+                ],
+                [
+                    "codigo" => 22,
+                    "nombre" => "TIT. UNIVERSITARIO 2",
+                ],
+                [
+                    "codigo" => 23,
+                    "nombre" => "TIT. UNIVERSITARIO 3",
+                ],
+                [
+                    "codigo" => 24,
+                    "nombre" => "TIT. SECUNDARIO 1",
+                ],
+                [
+                    "codigo" => 25,
+                    "nombre" => "TIT. SECUNDARIO 2",
+                ],
+                [
+                    "codigo" => 26,
+                    "nombre" => "CERT. DE ESTUDIOS",
+                ],
+                [
+                    "codigo" => 67,
+                    "nombre" => "PROLONG. DE JORN. 1HS",
+                ],
+                [
+                    "codigo" => 68,
+                    "nombre" => "PROLONG. DE JORN. 2HS",
+                ],
+                [
+                    "codigo" => 69,
+                    "nombre" => "UBICACIÓN ZONA B",
+                ],
+                [
+                    "codigo" => 70,
+                    "nombre" => "UBICACIÓN ZONA C",
+                ],
+                [
+                    "codigo" => 71,
+                    "nombre" => "UBICACIÓN ZONA D",
+                ],
+                [
+                    "codigo" => 72,
+                    "nombre" => "ZONA INHOSPITA DOC.",
+                ],
+                [
+                    "codigo" => 73,
+                    "nombre" => "COMP. TRANSPORTE. ZONA A",
+                ],
+                [
+                    "codigo" => 74,
+                    "nombre" => "COMP. TRANSPORTE. ZONA B",
+                ],
+                [
+                    "codigo" => 75,
+                    "nombre" => "COMP. TRANSPORTE. Z.A HCM",
+                ],
+                [
+                    "codigo" => 76,
+                    "nombre" => "COMP. TRANSPORTE. Z.B HCM",
+                ],
+                [
+                    "codigo" => 77,
+                    "nombre" => "RET. EXT. 1 DIA LABOR",
+                ],
+                [
+                    "codigo" => 78,
+                    "nombre" => "RET. EXT. 1/2 DIA LABOR",
+                ],
+                [
+                    "codigo" => 82,
+                    "nombre" => "EXP. DIDAC. PRODUC.",
+                ],
+                [
+                    "codigo" => 108,
+                    "nombre" => "ASIG. MATRIMONIO",
+                ],
+                [
+                    "codigo" => 109,
+                    "nombre" => "ASIG. NACIMIENTO",
+                ],
+                [
+                    "codigo" => 110,
+                    "nombre" => "ASIG. ADOPCIÓN",
+                ],
+                [
+                    "codigo" => 111,
+                    "nombre" => "ASIG. CONYUGE",
+                ]
+            ],
             //CONCEPTOS END
             "periodo_pago" => [
                 [

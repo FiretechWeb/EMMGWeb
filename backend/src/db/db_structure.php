@@ -361,13 +361,13 @@
                     "group" => "Configuración>Conceptos",
                     "store_clientside" => true
                 ],
-                "concepto_tipo" => [
+                "concepto_tipo_empleador" => [
                     "fields" => [
                         "id" => $f['id'],
                         "nombre" => $s->unique($s->displayName($f['varchar_64'], "Tipo")),
                     ],
                     "actions" => $a['default'],
-                    "display_name" => "Tipos de conceptos",
+                    "display_name" => "Tipos de conceptos empleador",
                     "group" => "Configuración>Conceptos",
                     "store_clientside" => true
                 ],
@@ -395,10 +395,10 @@
                 "concepto_tipo_afip" => [
                     "fields" => [
                         "id" => $f['id'],
-                        "nombre" => $s->unique($s->displayName($f['varchar_128'], "Descripción"))
+                        "nombre" => $s->unique($s->displayName($f['varchar_64'], "Descripción"))
                     ],
                     "actions" => $a['default'],
-                    "display_name" => "Tipo de conceptos AFIP",
+                    "display_name" => "Tipo conceptos AFIP",
                     "group" => "Configuración>Conceptos",
                     "store_clientside" => true
                 ],
@@ -551,6 +551,54 @@
                     "actions" => $a['default'],
                     "display_name" => "Categoría",
                     "group" => "Sindicatos>SPEP Stgo. del Estero",
+                    "store_clientside" => true
+                ],
+                "concepto_afip" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "codigo" => $s->displayName($f['bigint'], "Código AFIP"),
+                        "nombre" => $s->displayName($f['varchar_256'], "Nombre"),
+                        "id_tipo_concepto" => $s->displayName(
+                            $s->foreignKey($f['bigint'], 
+                            [
+                                'table' => 'concepto_tipo_afip',
+                                'field' => 'id',
+                                'format' => '{nombre}'
+                            ]), "Tipo de concepto"),
+                        "sipa_aporta" => $s->displayName($f['boolean'], "Aportes (Rem. 1)"),
+                        "sipa_contribuye" => $s->displayName($f['boolean'], "Contribuciones (Rem. 2)"),
+                        "inssjyp_aporta" => $s->displayName($f['boolean'], "Aportes (Rem. 5)"),
+                        "inssjyp_contribuye" => $s->displayName($f['boolean'], "Contribuciones (Rem. 2)"),
+                        "obra_social_aporta" => $s->displayName($f['boolean'], "Aportes (Rem. 4)"),
+                        "obra_social_contribuye" => $s->displayName($f['boolean'], "Contribuciones (Rem. 8)"),
+                        "fondo_sol_aporta" => $s->displayName($f['boolean'], "Aportes (Rem. 4)"),
+                        "fondo_sol_contribuye" => $s->displayName($f['boolean'], "Contribuciones (Rem. 8)"),
+                        "renatea_aporta" => $s->displayName($f['boolean'], "Aportes (Rem. 1)"),
+                        "renatea_contribuye" => $s->displayName($f['boolean'], "Contribuciones (Rem. 3)"),
+                        "asig_contribuye" => $s->displayName($f['boolean'], "Contribuciones (Rem. 3)"),
+                        "fondo_empleo_contribuye" => $s->displayName($f['boolean'], "Contribuciones (Rem. 3)"),
+                        "ley_riesgos_contribuye" => $s->displayName($f['boolean'], "Contribuciones (Rem. 9)"),
+                        "seguro_vida_contribuye" => $s->displayName($f['boolean'], "Contribuciones"),
+                        "reg_dif_aporta" => $s->displayName($f['boolean'], "Aportes (Rem. 6)"),
+                        "reg_esp_aporta" => $s->displayName($f['boolean'], "Aportes (Rem. 7)")
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "AFIP (Libro sueldo digital)",
+                    "group" => "Conceptos",
+                    "field_groups" => [
+                        "Datos Generales" => ["codigo", "nombre", "id_tipo_concepto"],
+                        "Sistema Previsional Argentino - SIPA" => ["sipa_aporta", "sipa_contribuye"],
+                        "INSSJyP" => ["inssjyp_aporta", "inssjyp_contribuye"],
+                        "Obra Social" => ["obra_social_aporta", "obra_social_contribuye"],
+                        "Fondo solidario de Redistribución (ex ANSSAL)" => ["fondo_sol_aporta", "fondo_sol_contribuye"],
+                        "RENATEA (ex RENATRE)" => ["renatea_aporta", "renatea_contribuye"],
+                        "Asignaciones familiares" => ["asig_contribuye"],
+                        "Fondo nacional de empleo" => ["fondo_empleo_contribuye"],
+                        "Ley de Riesgos del Trabajo" => ["ley_riesgos_contribuye"],
+                        "Seguro colectivo de vida Olbigatorio" => ["seguro_vida_contribuye"],
+                        "Régimenes Diferenciales" => ["reg_dif_aporta"],
+                        "Régimenes Especiales" => ["reg_esp_aporta"]
+                    ],
                     "store_clientside" => true
                 ],
                 "empresas" => [
@@ -768,6 +816,105 @@
                     "actions" => $a['default'],
                     "display_name" => "Departamentos",
                     "group" => "Empresas"   
+                ],
+                //concepto_tipo_empleador
+                "conceptos_empleador" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "em_id" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Empresa")),
+                            [
+                                'table' => 'empresas',
+                                'field' => 'id',
+                                'format' => '{razon}'
+                            ]
+                        ),
+                        "codigo" => $s->unique($s->displayName($f['bigint'], "Código")),
+                        "descripcion" => $s->displayName($f['varchar_128'], "Descripción"),
+                        "id_tipo" => $s->displayName(
+                            $s->foreignKey($f['bigint'], 
+                            [
+                                'table' => 'concepto_tipo_empleador',
+                                'field' => 'id',
+                                'format' => '{nombre}'
+                            ]), "Tipo de Concepto"),
+                        "id_liquidaciones" => $s->displayName(
+                            $s->foreignKey($f['bigint'], 
+                            [
+                                'table' => 'concepto_liquidaciones',
+                                'field' => 'id',
+                                'format' => '{nombre}'
+                            ]), "Incluir concepto en"),
+                        "titulo_impresion" => $s->displayName($f['varchar_128'], "Título de impresión"),
+                        "imp_en_recibos" => $s->displayName($f['boolean'], "Imprimir en recibos"),
+                        "usa_mopre" => $s->displayName($f['boolean'], "Utiliza MOPRE"),
+                        "id_cat_ganancias" => $s->displayName(
+                            $s->foreignKey($f['bigint'], 
+                            [
+                                'table' => 'concepto_cat_ganancias',
+                                'field' => 'id',
+                                'format' => '{nombre}'
+                            ]), "Categoría Ganancias"),
+                        "retencion_ganancias" => $s->displayName($f['boolean'], "Este concepto constituye la retención de ganancias"),
+                        "horas_extras" => $s->displayName($f['boolean'], "Concepto representa horas extras gravadas por gcias."),
+                        "id_concepto_afip" => $s->displayName(
+                            $s->foreignKey($f['bigint'], 
+                            [
+                                'table' => 'concepto_afip',
+                                'field' => 'id',
+                                'format' => '{codigo} {nombre}'
+                            ]), "Concepto AFIP para Libro Sueldos Digital"),
+                        "id_unidad_libro_sueldo" => $s->displayName(
+                            $s->foreignKey($f['bigint'], 
+                            [
+                                'table' => 'concepto_unidad_lsueldo',
+                                'field' => 'id',
+                                'format' => '{nombre}'
+                            ]), "Unidad en Libro de Sueldos Digital"),
+                        "id_cuenta_contable" => $s->displayName(
+                            $s->foreignKey($f['bigint'], 
+                            [
+                                'table' => 'cuenta_contable',
+                                'field' => 'id',
+                                'extra_relation' => 'em_id:em_id',
+                                'format' => '{nombre}'
+                            ]), "Cuenta contable"),
+                        "id_cat_aplicar" => $s->displayName(
+                            $s->foreignKey($f['bigint'], 
+                            [
+                                'table' => 'concepto_cat_aplicar',
+                                'field' => 'id',
+                                'format' => '{nombre}'
+                            ]), "Categoría a aplicar en Dec. en línea / libro sueldos digital / SICOSS"),
+                        "formula" => $s->displayName($f['varchar_256'], "Fórmula para cálculos"),
+                        "id_codigo_spep" => $s->displayName(
+                            $s->foreignKey($f['bigint'], 
+                            [
+                                'table' => 'concepto_codigo_spep',
+                                'field' => 'id',
+                                'format' => '{codigo} {nombre}'
+                            ]), "Código SPEP Santiago del Estero"),
+                        "adic_no_rem9" => $s->displayName($f['boolean'], "No incluir en remuneración 9 (Dec. en linea y LSD)"),
+                        "adic_rem_variable" => $s->displayName($f['boolean'], "Es remuneración variable"),
+                        "adic_inc_142020" => $s->displayName($f['boolean'], "Representa el incremento Dec. 14/2020"),
+                        "adic_maternidad" => $s->displayName($f['boolean'], "Maternidad (Dec. en línea y LSD)"),
+                        "adic_exportar_can" => $s->displayName($f['boolean'], "Exportar CAN a Libro de Sueldos Digital"),
+                        "bdif_aporte_os_fsr" => $s->displayName($f['boolean'], "Base dif. de aporte OS y FSR (Suma a Rem. 4)"),
+                        "bdif_contrib_os_fsr" => $s->displayName($f['boolean'], "Base dif. de aporte OS y FSR (Suma a Rem. 8)"),
+                        "bdif_lrt" => $s->displayName($f['boolean'], "Base dif. de LRT (Suma a Rem. 9)"),
+                        "bdif_aporte_ss" => $s->displayName($f['boolean'], "Base dif. de aporte SS (Suma a Rem. 1 y 5)"),
+                        "bdif_contrib_ss" => $s->displayName($f['boolean'], "Base dif. de contrib. SS (Suma a Rem. 2 y 3)")
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Conceptos Empleador",
+                    "field_groups" => [
+                        "Datos Generales" => ["em_id", "codigo", "descripcion", "id_tipo", "id_liquidaciones", "titulo_impresion", "imp_en_recibos", "usa_mopre", "id_cat_ganancias", "retencion_ganancias", "horas_extras", "id_concepto_afip", "id_unidad_libro_sueldo", "id_cuenta_contable", "id_cat_aplicar", "formula", "id_codigo_spep"],
+
+                        "Opciones adicionales" => ["adic_no_rem9", "adic_rem_variable", "adic_inc_142020", "adic_maternidad", "adic_exportar_can"],
+
+                        "Bases Cálculo Diferencial (LSD)" => ["bdif_aporte_os_fsr", "bdif_contrib_os_fsr", "bdif_lrt", "bdif_aporte_ss", "bdif_contrib_ss"]
+                    ],
+                    "group" => "Conceptos"
                 ],
                 "empleado" => [
                     "fields" => [

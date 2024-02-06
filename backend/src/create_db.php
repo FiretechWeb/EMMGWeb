@@ -8,9 +8,9 @@
     include_once 'db/db_default_data.php';
     include_once 'db/db_api.php';
     
-    set_time_limit(60);
+    set_time_limit(90);
     
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {    
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
         try {
             mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
             $conn = mysqli_connect(Config::$HOST_URL, Config::$HOST_USER, Config::$HOST_PASSWORD);
@@ -38,7 +38,7 @@
                 echo JSONResponse::error("Error creating Tables From Structure ".mysqli_error($conn));
                 exit(0);
             }
-            if (!DBAPI::insertDefaultDataFromStructure($conn, DBDefaultValues::getDefaultData(), DBStructure::getStructure())) {
+            if (!DBAPI::insertDataFromStructure($conn, DBDefaultValues::getDefaultData(), DBStructure::getStructure())) {
                 echo JSONResponse::error("Error inserting default data ".mysqli_error($conn));
                 exit(0);  
             }
