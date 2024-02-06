@@ -115,6 +115,25 @@ export class DBActions {
         console.log(tableGroups);
         return tableGroups;
     }
+    static async populateRandom() {
+        try {
+            let res = await axiosQueue.post(`${GlobalVars.backend_path!}/api/fill_data.php`, { },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            if (res.status === 404) {
+                console.error("404 response");
+                return null;
+            } else {
+                return res.data;
+            }
+        } catch (e) {
+            console.error(e);
+            return null;
+        }
+    }
     static async getStructure() {
         try {
             let res = await axiosQueue.post(`${GlobalVars.backend_path!}/api/get_structure.php`, { },
@@ -196,6 +215,7 @@ export class DBActions {
             return fieldsData[fieldName] != null && fieldsData[fieldName] != undefined;
         });
     }
+
     static shouldUpdateForeignList(field: DBFieldType, prevFieldsData: any, currentFieldsData: any): boolean {
         if (!DBActions.foreignRelatedDataExists(field, currentFieldsData)) 
             return false;

@@ -28,6 +28,17 @@ export function createDBcmds() {
 
     addCMD(
         {
+            name: 'populate random',
+            usage:'populate DB with random data for testing',
+            multiArgs: false,
+            callback: async () => {
+                processCMD(`echo ${removeHTMLTags(JSON.stringify(await DBActions.populateRandom(), null, 3))}`);
+            }
+        } as cmdType
+    );
+
+    addCMD(
+        {
             name: 'action',
             usage:'action <<table>>, <<action>>, ...<<field: field_name = value>>, <<cond: field COND value>>',
             multiArgs: true,
