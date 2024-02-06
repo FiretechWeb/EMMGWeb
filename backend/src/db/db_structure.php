@@ -663,7 +663,7 @@
                                 'format' => '{razon}'
                             ]
                         ),
-                        "codigo" => $s->unique($s->displayName($f['varchar_64'], "Código")),
+                        "codigo" => $s->unique($s->displayName($f['bigint'], "Código")),
                         "nombre" => $s->displayName($f['varchar_64'], "Nombre"),
                     ],
                     "actions" => $a['default'],

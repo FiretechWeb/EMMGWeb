@@ -1,0 +1,84 @@
+{
+	"empresas":
+	{
+		"min": 2,
+		"max": 5,
+		"data":
+		{
+			"cuit": [20383614903, 30988694122, 24224990681, 34520141407, 34852262577],
+			"razon": [
+                "BACIGALUPPI SRL",
+                "EMMG SRL",
+                "SIPA PARARRAYOS",
+                "GALANIZADOS LANÚS",
+                "TORRESUR SRL"],
+			"tel": [
+                "4290-7551",
+                "3232-1235",
+                "7565-1235",
+                "9845-4235",
+                "88-88845"
+            ],
+			"domicilio": [
+                "Nicolás Avellaneda 712",
+                "Carlos cervetti 125",
+                "Avenida Fair 1235",
+                "Pedro baltazar 456",
+                "Castex 756"
+            ],
+			"ciudad": [
+                "Monte Grande",
+                "Lanús",
+                "Luis Guillón",
+                "Lomas de Zamora",
+                "Moreno"
+            ],
+			"id_provincia": [1, 2, 3, 4, 5],
+			"id_tipo": [1, 2, 3, 4, 5],
+			"id_actividad": [1, 2, 3, 4, 5],
+			"cuenta_bancaria": [
+                "1235428/2",
+                "9845351/3",
+                "2351862/5",
+                "9786521/2",
+                "3758452/2"
+            ],
+			"id_tcuenta_banco": [1, 2],
+			"hs_completa": [160, 128],
+			"dias_completa": [36, 40, 28],
+			"imp_detraccion": [2624.25, 1232.25, 7242.25]
+		}
+	},
+	"cuenta_contable":
+	{
+		"min": 3,
+		"max": 6,
+		"data":
+		{
+			"em_id": [1, 2],
+			"codigo": [75, 123, 12, 45, 28, 75, 756, 256, 13, 17],
+            "nombre": ["Bancos", "Maquinaria", "Hierros", "Mobiliario"]
+		}
+	},
+	"centro_costos":
+	{
+		"min": 3,
+		"max": 6,
+		"data":
+		{
+			"em_id": [1, 2], 
+			"cuenta": ["121565/2", "175651235/2", "1456785/2"],
+            "nombre": ["Subdirección de producción", "Gerencia de recursos humanos", "Gerencia de tesoreria", "Emergencia"]
+		}
+	},
+	"tablas_categoria":
+	{
+		"min": 3,
+		"max": 7,
+		"data":
+		{
+			"em_id": [1, 2], 
+			"numero": [1, 2, 3, 4, 5]
+		}
+	}
+}

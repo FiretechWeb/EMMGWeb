@@ -4,6 +4,60 @@
     
     class DBAPI {
 
+        public static function readJSONFile($filename) {
+            try {
+                $jsonContents = file_get_contents($filename);
+        
+                if ($jsonContents === false) {
+                    throw new Exception("Error reading the JSON file.");
+                }
+        
+                $decodedData = json_decode($jsonContents, true);
+        
+                if ($decodedData === null) {
+                    throw new Exception("Error decoding the JSON data.");
+                }
+        
+                return $decodedData;
+            } catch (Exception $e) {
+                echo "An error occurred: " . $e->getMessage();
+            }
+        }
+
+        public static function getRandomTableData($randomValues, $tableName, $tableStructure) {
+            if (!isset($randomValues[$tableName])) {
+                return null;
+            }
+            if (!isset($tableStructure[$tableName])) {
+                return null;
+            }
+            $tableFields = $tableStructure[$tableName]['fields'];
+            $randomTableValues = $randomValues[$tableName]['data'];
+            $r = [];
+    
+            foreach ($tableFields as $fieldName => $fieldData) {
+                if (!isset($randomTableValues[$fieldName])) {
+                    continue;
+                }
+                $randomFields = $randomTableValues[$fieldName];
+                $r[$fieldName] = $randomFields[array_rand($randomFields)];
+            }
+    
+            return $r;
+        }
+    
+        public static function getRandomData($randomValues, $tableStructure) {
+            $r = [];
+            foreach ($randomValues as $tableName => $randomData) {
+                $count = rand($randomData['min'], $randomData['max']);
+                $r[$tableName] = [];
+                for ($i=0; $i < $count; $i++) {
+                    $r[$tableName][] = self::getRandomTableData($randomValues, $tableName, $tableStructure);
+                }
+            }
+            return $r;
+        }
+
         public static function insertDataFromStructure($conn, $defaultData, $tableStructure) {
             $sqlColumns = [];
             foreach ($tableStructure as $tableName => $data) {

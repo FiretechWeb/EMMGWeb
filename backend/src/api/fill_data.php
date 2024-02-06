@@ -6,7 +6,6 @@
     include_once '../db/db_structure.php';
     include_once '../db/db_response.php';
     include_once '../db/db_api.php';
-    include_once '../db/db_test.php';
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         try {
@@ -22,7 +21,7 @@
                 exit(0);
             }
 
-            $randData = DBTestData::getRandomData(DBStructure::getStructure(), 3);
+            $randData = DBAPI::getRandomData(DBAPI::readJSONFile('../test/random_data.json'), DBStructure::getStructure());
             if (!DBAPI::insertDataFromStructure($conn, $randData, DBStructure::getStructure())) {
                 echo JSONResponse::error("Error popullating with random data ".mysqli_error($conn));
                 exit(0); 
