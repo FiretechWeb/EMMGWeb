@@ -1718,6 +1718,95 @@
                     "display_name" => "Familiares",
                     "group" => "Personal"   
                 ],
+                "recibo" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "em_id" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Empresa")),
+                            [
+                                'table' => 'empresas',
+                                'field' => 'id',
+                                'format' => '{razon}'
+                            ]
+                        ),
+                        "codigo_liquid" => $s->unique($s->displayName($f['bigint'], "ID de liquidación")),
+                        "fecha_pago" => $s->displayName($f['date'], "Fecha de pago"),
+                        "ini_periodo_liq" => $s->displayName($f['date'], "Inicio período de liq."),
+                        "fin_periodo_liq" => $s->displayName($f['date'], "Fin período de liq."),
+                        "cuil" => $s->displayName($f['bigint'], "CUIL"),
+                        "comentarios" => $s->displayName($f['varchar_512'], "Comentarios"),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Recibo",
+                    "group" => "Recibos"   
+                ],
+                "recibo_empleados" => [
+                    "fields" => [
+                        "em_id" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Empresa")),
+                            [
+                                'table' => 'empresas',
+                                'field' => 'id',
+                                'format' => '{razon}'
+                            ]
+                        ),
+                        "id_recibo" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Código de liquidación")),
+                            [
+                                'table' => 'recibo',
+                                'field' => 'id',
+                                'extra_relation' => 'em_id:em_id',
+                                'format' => '{codigo_liquid}'
+                            ]
+                        ),
+                        "pr_id" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Empleado")),
+                            [
+                                'table' => 'empleado',
+                                'field' => 'id',
+                                'extra_relation' => 'em_id:em_id',
+                                'format' => '{cuil} - {nombre} {apellido}'
+                            ]
+                        ),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Recibo Empleados",
+                    "group" => "Recibos"   
+                ],
+                "recibo_conceptos" => [
+                    "fields" => [
+                        "id" => $f['id'],
+                        "em_id" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Empresa")),
+                            [
+                                'table' => 'empresas',
+                                'field' => 'id',
+                                'format' => '{razon}'
+                            ]
+                        ),
+                        "id_recibo" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Código de liquidación")),
+                            [
+                                'table' => 'recibo',
+                                'field' => 'id',
+                                'extra_relation' => 'em_id:em_id',
+                                'format' => '{codigo_liquid}'
+                            ]
+                        ),
+                        "id_concepto_empleador" => $s->foreignKey(
+                            $s->primary($s->displayName($f['bigint'], "Concepto Empleador")),
+                            [
+                                'table' => 'conceptos_empleador',
+                                'field' => 'id',
+                                'extra_relation' => 'em_id:em_id',
+                                'format' => '{codigo} {descripcion}'
+                            ]
+                        ),
+                    ],
+                    "actions" => $a['default'],
+                    "display_name" => "Recibo Conceptos",
+                    "group" => "Recibos"   
+                ],
             ];
         }
     }
