@@ -80,5 +80,40 @@
 			"em_id": [1, 2], 
 			"numero": [1, 2, 3, 4, 5]
 		}
+	},
+	"categoria_puesto":
+	{
+		"min": 3,
+		"max": 6,
+		"data":
+		{
+			"em_id": [1, 2], 
+			"id_tabla_cat": [1, 2, 3],
+			"numero": [1, 2, 3, 4, 5],
+			"descripcion": ["Gerente General", "Obrero", "Operario", "Secretaria", "Técnico"],
+			"valor": [2623.25, 2652.25, 723.27, 74232.25, 123.25, 8563.25]
+		}
+	},
+	"ART":
+	{
+		"min": 3,
+		"max": 6,
+		"data":
+		{
+			"em_id": [1, 2], 
+			"numero": [2512323262, 25126234, 9825123, 8275123],
+			"descripcion": ["Aseguradora", "Aseguradora Profesional"]
+		}
+	},
+	"tabla_antiguedad":
+	{
+		"min": 4,
+		"max": 8,
+		"data":
+		{
+			"em_id": [1, 2], 
+			"antiguedad": [1, 2, 3, 4, 5, 6, 7],
+			"valor": [252.26, 26123.26, 7423.26, 262.1, 262312.2, 67123.2]
+		}
 	}
 }
