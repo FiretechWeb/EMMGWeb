@@ -257,6 +257,13 @@
         }
     }
 
+    class DBActionShortHand {
+        public function add($actions, $actionToAdd, $actionData) {
+            $actions[$actionToAdd] = $actionData;
+            return $actions;
+        }
+    }
+
     class DBFieldShortHand {
         public function unique($field) {
             $field['unique'] = true;
