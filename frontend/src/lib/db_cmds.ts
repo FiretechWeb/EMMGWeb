@@ -39,6 +39,17 @@ export function createDBcmds() {
 
     addCMD(
         {
+            name: 'fill data',
+            usage:'fill data <<JSON file name.json>>',
+            multiArgs: false,
+            callback: async (fileName: string) => {
+                processCMD(`echo ${removeHTMLTags(JSON.stringify(await DBActions.fillData(fileName), null, 3))}`);
+            }
+        } as cmdType
+    );
+
+    addCMD(
+        {
             name: 'action',
             usage:'action <<table>>, <<action>>, ...<<field: field_name = value>>, <<cond: field COND value>>',
             multiArgs: true,

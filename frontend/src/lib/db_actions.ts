@@ -115,9 +115,32 @@ export class DBActions {
         console.log(tableGroups);
         return tableGroups;
     }
+    static async fillData(JSONFileName: string) {
+        try {
+            let res = await axiosQueue.post(`${GlobalVars.backend_path!}/api/fill_data.php`, {
+                file: JSONFileName,
+             },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            if (res.status === 404) {
+                console.error("404 response");
+                return null;
+            } else {
+                return res.data;
+            }
+        } catch (e) {
+            console.error(e);
+            return null;
+        }
+    }
     static async populateRandom() {
         try {
-            let res = await axiosQueue.post(`${GlobalVars.backend_path!}/api/fill_data.php`, { },
+            let res = await axiosQueue.post(`${GlobalVars.backend_path!}/api/fill_data.php`, {
+                random: true,
+             },
             {
                 headers: {
                     'Content-Type': 'application/json',
