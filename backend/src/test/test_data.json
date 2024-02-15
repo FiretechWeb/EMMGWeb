@@ -1,0 +1,28 @@
+{
+	"empresas":
+    [
+		{
+			"cuit": 20383614903,
+			"razon": "EMMG SRL",
+			"tel": "4290-7551",
+			"domicilio": "Carlos cervetti 125",
+			"ciudad": "Monte Grande",
+			"id_provincia": {
+                "nombre": "Buenos Aires"
+            },
+			"id_tipo": {
+                "codigo": 4
+            },
+			"id_actividad": {
+                "codigo": 455000
+            },
+			"cuenta_bancaria": "1235428/2",
+			"id_tcuenta_banco": {
+                "nombre": "Cuenta Corriente"
+            },
+			"hs_completa": 160,
+			"dias_completa": 36,
+			"imp_detraccion": 75325.25
+		}
+    ]
+}
