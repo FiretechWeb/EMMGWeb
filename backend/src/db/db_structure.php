@@ -6,8 +6,9 @@
         public static function getStructure() {
             $f = DBTemplate::getFieldTemplates();
             $t = DBTemplate::getTableTemplates();
-            $a = DBTemplate::getTemplateActions();
+            $ta = DBTemplate::getTemplateActions();
             $s = new DBFieldShortHand();
+            $a = new DBActionShortHand();
 
             return [
                 "configuracion" => [
@@ -22,7 +23,7 @@
                         "max_remunerativo_sac" => $s->displayName($f['decimal'], "Máximo remunerativo con SAC"),
                         "mb_vac_sac" => $s->displayName($f['boolean'], "MAXBRUTO incluye topes de vacaciones y SAC")
                     ],
-                    "actions" => $a['updateonly'],
+                    "actions" => $ta['updateonly'],
                     "display_name" => "Configuración General",
                     "group" => "Configuración",
                     "store_clientside" => true
@@ -33,7 +34,7 @@
                         "codigo" => $s->unique($s->displayName($f['bigint'], "Código")),
                         "modalidad" => $s->unique($s->displayName($f['varchar_256'], "Nombre de modalidad")),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Modalidad de contratación",
                     "group" => "Configuración>Laborales",
                     "store_clientside" => true
@@ -43,7 +44,7 @@
                         "id" => $f['id'],
                         "tipo" => $s->unique($s->displayName($f['varchar_64'], "Tipo")),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Tipo de contratación",
                     "group" => "Configuración>Laborales",
                     "store_clientside" => true
@@ -53,7 +54,7 @@
                         "id" => $f['id'],
                         "forma" => $s->unique($s->displayName($f['varchar_128'], "Forma de pago")),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Forma de pago",
                     "group" => "Configuración>Laborales",
                     "store_clientside" => true
@@ -64,7 +65,7 @@
                         "codigo" => $s->unique($s->displayName($f['bigint'], "Código")),
                         "descripcion" => $s->unique($s->displayName($f['varchar_256'], "Descripción")),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Situación de Revista",
                     "group" => "Configuración>Laborales",
                     "store_clientside" => true
@@ -75,7 +76,7 @@
                         "codigo" => $s->unique($s->displayName($f['bigint'], "Código")),
                         "descripcion" => $s->unique($s->displayName($f['varchar_256'], "Descripción")),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Condiciones",
                     "group" => "Configuración>Laborales",
                     "store_clientside" => true
@@ -86,7 +87,7 @@
                         "codigo" => $s->unique($s->displayName($f['bigint'], "Código")),
                         "descripcion" => $s->unique($s->displayName($f['varchar_256'], "Descripción")),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Actividades",
                     "group" => "Configuración>Laborales",
                     "store_clientside" => true
@@ -97,7 +98,7 @@
                         "codigo" => $s->unique($s->displayName($f['bigint'], "Código")),
                         "descripcion" => $s->unique($s->displayName($f['varchar_256'], "Descripción")),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Obras Sociales",
                     "group" => "Configuración>Laborales",
                     "store_clientside" => true
@@ -107,7 +108,7 @@
                         "id" => $f['id'],
                         "nombre" => $s->unique($s->displayName($f['varchar_128'], "Tipo de cuenta")),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Tipo de cuenta bancaria",
                     "group" => "Configuración>Datos",
                     "store_clientside" => true
@@ -117,7 +118,7 @@
                         "id" => $f['id'],
                         "nombre" => $s->unique($s->displayName($f['varchar_128'], "Nombre")),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Provincia",
                     "group" => "Configuración>Datos",
                     "store_clientside" => true
@@ -135,7 +136,7 @@
                         ),
                         "nombre" => $s->unique($s->displayName($f['varchar_128'], "Nombre"))
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Localidades",
                     "group" => "Configuración>Datos",
                     "store_clientside" => true
@@ -145,7 +146,7 @@
                         "id" => $f['id'],
                         "nombre" => $s->unique($s->displayName($f['varchar_128'], "Tipo de documento")),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Tipo de documento",
                     "group" => "Configuración>Datos",
                     "store_clientside" => true
@@ -155,7 +156,7 @@
                         "id" => $f['id'],
                         "nombre" => $s->unique($s->displayName($f['varchar_128'], "Nacionalidad")),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Nacionalidad",
                     "group" => "Configuración>Datos",
                     "store_clientside" => true
@@ -165,7 +166,7 @@
                         "id" => $f['id'],
                         "tipo" => $s->unique($s->displayName($f['varchar_64'], "Tipo de parentesco")),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Parentesco",
                     "group" => "Configuración>Datos",
                     "store_clientside" => true
@@ -175,7 +176,7 @@
                         "id" => $f['id'],
                         "genero" => $s->unique($s->displayName($f['varchar_128'], "Genero")),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Género",
                     "group" => "Configuración>Datos",
                     "store_clientside" => true
@@ -185,7 +186,7 @@
                         "id" => $f['id'],
                         "estado" => $s->unique($s->displayName($f['varchar_128'], "Estado civil")),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Estado Civil",
                     "group" => "Configuración>Datos",
                     "store_clientside" => true
@@ -196,7 +197,7 @@
                         "codigo" => $s->unique($s->displayName($f['bigint'], "Código")),
                         "nombre" => $s->unique($s->displayName($f['varchar_256'], "Actividad")),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Actividad",
                     "group" => "Configuración>Empresas",
                     "store_clientside" => true
@@ -207,7 +208,7 @@
                         "codigo" => $s->unique($s->displayName($f['bigint'], "Código AFIP")),
                         "tipo" => $s->unique($s->displayName($f['varchar_128'], "Tipo de Empresa")),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Tipo de Empresa",
                     "group" => "Configuración>Empresas",
                     "store_clientside" => true
@@ -220,7 +221,7 @@
                         "meses" => $s->canBeNull($s->displayName($f['int'], "Meses")),
                         "anios" => $s->canBeNull($s->displayName($f['int'], "Años")),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Periodo de Pago",
                     "group" => "Configuración>Empresas",
                     "store_clientside" => true
@@ -230,7 +231,7 @@
                         "id" => $f['id'],
                         "descripcion" => $s->unique($s->displayName($f['varchar_64'], "Descripción")),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Régimen Jubilatorio",
                     "group" => "Configuración>Empresas",
                     "store_clientside" => true
@@ -243,7 +244,7 @@
                         "ali_tope_inf_2do" => $s->displayName($f['decimal'], "Tope inferior deducción especial Incr. - 2da Parte"),
                         "ali_tope_sup_2do" => $s->displayName($f['decimal'], "Tope superior deducción especial Incr. - 2da Parte")
                     ],
-                    "actions" => $a['updateonly'],
+                    "actions" => $ta['updateonly'],
                     "display_name" => "Configuración",
                     "group" => "Configuración>Ganancias",
                     "field_groups" => [
@@ -256,7 +257,7 @@
                         "id" => $f['id'],
                         "porcentaje" => $s->displayName($f['decimal'], "Tipo")
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Deducción hijo",
                     "group" => "Configuración>Ganancias",
                     "store_clientside" => true
@@ -266,7 +267,7 @@
                         "id" => $f['id'],
                         "tipo" => $s->unique($s->displayName($f['varchar_64'], "Tipo"))
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Tipos de tope",
                     "group" => "Configuración>Ganancias",
                     "store_clientside" => true
@@ -280,7 +281,7 @@
                         "impuesto_base" => $s->displayName($f['decimal'], "Impuesto Base"),
                         "alicuota" => $s->displayName($f['int'], "Alícuota"),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Álicuotas",
                     "group" => "Configuración>Ganancias",
                     "store_clientside" => true
@@ -296,7 +297,7 @@
                         "hijos" => $s->displayName($f['decimal'], "Hijos"),
                         "otras_cargas" => $s->displayName($f['decimal'], "Otras cargas")
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Deducciones Personales",
                     "group" => "Configuración>Ganancias",
                     "store_clientside" => true
@@ -326,7 +327,7 @@
                         "noviembre" => $s->displayName($f['decimal'], "Noviembre"),
                         "diciembre" => $s->displayName($f['decimal'], "Diciembre")
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Deducciones Generales",
                     "group" => "Configuración>Ganancias",
                     "store_clientside" => true
@@ -336,7 +337,7 @@
                         "id" => $f['id'],
                         "nombre" => $s->unique($s->displayName($f['varchar_128'], "Nombre de inclusión")),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Liquidaciones",
                     "group" => "Configuración>Conceptos",
                     "store_clientside" => true
@@ -346,7 +347,7 @@
                         "id" => $f['id'],
                         "nombre" => $s->unique($s->displayName($f['varchar_128'], "Nombre de categoria")),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Categoría Ganancias",
                     "group" => "Configuración>Conceptos",
                     "store_clientside" => true
@@ -356,7 +357,7 @@
                         "id" => $f['id'],
                         "nombre" => $s->unique($s->displayName($f['varchar_32'], "Unidad en libro sueldo digital")),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Unidad libro sueldo",
                     "group" => "Configuración>Conceptos",
                     "store_clientside" => true
@@ -366,7 +367,7 @@
                         "id" => $f['id'],
                         "nombre" => $s->unique($s->displayName($f['varchar_64'], "Tipo")),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Tipos de conceptos empleador",
                     "group" => "Configuración>Conceptos",
                     "store_clientside" => true
@@ -376,7 +377,7 @@
                         "id" => $f['id'],
                         "nombre" => $s->unique($s->displayName($f['varchar_128'], "Categoría")),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Categorías a aplicar",
                     "group" => "Configuración>Conceptos",
                     "store_clientside" => true
@@ -387,7 +388,7 @@
                         "codigo" => $s->unique($s->displayName($f['bigint'], "Código")),
                         "nombre" => $s->unique($s->displayName($f['varchar_128'], "Descripción"))
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "SPEP Sgo del Estero",
                     "group" => "Configuración>Conceptos",
                     "store_clientside" => true
@@ -397,7 +398,7 @@
                         "id" => $f['id'],
                         "nombre" => $s->unique($s->displayName($f['varchar_64'], "Descripción"))
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Tipo conceptos AFIP",
                     "group" => "Configuración>Conceptos",
                     "store_clientside" => true
@@ -407,7 +408,7 @@
                         "id" => $f['id'],
                         "nombre" => $s->unique($s->displayName($f['varchar_64'], "Categoria"))
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Categorias",
                     "group" => "Sindicatos>UOCRA",
                     "store_clientside" => true
@@ -417,7 +418,7 @@
                         "id" => $f['id'],
                         "nombre" => $s->unique($s->displayName($f['varchar_128'], "Convenio"))
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Convenios",
                     "group" => "Sindicatos>UOCRA",
                     "store_clientside" => true
@@ -427,7 +428,7 @@
                         "id" => $f['id'],
                         "nombre" => $s->unique($s->displayName($f['varchar_32'], "Categoria"))
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Categorias",
                     "group" => "Sindicatos>AEC Rosario",
                     "store_clientside" => true
@@ -437,7 +438,7 @@
                         "id" => $f['id'],
                         "nombre" => $s->unique($s->displayName($f['varchar_128'], "Puesto"))
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Puestos",
                     "group" => "Sindicatos>AEC Rosario",
                     "store_clientside" => true
@@ -447,7 +448,7 @@
                         "id" => $f['id'],
                         "nombre" => $s->unique($s->displayName($f['varchar_128'], "Licencia"))
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Licencias",
                     "group" => "Sindicatos>AEC Rosario",
                     "store_clientside" => true
@@ -457,7 +458,7 @@
                         "id" => $f['id'],
                         "nombre" => $s->unique($s->displayName($f['varchar_128'], "Categoría"))
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Categoria",
                     "group" => "Sindicatos>UOM",
                     "store_clientside" => true
@@ -467,7 +468,7 @@
                         "id" => $f['id'],
                         "nombre" => $s->unique($s->displayName($f['varchar_128'], "Sit. Revista"))
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Situación de revista",
                     "group" => "Sindicatos>UOM",
                     "store_clientside" => true
@@ -477,7 +478,7 @@
                         "id" => $f['id'],
                         "nombre" => $s->unique($s->displayName($f['varchar_128'], "Categoría"))
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Categoría",
                     "group" => "Sindicatos>SEC Santiago del Estero",
                     "store_clientside" => true
@@ -487,7 +488,7 @@
                         "id" => $f['id'],
                         "nombre" => $s->unique($s->displayName($f['varchar_128'], "Categoría"))
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Categoría",
                     "group" => "Sindicatos>FAECYS",
                     "store_clientside" => true
@@ -498,7 +499,7 @@
                         "codigo" => $s->unique($s->displayName($f['bigint'], "Código AFIP")),
                         "nombre" => $s->unique($s->displayName($f['varchar_128'], "Cargo"))
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Cargos",
                     "group" => "Sindicatos>SPEP Stgo. del Estero",
                     "store_clientside" => true
@@ -508,7 +509,7 @@
                         "id" => $f['id'],
                         "nombre" => $s->unique($s->displayName($f['varchar_128'], "Situación de cargo"))
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Situación",
                     "group" => "Sindicatos>SPEP Stgo. del Estero",
                     "store_clientside" => true
@@ -518,7 +519,7 @@
                         "id" => $f['id'],
                         "nombre" => $s->unique($s->displayName($f['varchar_128'], "Revista cargo"))
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Revista",
                     "group" => "Sindicatos>SPEP Stgo. del Estero",
                     "store_clientside" => true
@@ -528,7 +529,7 @@
                         "id" => $f['id'],
                         "nombre" => $s->unique($s->displayName($f['varchar_128'], "Nivel de enseñanza"))
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Nivel de enseñanza",
                     "group" => "Sindicatos>SPEP Stgo. del Estero",
                     "store_clientside" => true
@@ -538,7 +539,7 @@
                         "id" => $f['id'],
                         "nombre" => $s->unique($s->displayName($f['varchar_128'], "Obra social obligatoría"))
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Obra Social",
                     "group" => "Sindicatos>SPEP Stgo. del Estero",
                     "store_clientside" => true
@@ -548,7 +549,7 @@
                         "id" => $f['id'],
                         "categoria" => $s->unique($s->displayName($f['int'], "Categoría"))
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Categoría",
                     "group" => "Sindicatos>SPEP Stgo. del Estero",
                     "store_clientside" => true
@@ -582,7 +583,7 @@
                         "reg_dif_aporta" => $s->displayName($f['boolean'], "Aportes (Rem. 6)"),
                         "reg_esp_aporta" => $s->displayName($f['boolean'], "Aportes (Rem. 7)")
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "AFIP (Libro sueldo digital)",
                     "group" => "Conceptos",
                     "field_groups" => [
@@ -644,7 +645,7 @@
                             $s->displayName($f['decimal'], "Importe detracción")
                         ),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Empresa",
                     "group" => "Empresas",
                     "field_groups" => [
@@ -666,7 +667,7 @@
                         "codigo" => $s->unique($s->displayName($f['bigint'], "Código")),
                         "nombre" => $s->displayName($f['varchar_64'], "Nombre"),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Cuenta Contable",
                     "group" => "Empresas"
                 ],
@@ -684,7 +685,7 @@
                         "nombre" => $s->unique($s->displayName($f['varchar_128'], "Nombre")),
                         "cuenta" => $s->unique($s->displayName($f['varchar_64'], "Cuenta")),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Centro de Costos",
                     "group" => "Empresas"
                 ],
@@ -701,7 +702,7 @@
                         ),
                         "numero" => $s->unique($s->displayName($f['int'], "Número de tabla de categoria.")),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Tablas de Categoria",
                     "group" => "Empresas"
                 ],
@@ -729,7 +730,7 @@
                         "descripcion" => $s->unique($s->displayName($f['varchar_128'], "Descripción")),
                         "valor" => $s->displayName($f['decimal'], "Valor"),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Puestos de trabajo",
                     "group" => "Empresas"
                 ],
@@ -747,7 +748,7 @@
                         "numero" => $s->unique($s->displayName($f['bigint'], "Número de seguro")),
                         "descripcion" => $s->displayName($f['varchar_128'], "Descripción")
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "ART - Seguros de vida",
                     "group" => "Empresas"
                 ],
@@ -765,7 +766,7 @@
                         "antiguedad" => $s->unique($s->displayName($f['int'], "Antigüedad")),
                         "valor" => $s->displayName($f['decimal'], "Valor")
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Tablas de antigüedad",
                     "group" => "Empresas"
                 ],
@@ -796,7 +797,7 @@
                                 'format' => '{nombre}'
                             ]), "Cuenta contable"),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Contribuciones Patronales",
                     "group" => "Empresas"
                 ],
@@ -813,7 +814,7 @@
                         ),
                         "tipo" => $s->unique($s->displayName($f['varchar_128'], "Departamento")),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Departamentos",
                     "group" => "Empresas"   
                 ],
@@ -905,7 +906,7 @@
                         "bdif_aporte_ss" => $s->displayName($f['boolean'], "Base dif. de aporte SS (Suma a Rem. 1 y 5)"),
                         "bdif_contrib_ss" => $s->displayName($f['boolean'], "Base dif. de contrib. SS (Suma a Rem. 2 y 3)")
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Conceptos Empleador",
                     "field_groups" => [
                         "Datos Generales" => ["em_id", "codigo", "descripcion", "id_tipo", "id_liquidaciones", "titulo_impresion", "imp_en_recibos", "usa_mopre", "id_cat_ganancias", "retencion_ganancias", "horas_extras", "id_concepto_afip", "id_unidad_libro_sueldo", "id_cuenta_contable", "id_cat_aplicar", "formula", "id_codigo_spep"],
@@ -1136,7 +1137,7 @@
                         )),
                         "lab_obs" => $s->canBeNull($s->displayName($f['varchar_256'], "Observaciones"))
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Empleado",
                     "group" => "Personal",
                     "field_groups" => [
@@ -1234,7 +1235,7 @@
                         "renum_admin" =>  $s->canBeNull($s->displayName($f['varchar_128'], "Administradora")),
                         "renum_convencionado" => $s->canBeNull($s->displayName($f['boolean'], "Convencionado")),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Remuneraciones",
                     "group" => "Personal"   
                 ],
@@ -1277,7 +1278,7 @@
                         "uocra_admin_pub" => $s->canBeNull($s->displayName($f['boolean'], "Administración Pública")),
                         "uocra_gremio" => $s->canBeNull($s->displayName($f['boolean'], "Pertenece al gremio")),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "UOCRA",
                     "group" => "Personal>Sindicatos / Organismos"   
                 ],
@@ -1326,7 +1327,7 @@
                         )),
                         "aec_rosario_afiliado" => $s->canBeNull($s->displayName($f['boolean'], "Afiliado")),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "AEC Rosario",
                     "group" => "Personal>Sindicatos / Organismos"   
                 ],
@@ -1369,7 +1370,7 @@
                         "uom_sindicato" => $s->canBeNull($s->displayName($f['boolean'], "Sindicato")),
                         "uom_incapacitado" => $s->canBeNull($s->displayName($f['boolean'], "Incapacitado")),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "UOM",
                     "group" => "Personal>Sindicatos / Organismos"   
                 ],
@@ -1404,7 +1405,7 @@
                         "sec_santiago_jubilado" => $s->canBeNull($s->displayName($f['boolean'], "Jubilado")),
                         "sec_santiago_cargas" => $s->canBeNull($s->displayName($f['boolean'], "Cargas de familia")),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "SEC Santiago del Estero",
                     "group" => "Personal>Sindicatos / Organismos"   
                 ],
@@ -1437,7 +1438,7 @@
                         )),
                         "faecys_afiliado" => $s->canBeNull($s->displayName($f['boolean'], "Afiliado")),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "FAECYS",
                     "group" => "Personal>Sindicatos / Organismos"   
                 ],
@@ -1511,7 +1512,7 @@
                             ]
                         )),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "SPEP Sgo. del estero",
                     "group" => "Personal>Sindicatos / Organismos"   
                 ],
@@ -1561,7 +1562,7 @@
                             ]
                         )),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "SPEP Cargos",
                     "group" => "Personal>Sindicatos / Organismos"   
                 ],
@@ -1594,7 +1595,7 @@
                             ]
                         )
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Aportes patronales",
                     "group" => "Personal>Contribuciones"   
                 ],
@@ -1628,7 +1629,7 @@
                         ),
                         "porcentaje" => $s->displayName($f['decimal'], "Porcentaje")
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Centros de costos asociados",
                     "group" => "Personal>Contribuciones"   
                 ],
@@ -1660,7 +1661,7 @@
                         "nro_doc_bef" => $s->displayName($f['bigint'], "Nro. Doc. Beneficiario"),
                         "orden_exp" => $s->displayName($f['int'], "Orden en Exportación"),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Embargos",
                     "group" => "Personal"   
                 ],
@@ -1714,7 +1715,7 @@
                                 'format' => '{porcentaje}'
                             ]), "% Deducción Ganancias Hijo"), "deduce_ganancias"),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Familiares",
                     "group" => "Personal"   
                 ],
@@ -1736,7 +1737,7 @@
                         "cuil" => $s->displayName($f['bigint'], "CUIL"),
                         "comentarios" => $s->displayName($f['varchar_512'], "Comentarios"),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $a->add($ta['default'], 'liquidar', ['DBAPILiquidacion', 'calcularLiquidacion']),
                     "display_name" => "Recibo",
                     "group" => "Recibos"   
                 ],
@@ -1769,7 +1770,7 @@
                             ]
                         ),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Recibo Empleados",
                     "group" => "Recibos"   
                 ],
@@ -1802,8 +1803,10 @@
                                 'format' => '{codigo} {descripcion}'
                             ]
                         ),
+                        "cantidad" => $s->canBeNull($s->displayName($f['decimal'], "Cantidad")),
+                        "importe" =>  $s->canBeNull($s->displayName($f['decimal'], "Importe")),
                     ],
-                    "actions" => $a['default'],
+                    "actions" => $ta['default'],
                     "display_name" => "Recibo Conceptos",
                     "group" => "Recibos"   
                 ],
