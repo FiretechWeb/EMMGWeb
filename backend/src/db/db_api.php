@@ -1,6 +1,10 @@
 <?php
     include_once 'db_response.php';
     include_once dirname(__FILE__).'/../config/def.php';
+
+    function isAssociativeArray($array) {
+        return is_array($array) && array_keys($array) !== range(0, count($array) - 1);
+    }
     
     class DBAPI {
 
@@ -58,12 +62,52 @@
             return $r;
         }
 
-        public static function insertDataFromStructure($conn, $defaultData, $tableStructure) {
+        //CAUTION: THERE IS NO PROTECTION AGAINST SQL INJECTION!!!
+        public static function insertDataFromStructure($conn, $dataToInsert, $tableStructure) {
             $sqlColumns = [];
+            
+            //STEP 1: Convert any foreign key object into a foreign key ID/Value
+            foreach ($tableStructure as $tableName => $structureData) {
+                if (isset($dataToInsert[$tableName])) {
+                    $tableData = $dataToInsert[$tableName];
+                    foreach ($tableData as $fieldName => $fieldData) {
+                        if (!isset($structureData[$fieldName])) {
+                            continue;
+                        }
+                        $fieldStructure = $structureData[$fieldName];
+                        if (!isset($fieldStructure['foreign_key']) || !isset($fieldStructure['table']) || !isset($fieldStructure['field'])) {
+                            continue;
+                        }
+                        if (!isAssociativeArray($fieldData)) {
+                            continue;
+                        }
+                        $foreignTableName = $fieldStructure['foreign_key']['table'];
+                        $foreignFieldName = $fieldStructure['foreign_key']['field'];
+                        $conditions = array();
+
+                        foreach ($fieldData as $foreignField => $value) {
+                            $conditions[] = "$foreignField = '$value'";
+                        }
+
+                        $sql = "SELECT * FROM $foreignTableName WHERE ". implode(' AND ', $conditions);
+                        $result = mysqli_query($conn, $sql);
+                        if ($result) {
+                            while ($row = mysqli_fetch_assoc($result)) {
+                                if (isset($row[$foreignFieldName])) {
+                                    $dataToInsert[$tableName][$fieldName] = $row[$foreignFieldName];
+                                }
+                            }
+                            mysqli_free_result($result);
+                        }
+                    }
+                }
+            }
+
+            //STEP 2: Create data
             foreach ($tableStructure as $tableName => $data) {
-                if (isset($defaultData[$tableName])) {
-                    $defaultTableData = $defaultData[$tableName];
-                    foreach($defaultTableData as $columnData) {
+                if (isset($dataToInsert[$tableName])) {
+                    $tableData = $dataToInsert[$tableName];
+                    foreach($tableData as $columnData) {
                         $sqlColumns[] = "INSERT INTO $tableName (" . implode(", ", array_keys($columnData)) . ") VALUES ( " . implode(", ", array_map(function($value) { return "'".strval($value)."'"; }, $columnData)). " );";
                     }
                 }
